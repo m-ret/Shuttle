@@ -1,0 +1,7 @@
+{
+  "loginScreen": {
+    "shuttle": "SHUTTLE",
+    "service": "SERVICE",
+    "hint": "*Contact your manager for log in details"
+  }
+}

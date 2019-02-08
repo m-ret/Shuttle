@@ -2,7 +2,6 @@ import React from 'react';
 import {
   ActivityIndicator,
   AsyncStorage,
-  Button,
   StatusBar,
   StyleSheet,
   View,
@@ -14,34 +13,24 @@ import {
 } from 'react-navigation';
 
 import MainTabNavigator from './MainTabNavigator';
+import SigninScreen from '../screens/SigninScreen';
 
-class SignInScreen extends React.Component {
-  static navigationOptions = {
-    title: 'Sign in screen',
-  };
-
-  _signInAsync = async () => {
-    await AsyncStorage.setItem('userToken', 'abc');
-    this.props.navigation.navigate('App');
-  };
-
-  render() {
-    return (
-      <View style={styles.container}>
-        <Button title="Sign in!" onPress={this._signInAsync} />
-      </View>
-    );
-  }
-}
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
 
 class AuthLoadingScreen extends React.Component {
   constructor() {
     super();
-    this._bootstrapAsync();
+    this.bootstrapAsync();
   }
 
   // Fetch the token from storage then navigate to our appropriate place
-  _bootstrapAsync = async () => {
+  bootstrapAsync = async () => {
     const userToken = await AsyncStorage.getItem('userToken');
 
     // This will switch to the App screen or Auth screen and this loading
@@ -60,15 +49,7 @@ class AuthLoadingScreen extends React.Component {
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
-
-const AuthStack = createStackNavigator({ SignIn: SignInScreen });
+const AuthStack = createStackNavigator({ SignIn: SigninScreen });
 
 export default createAppContainer(
   createSwitchNavigator(
