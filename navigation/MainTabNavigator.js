@@ -1,59 +1,72 @@
 import React from 'react';
-import { Platform } from 'react-native';
 import {
   createStackNavigator,
   createBottomTabNavigator,
 } from 'react-navigation';
 
-import TabBarIcon from '../components/TabBarIcon';
-import HomeScreen from '../screens/HomeScreen';
-import LinksScreen from '../screens/LinksScreen';
-import SettingsScreen from '../screens/SettingsScreen';
+import AllPassengersIcon from '../components/SVGs/BottomNavigation/AllPassengersIcon';
+import MyPassengersIcon from '../components/SVGs/BottomNavigation/MyPassengersIcon';
+import MoreIcon from '../components/SVGs/BottomNavigation/MoreIcon';
+
+import HomeScreen from '../screens/HomeScreen/HomeScreen';
+import LinksScreen from '../screens/LinksScreen/LinksScreen';
+import SettingsScreen from '../screens/SettingsScreen/SettingsScreen';
+
+import Colors from '../constants/Colors';
+
+const tabBarOptions = {
+  activeTintColor: 'black',
+  activeBackgroundColor: '#f7f7f7',
+};
 
 const HomeStack = createStackNavigator({
-  Home: HomeScreen,
+  DropOffAllPassengers: HomeScreen,
 });
 
 HomeStack.navigationOptions = {
   tabBarLabel: 'All Passengers',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
-      }
-    />
-  ),
+  tabBarIcon: ({ focused }) => {
+    return (
+      <AllPassengersIcon
+        focused={focused}
+        tabIconSelected={Colors.tabIconSelected}
+        tabIconDefault={Colors.tabIconDefault}
+      />
+    );
+  },
+  tabBarOptions,
 };
 
 const LinksStack = createStackNavigator({
-  Links: LinksScreen,
+  DropOffMyPassengers: LinksScreen,
 });
 
 LinksStack.navigationOptions = {
   tabBarLabel: 'My Passengers',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon
+    <MyPassengersIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
+      tabIconSelected={Colors.tabIconSelected}
+      tabIconDefault={Colors.tabIconDefault}
     />
   ),
+  tabBarOptions,
 };
 
 const SettingsStack = createStackNavigator({
-  Settings: SettingsScreen,
+  DropOffMore: SettingsScreen,
 });
 
 SettingsStack.navigationOptions = {
   tabBarLabel: 'More',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon
+    <MoreIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
+      tabIconSelected={Colors.tabIconSelected}
+      tabIconDefault={Colors.tabIconDefault}
     />
   ),
+  tabBarOptions,
 };
 
 export default createBottomTabNavigator({

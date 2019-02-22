@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { View, TextInput, Animated } from 'react-native';
-import styles from '../../styles/SigningScreenStyles';
+import signingStyles from '../../styles/SigningScreenStyles';
 
 export default class SigningInputs extends Component {
   componentWillMount() {
@@ -29,7 +29,7 @@ export default class SigningInputs extends Component {
   render() {
     const { secureTextEntry, onChangeText, labelText } = this.props;
 
-    const labelStyle = {
+    const labelAnimationStyle = {
       position: 'absolute',
       left: 0,
       top: this.animatedIsFocused.interpolate({
@@ -48,15 +48,20 @@ export default class SigningInputs extends Component {
 
     return (
       <>
-        <View style={styles.inputContainer}>
-          <Animated.Text style={labelStyle}>{labelText}</Animated.Text>
+        <View style={signingStyles.inputContainer}>
+          <Animated.Text
+            style={[labelAnimationStyle, signingStyles.labelFontSemibold]}
+          >
+            {labelText}
+          </Animated.Text>
           <TextInput
-            style={styles.inputs}
+            style={signingStyles.inputs}
             onChangeText={onChangeText}
             onFocus={this.handleOnFocus}
             onBlur={this.handleOnBlur}
             blurOnSubmit
             secureTextEntry={secureTextEntry}
+            autoCapitalize="none"
           />
         </View>
       </>

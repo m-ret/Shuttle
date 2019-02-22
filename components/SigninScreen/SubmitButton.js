@@ -1,16 +1,18 @@
 import React from 'react';
-import { Text, TouchableHighlight } from 'react-native';
+import { Text, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
-import styles from '../../styles/SigningScreenStyles';
+import signingStyles from '../../styles/SigningScreenStyles';
+
+const jsonCopy = require('../../copy-text/copy');
 
 const SigninSubmitButton = ({ signInAsync, disabledProp, style }) => (
-  <TouchableHighlight
+  <TouchableOpacity
     style={style}
     onPress={signInAsync}
     disabled={!disabledProp}
   >
-    <Text style={styles.loginText}>Log In</Text>
-  </TouchableHighlight>
+    <Text style={signingStyles.loginText}>{jsonCopy.loginScreen.login}</Text>
+  </TouchableOpacity>
 );
 
 SigninSubmitButton.propTypes = {

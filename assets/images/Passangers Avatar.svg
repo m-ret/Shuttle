@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="86" height="104">
+  <g fill="none" fill-rule="evenodd">
+    <g fill="#474350" opacity=".5">
+      <path d="M42.2712855 25.5C49.3380634 25.5 55 19.805 55 12.75S49.3380634 0 42.2712855 0C35.2045075 0 29.5 5.695 29.5 12.75S35.2045075 25.5 42.2712855 25.5zM13 49.375V60h60V49.375C73 39.4725 52.9857143 34.5 43 34.5c-9.9857143 0-30 4.9725-30 14.875z"/>
+    </g>
+    <text fill="#474350" font-family="Montserrat-Regular, Montserrat" font-size="10">
+      <tspan x=".14" y="76">Passangers going</tspan>
+    </text>
+    <text fill="#474350" font-family="Montserrat-Bold, Montserrat" font-size="23" font-weight="bold">
+      <tspan x="0" y="107">NORTH</tspan>
+    </text>
+    <path fill="#FF5252" d="M32.66666667 48.33333333c-1.28333334 0-2.32166667 1.05-2.32166667 2.33333334V64.9972127C30.345 66.1033216 31.24253082 67 32.34615421 67H53.6666667C54.95 67 56 65.95 56 64.6666667V50.66666667c0-1.28333334-1.05-2.33333334-2.3333333-2.33333334H32.66666667z"/>
+    <text fill="#FFF" font-family="Montserrat-Medium, Montserrat" font-size="14" font-weight="400" transform="translate(30 47)">
+      <tspan x="8.058" y="14">0</tspan>
+    </text>
+  </g>
+</svg>

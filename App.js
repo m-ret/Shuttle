@@ -1,6 +1,8 @@
 import React from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
-import { AppLoading, Asset, Font, Icon } from 'expo';
+import { Provider as ReduxProvider } from 'react-redux';
+import { AppLoading, Font, Icon } from 'expo';
+import store from './redux/store';
 import AppNavigator from './navigation/AppNavigator';
 
 const styles = StyleSheet.create({
@@ -10,23 +12,20 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class App extends React.Component {
+class App extends React.Component {
   state = {
     isLoadingComplete: false,
   };
 
   loadResourcesAsync = async () => {
     return Promise.all([
-      Asset.loadAsync([
-        require('./assets/images/robot-dev.png'),
-        require('./assets/images/robot-prod.png'),
-      ]),
+      // Asset.loadAsync([require('./assets/images/drawable-hdpi/shuttle.png')]),
       Font.loadAsync({
         // This is the font that we are using for our tab bar
         ...Icon.Ionicons.font,
-        // We include SpaceMono because we use it in HomeScreen.js. Feel free
-        // to remove this if you are not using it in your app
-        'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
+        montserratRegular: require('./assets/fonts/Montserrat-Regular.ttf'),
+        montserratSemibold: require('./assets/fonts/Montserrat-SemiBold.ttf'),
+        montserratBold: require('./assets/fonts/Montserrat-Bold.ttf'),
       }),
     ]);
   };
@@ -42,7 +41,9 @@ export default class App extends React.Component {
   };
 
   render() {
-    if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
+    const { isLoadingComplete } = this.state;
+    const { skipLoadingScreen } = this.props;
+    if (!isLoadingComplete && !skipLoadingScreen) {
       return (
         <AppLoading
           startAsync={this.loadResourcesAsync}
@@ -52,10 +53,14 @@ export default class App extends React.Component {
       );
     }
     return (
-      <View style={styles.container}>
-        {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-        <AppNavigator />
-      </View>
+      <ReduxProvider store={store}>
+        <View style={styles.container}>
+          {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+          <AppNavigator />
+        </View>
+      </ReduxProvider>
     );
   }
 }
+
+export default App;

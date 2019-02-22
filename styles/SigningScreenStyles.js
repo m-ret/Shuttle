@@ -1,11 +1,15 @@
 import { StyleSheet } from 'react-native';
+import globalStyles from './GlobalStyles';
 
-export default StyleSheet.create({
+const signingStyles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
+  },
+  companyName: {
+    letterSpacing: 3,
   },
   getStartedContainer: {
     alignItems: 'center',
@@ -14,23 +18,21 @@ export default StyleSheet.create({
   },
   welcomeContainer: {
     alignItems: 'center',
-    marginVertical: 20,
+    marginVertical: 5,
   },
   welcomeShuttleTitle: {
     fontSize: 40,
-    fontWeight: 'bold',
+    fontFamily: 'montserratBold',
     letterSpacing: 0,
   },
   welcomeServiceTitle: {
     fontSize: 40,
-    fontWeight: 'bold',
+    fontFamily: 'montserratBold',
     letterSpacing: 2,
   },
   welcomeImage: {
-    width: 100,
-    height: 100,
     resizeMode: 'contain',
-    marginBottom: 20,
+    marginVertical: 30,
   },
   developmentModeText: {
     marginBottom: 20,
@@ -41,8 +43,8 @@ export default StyleSheet.create({
   },
   inputContainer: {
     backgroundColor: '#FFFFFF',
-    borderBottomWidth: 2,
-    borderBottomColor: '#D3D3D3',
+    borderBottomWidth: 1,
+    borderBottomColor: 'darkgray',
     height: 45,
     marginBottom: 20,
     flexDirection: 'row',
@@ -52,6 +54,12 @@ export default StyleSheet.create({
     height: 45,
     flex: 1,
     fontSize: 30,
+  },
+  labelFontRegular: {
+    fontFamily: 'montserratRegular',
+  },
+  labelFontSemibold: {
+    fontFamily: 'montserratSemibold',
   },
   buttonWrapper: {
     flexDirection: 'row',
@@ -73,9 +81,14 @@ export default StyleSheet.create({
     backgroundColor: 'lightgray',
   },
   loginButton: {
-    backgroundColor: 'red',
+    backgroundColor: globalStyles.mainColorBackground.backgroundColor,
   },
   loginText: {
     color: 'white',
   },
+  hint: {
+    marginTop: 15,
+  },
 });
+
+export default signingStyles;

@@ -1,28 +1,24 @@
-import { Image, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import React from 'react';
-import styles from '../../styles/SigningScreenStyles';
+import signingStyles from '../../styles/SigningScreenStyles';
+import ShuttleLogoSVG from '../SVGs/SigningScreen/ShuttleLogo';
 
 const jsonCopy = require('../../copy-text/copy');
 
 const TopComponent = () => (
-  <View style={styles.welcomeContainer}>
-    <Image
-      source={
-        __DEV__
-          ? require('../../assets/images/robot-dev.png')
-          : require('../../assets/images/robot-prod.png')
-      }
-      style={styles.welcomeImage}
-    />
-
-    <View style={styles.getStartedContainer}>
-      <Text style={styles.welcomeShuttleTitle}>
+  <View style={signingStyles.welcomeContainer}>
+    <View style={signingStyles.welcomeImage}>
+      <ShuttleLogoSVG />
+    </View>
+    <View style={signingStyles.getStartedContainer}>
+      <Text style={signingStyles.companyName}>COMPANY NAME’S</Text>
+      <Text style={signingStyles.welcomeShuttleTitle}>
         {jsonCopy.loginScreen.shuttle}
       </Text>
-      <Text style={styles.welcomeServiceTitle}>
+      <Text style={signingStyles.welcomeServiceTitle}>
         {jsonCopy.loginScreen.service}
       </Text>
-      <Text>{jsonCopy.loginScreen.hint}</Text>
+      <Text style={signingStyles.hint}>{jsonCopy.loginScreen.hint}</Text>
     </View>
   </View>
 );
