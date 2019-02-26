@@ -1,8 +1,14 @@
 import createReducer from '../../../redux/createReducer';
 import ActionTypes from '../constants/ActionTypes';
-import { filter } from 'lodash';
 
 const initialState = {
+  searchParam: '',
+  passengerCardId: null,
+  pickupTabColor: '#3DA7DC',
+  dropOffTabColor: '#ff5252',
+  unassignedPickUpPassengers: [],
+  unassignedDropOffPassengers: [],
+  isAddToMyPassengersSuccess: false,
   navigation: {
     index: 0,
     routes: [
@@ -10,8 +16,6 @@ const initialState = {
       { key: '1', title: 'Pick up', routeName: 'PickupHome' },
     ],
   },
-  passengersData: [],
-  searchParam: '',
 };
 
 const handlers = {
@@ -25,10 +29,10 @@ const handlers = {
     };
   },
 
-  [ActionTypes.PASSENGERS_DATA](state, action) {
+  [ActionTypes.PASSENGERS_CARD_ID](state, action) {
     return {
       ...state,
-      passengersData: action.payload.passengersData,
+      passengerCardId: action.payload.passengerCardId,
     };
   },
 
@@ -36,6 +40,27 @@ const handlers = {
     return {
       ...state,
       searchParam: action.payload.searchParam,
+    };
+  },
+
+  [ActionTypes.ADD_TO_MY_PASSENGERS_SUCCESS](state, action) {
+    return {
+      ...state,
+      isAddToMyPassengersSuccess: action.payload.isAddToMyPassengersSuccess,
+    };
+  },
+
+  [ActionTypes.UNASSIGNED_DROP_OFF_PASSENGERS](state, action) {
+    return {
+      ...state,
+      unassignedDropOffPassengers: action.payload.unassignedDropOffPassengers,
+    };
+  },
+
+  [ActionTypes.UNASSIGNED_PICKUP_PASSENGERS](state, action) {
+    return {
+      ...state,
+      unassignedPickUpPassengers: action.payload.unassignedPickUpPassengers,
     };
   },
 };

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, TextInput } from 'react-native';
-import { filter } from 'lodash';
 import { Ionicons } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
@@ -12,24 +11,28 @@ import PassengerCardBasedOnRoute from '../PassengerInfo/PassengerCardBasedOnRout
 import { searchParamAction } from '../../screens/HomeScreen/actions/homeScreen';
 
 class AllPassengersList extends Component {
-  state = { isVisible: false };
+  constructor() {
+    super();
+    this.searchRef = React.createRef();
+    this.state = { isVisible: false };
+  }
 
-  toggleSearchBarVisibility = () => {
+  toggleSearchBarVisibility = async () => {
     const { isVisible } = this.state;
-    this.setState({ isVisible: !isVisible });
-  };
+    const { searchParamActionHandler } = this.props;
 
-  getPassengersLength = filteredBy => {
-    const { passengersData } = this.props;
-    return filter(passengersData, ['pickup', filteredBy]);
+    await this.setState({ isVisible: !isVisible });
+
+    if (isVisible) searchParamActionHandler('');
   };
 
   render() {
     const {
-      navigationStore,
-      passengersData,
-      searchParamActionHandler,
       searchParam,
+      navigationStore,
+      searchParamActionHandler,
+      unassignedPickUpPassengers,
+      unassignedDropOffPassengers,
     } = this.props;
     const { isVisible } = this.state;
     return (
@@ -39,8 +42,8 @@ class AllPassengersList extends Component {
           <Text style={{ fontWeight: 'bold', color: '#000000' }}>
             All Passengers List (
             {navigationStore.index
-              ? `${this.getPassengersLength(1).length}`
-              : `${passengersData.length}`}
+              ? unassignedPickUpPassengers.length
+              : unassignedDropOffPassengers.length}
             )
           </Text>
         </View>
@@ -98,10 +101,10 @@ class AllPassengersList extends Component {
               value={searchParam}
               placeholder="Search..."
               autoCapitalize="none"
+              ref={this.searchRef}
             />
           </View>
         )}
-        <Text>{searchParam}</Text>
         <PassengerCardBasedOnRoute searchParam={searchParam} />
       </View>
     );
@@ -110,21 +113,25 @@ class AllPassengersList extends Component {
 
 AllPassengersList.propTypes = {
   navigationStore: PropTypes.shape({}).isRequired,
-  passengersData: PropTypes.oneOfType([PropTypes.array]).isRequired,
   searchParam: PropTypes.oneOfType([PropTypes.string]).isRequired,
   searchParamActionHandler: PropTypes.oneOfType([PropTypes.func]).isRequired,
+  unassignedPickUpPassengers: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  unassignedDropOffPassengers: PropTypes.oneOfType([PropTypes.array])
+    .isRequired,
 };
 
 export default compose(
   connect(
     store => ({
-      navigationStore: store.homeScreen.navigation,
       searchParam: store.homeScreen.searchParam,
+      navigationStore: store.homeScreen.navigation,
       passengersData: store.homeScreen.passengersData,
+      unassignedPickUpPassengers: store.homeScreen.unassignedPickUpPassengers,
+      unassignedDropOffPassengers: store.homeScreen.unassignedDropOffPassengers,
     }),
     dispatch => ({
-      searchParamActionHandler: token => {
-        dispatch(searchParamAction(token));
+      searchParamActionHandler: value => {
+        dispatch(searchParamAction(value));
       },
     }),
   ),

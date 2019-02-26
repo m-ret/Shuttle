@@ -10,7 +10,8 @@ import { TabView, SceneMap } from 'react-native-tab-view';
 import { withNavigation } from 'react-navigation';
 
 import tabViewStyles from '../../styles/TabViewStyles';
-import AllPassengers from './AllPassengers';
+import AllPassengersDropOff from './AllPassengersDropOff';
+import AllPassengersPickup from './AllPassengersPickup';
 
 import { indexRouteAction } from '../../screens/HomeScreen/actions/homeScreen';
 
@@ -74,20 +75,20 @@ class TopTabView extends Component {
   };
 
   renderScene = SceneMap({
-    0: AllPassengers,
-    1: AllPassengers,
+    0: AllPassengersDropOff,
+    1: AllPassengersPickup,
   });
 
   render() {
     const { navigationStore } = this.props;
     return (
       <TabView
-        navigationState={navigationStore}
+        useNativeDriver
+        initialLayout={initialLayout}
         renderScene={this.renderScene}
         renderTabBar={this.renderTabBar}
+        navigationState={navigationStore}
         onIndexChange={this.handleIndexChange}
-        initialLayout={initialLayout}
-        useNativeDriver
       />
     );
   }

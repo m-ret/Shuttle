@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Shuttle Front End",
+    "name": "Shuttle HopDrop",
     "slug": "Shuttle",
     "privacy": "public",
     "sdkVersion": "32.0.0",
@@ -24,6 +24,8 @@
     ],
     "ios": {
       "supportsTablet": true
-    }
+    },
+    "description": "Shuttle ",
+    "githubUrl": "https://github.com/maketroli/Shuttle"
   }
 }

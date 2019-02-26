@@ -5,12 +5,27 @@ export const indexRouteAction = index => ({
   payload: { index },
 });
 
-export const passengersDataAction = passengersData => ({
-  type: ActionTypes.PASSENGERS_DATA,
-  payload: { passengersData },
-});
-
 export const searchParamAction = searchParam => ({
   type: ActionTypes.SEARCH_PARAM,
   payload: { searchParam },
+});
+
+export const passengerCardIdAction = passengerCardId => ({
+  type: ActionTypes.PASSENGERS_CARD_ID,
+  payload: { passengerCardId },
+});
+
+export const isAddToMyPassengersSuccessAction = isAddToMyPassengersSuccess => ({
+  type: ActionTypes.ADD_TO_MY_PASSENGERS_SUCCESS,
+  payload: { isAddToMyPassengersSuccess },
+});
+
+export const unassignedPickUpPassengersAction = unassignedPickUpPassengers => ({
+  type: ActionTypes.UNASSIGNED_PICKUP_PASSENGERS,
+  payload: { unassignedPickUpPassengers },
+});
+
+export const unassignedDropOffPassengersAction = unassignedDropOffPassengers => ({
+  type: ActionTypes.UNASSIGNED_DROP_OFF_PASSENGERS,
+  payload: { unassignedDropOffPassengers },
 });

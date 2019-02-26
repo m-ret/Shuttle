@@ -1,10 +1,11 @@
+import { ScrollView, Text, View } from 'react-native';
 import React from 'react';
-import { ScrollView, View, Text } from 'react-native';
+import PropTypes from 'prop-types';
 import tabViewStyles from '../../styles/TabViewStyles';
 import PassengersCircle from '../SVGs/Passengers/PassengersCircle';
 import AllPassengersList from './AllPassengersList';
 
-const AllPassengers = () => (
+const AllPassengersContainer = ({ fill }) => (
   <ScrollView>
     <View style={{ height: 50 }} />
     <View
@@ -17,10 +18,14 @@ const AllPassengers = () => (
         Select passengers to start your route
       </Text>
       <View style={{ height: 50 }} />
-      <PassengersCircle />
+      <PassengersCircle fill={fill} />
     </View>
     <AllPassengersList />
   </ScrollView>
 );
 
-export default AllPassengers;
+AllPassengersContainer.propTypes = {
+  fill: PropTypes.oneOfType([PropTypes.string]).isRequired,
+};
+
+export default AllPassengersContainer;
