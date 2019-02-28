@@ -7,20 +7,20 @@ import FetchPickupPassengers from './FetchPickupPassengers';
 
 import { API_URL } from '../constants/API';
 
-const FetchAddToMyPassengers = async (
+const FetchDeletePassenger = async (
   // These are params. So be careful before you change its order
   id,
   navigationStore,
   passengerCardIdActionHandler,
   pickupPassengerCardIdActionHandler,
+  isDeletePassengerSuccessActionHandler,
   unassignedPickUpPassengersActionHandler,
   unassignedDropOffPassengersActionHandler,
-  isAddToMyPassengersSuccessActionHandler,
 ) => {
   const route = navigationStore.index ? 'PickUp' : 'DropOff';
   const userToken = await AsyncStorage.getItem('userToken');
   try {
-    const response = await fetch(`${API_URL}addToMy${route}Passengers`, {
+    const response = await fetch(`${API_URL}deletePassenger`, {
       method: 'POST',
       body: JSON.stringify({ id }),
       headers: {
@@ -33,17 +33,17 @@ const FetchAddToMyPassengers = async (
     if (has(responseJson, 'error')) {
       Alert.alert('Error', 'Unable to process your request at this time.');
     } else {
-      await isAddToMyPassengersSuccessActionHandler(responseJson.success);
-      if (route === 'DropOff') {
-        passengerCardIdActionHandler(id);
-        FetchDropOffPassengers(
-          unassignedDropOffPassengersActionHandler,
-          userToken,
-        );
-      } else {
+      isDeletePassengerSuccessActionHandler(responseJson.success);
+      if (route) {
         pickupPassengerCardIdActionHandler(id);
         FetchPickupPassengers(
           unassignedPickUpPassengersActionHandler,
+          userToken,
+        );
+      } else {
+        passengerCardIdActionHandler(id);
+        FetchDropOffPassengers(
+          unassignedDropOffPassengersActionHandler,
           userToken,
         );
       }
@@ -56,4 +56,4 @@ const FetchAddToMyPassengers = async (
   }
 };
 
-export default FetchAddToMyPassengers;
+export default FetchDeletePassenger;

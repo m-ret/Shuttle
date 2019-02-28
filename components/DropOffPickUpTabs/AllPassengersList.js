@@ -13,16 +13,17 @@ import Colors from '../../constants/Colors';
 
 import PassengerCardBasedOnRoute from '../PassengerInfo/PassengerCardBasedOnRoute';
 import PassengersAdded from '../PassengerInfo/PassengersAdded';
-import SearchBox from '../SearchBox/SearchBox';
-import FetchUndoAddToMyPassenger from '../../APICalls/FetchUndoAddToMyPassenger';
 
 import {
+  isAddToMyPassengersSuccessAction,
   searchParamAction,
   toggleSearchAction,
-  unassignedPickUpPassengersAction,
-  isAddToMyPassengersSuccessAction,
   unassignedDropOffPassengersAction,
+  unassignedPickUpPassengersAction,
 } from '../../screens/HomeScreen/actions/homeScreen';
+
+import SearchBox from '../SearchBox/SearchBox';
+import FetchUndoAddToMyPassenger from '../../APICalls/FetchUndoAddToMyPassenger';
 
 class AllPassengersList extends Component {
   componentDidMount() {

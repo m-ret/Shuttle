@@ -13,6 +13,15 @@ import { connect } from 'react-redux';
 import styles from '../../styles/PopupsModals';
 import { popupsModalsAction } from './actions/popupsModals';
 
+import FetchDeletePassenger from '../../APICalls/FetchDeletePassenger';
+import {
+  isDeletePassengerSuccessAction,
+  passengerCardIdAction,
+  pickupPassengerCardIdAction,
+  unassignedDropOffPassengersAction,
+  unassignedPickUpPassengersAction,
+} from '../../screens/HomeScreen/actions/homeScreen';
+
 class AllPassengersOptionsModal extends Component {
   _handlePressSlack = () => {
     WebBrowser.openBrowserAsync('https://slack.expo.io');
@@ -22,12 +31,32 @@ class AllPassengersOptionsModal extends Component {
     WebBrowser.openBrowserAsync('http://docs.expo.io');
   };
 
-  _handlePressForums = () => {
-    WebBrowser.openBrowserAsync('http://forums.expo.io');
+  handleDeletePassenger = async () => {
+    const {
+      id,
+      navigationStore,
+      popupsModalsActionHandler,
+      passengerCardIdActionHandler,
+      pickupPassengerCardIdActionHandler,
+      isDeletePassengerSuccessActionHandler,
+      unassignedPickUpPassengersActionHandler,
+      unassignedDropOffPassengersActionHandler,
+    } = this.props;
+    await FetchDeletePassenger(
+      id,
+      navigationStore,
+      passengerCardIdActionHandler,
+      pickupPassengerCardIdActionHandler,
+      isDeletePassengerSuccessActionHandler,
+      unassignedPickUpPassengersActionHandler,
+      unassignedDropOffPassengersActionHandler,
+    );
+
+    popupsModalsActionHandler();
   };
 
   render() {
-    const { popupsModalsActionHandler } = this.props;
+    const { popupsModalsActionHandler, handleDeleteOptionsModal } = this.props;
     return (
       <>
         <View style={styles.Container}>
@@ -66,7 +95,7 @@ class AllPassengersOptionsModal extends Component {
           <TouchableOpacity
             background={TouchableOpacity.Ripple('#ccc', false)}
             style={styles.Option}
-            onPress={this._handlePressForums}
+            onPress={handleDeleteOptionsModal}
           >
             <View style={{ flexDirection: 'row' }}>
               <View style={styles.OptionIconContainer}>
@@ -99,18 +128,47 @@ class AllPassengersOptionsModal extends Component {
 }
 
 AllPassengersOptionsModal.propTypes = {
+  navigationStore: PropTypes.shape({}).isRequired,
+  handleDeleteOptionsModal: PropTypes.func.isRequired,
+  id: PropTypes.oneOfType([PropTypes.number]).isRequired,
+  passengerCardIdActionHandler: PropTypes.func.isRequired,
+  pickupPassengerCardIdActionHandler: PropTypes.func.isRequired,
+  isDeletePassengerSuccessActionHandler: PropTypes.func.isRequired,
+  unassignedPickUpPassengersActionHandler: PropTypes.func.isRequired,
+  unassignedDropOffPassengersActionHandler: PropTypes.func.isRequired,
   popupsModalsActionHandler: PropTypes.oneOfType([PropTypes.func]).isRequired,
 };
 
 export default compose(
   connect(
     store => ({
+      navigationStore: store.homeScreen.navigation,
+      passengerCardId: store.homeScreen.passengerCardId,
       allPassengersDropOffOptionsPopup:
         store.popupsModals.allPassengersDropOffOptionsPopup,
+      pickupPassengerCardId: store.homeScreen.pickupPassengerCardId,
+      isDeletePassengerSuccess: store.homeScreen.isDeletePassengerSuccess,
+      unassignedPickUpPassengers: store.homeScreen.unassignedPickUpPassengers,
+      unassignedDropOffPassengers: store.homeScreen.unassignedDropOffPassengers,
     }),
     dispatch => ({
       popupsModalsActionHandler: data => {
         dispatch(popupsModalsAction(data));
+      },
+      passengerCardIdActionHandler: id => {
+        dispatch(passengerCardIdAction(id));
+      },
+      pickupPassengerCardIdActionHandler: id => {
+        dispatch(pickupPassengerCardIdAction(id));
+      },
+      unassignedPickUpPassengersActionHandler: data => {
+        dispatch(unassignedPickUpPassengersAction(data));
+      },
+      unassignedDropOffPassengersActionHandler: data => {
+        dispatch(unassignedDropOffPassengersAction(data));
+      },
+      isDeletePassengerSuccessActionHandler: isSuccess => {
+        dispatch(isDeletePassengerSuccessAction(isSuccess));
       },
     }),
   ),

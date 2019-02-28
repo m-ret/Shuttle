@@ -14,6 +14,9 @@ import globalStyles from '../../styles/GlobalStyles';
 
 import FetchAddToMyPassengers from '../../APICalls/FetchAddToMyPassengers';
 
+import AllPassengersOptionsModal from '../PopupsModals/AllPassengersOptionsModal';
+import OptionsModal from '../PopupsModals/OptionsAlertPassenger';
+
 import {
   passengerCardIdAction,
   pickupPassengerCardIdAction,
@@ -30,6 +33,7 @@ const PassengersInfo = ({
   callModal,
   cardinalpoint,
   navigationStore,
+  handleDeleteOptionsModal,
   passengerCardIdActionHandler,
   pickupPassengerCardIdActionHandler,
   isAddToMyPassengersSuccessActionHandler,
@@ -50,6 +54,14 @@ const PassengersInfo = ({
 
   return (
     <View>
+      <OptionsModal>
+        {
+          <AllPassengersOptionsModal
+            id={id}
+            handleDeleteOptionsModal={handleDeleteOptionsModal}
+          />
+        }
+      </OptionsModal>
       <View style={{ height: 30 }} />
       <View>
         <View style={PassengersStyles.CTileList}>
@@ -120,6 +132,7 @@ const PassengersInfo = ({
 
 PassengersInfo.propTypes = {
   navigationStore: PropTypes.shape({}).isRequired,
+  handleDeleteOptionsModal: PropTypes.func.isRequired,
   id: PropTypes.oneOfType([PropTypes.number]).isRequired,
   passengerCardIdActionHandler: PropTypes.func.isRequired,
   name: PropTypes.oneOfType([PropTypes.string]).isRequired,
@@ -147,8 +160,8 @@ export default compose(
       passengerCardIdActionHandler: id => {
         dispatch(passengerCardIdAction(id));
       },
-      pickupPassengerCardIdActionHandler: data => {
-        dispatch(pickupPassengerCardIdAction(data));
+      pickupPassengerCardIdActionHandler: id => {
+        dispatch(pickupPassengerCardIdAction(id));
       },
       unassignedPickUpPassengersActionHandler: data => {
         dispatch(unassignedPickUpPassengersAction(data));

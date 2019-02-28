@@ -8,11 +8,11 @@ import { connect } from 'react-redux';
 import { size } from 'lodash';
 
 import PassengersInfo from './PassengerInfo';
-import OptionsModal from '../PopupsModals/OptionsAlertPassenger';
-import AllPassengersOptionsModal from '../PopupsModals/AllPassengersOptionsModal';
+
 import EmptyState from '../EmptyState/EmptyState';
 
 import { popupsModalsAction } from '../PopupsModals/actions/popupsModals';
+import FetchDeletePassenger from "../../APICalls/FetchDeletePassenger";
 
 class PassengerCardBasedOnRoute extends Component {
   shouldComponentUpdate(nextProps, nextState) {
@@ -40,6 +40,30 @@ class PassengerCardBasedOnRoute extends Component {
     );
   };
 
+  handleDeletePassenger = async () => {
+    const {
+      id,
+      navigationStore,
+      popupsModalsActionHandler,
+      passengerCardIdActionHandler,
+      pickupPassengerCardIdActionHandler,
+      isDeletePassengerSuccessActionHandler,
+      unassignedPickUpPassengersActionHandler,
+      unassignedDropOffPassengersActionHandler,
+    } = this.props;
+    await FetchDeletePassenger(
+      id,
+      navigationStore,
+      passengerCardIdActionHandler,
+      pickupPassengerCardIdActionHandler,
+      isDeletePassengerSuccessActionHandler,
+      unassignedPickUpPassengersActionHandler,
+      unassignedDropOffPassengersActionHandler,
+    );
+
+    popupsModalsActionHandler();
+  };
+
   componentToRenderBasedOnParams = info => {
     const { popupsModalsActionHandler, searchParam } = this.props;
     return (
@@ -52,6 +76,7 @@ class PassengerCardBasedOnRoute extends Component {
           searchParam={searchParam}
           cardinalpoint={info.cardinalpoint}
           callModal={popupsModalsActionHandler}
+          handleDeleteOptionsModal={this.handleDeletePassenger}
         />
       </View>
     );
@@ -79,7 +104,6 @@ class PassengerCardBasedOnRoute extends Component {
     } = this.props;
     return (
       <>
-        <OptionsModal>{<AllPassengersOptionsModal />}</OptionsModal>
         <View>
           {!navigationStore.index && unassignedDropOffPassengers
             ? this.showFeedbackIfNoLength(unassignedDropOffPassengers)

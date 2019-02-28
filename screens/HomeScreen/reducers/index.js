@@ -59,6 +59,13 @@ const handlers = {
     };
   },
 
+  [ActionTypes.DELETE_PASSENGER_SUCCESS](state, action) {
+    return {
+      ...state,
+      isDeletePassengerSuccess: action.payload.isDeletePassengerSuccess,
+    };
+  },
+
   [ActionTypes.UNASSIGNED_PICKUP_PASSENGERS](state, action) {
     return {
       ...state,

@@ -24,6 +24,11 @@ export const pickupPassengerCardIdAction = pickupPassengerCardId => ({
   payload: { pickupPassengerCardId },
 });
 
+export const isDeletePassengerSuccessAction = isDeletePassengerSuccess => ({
+  type: ActionTypes.DELETE_PASSENGER_SUCCESS,
+  payload: { isDeletePassengerSuccess },
+});
+
 export const isAddToMyPassengersSuccessAction = isAddToMyPassengersSuccess => ({
   type: ActionTypes.ADD_TO_MY_PASSENGERS_SUCCESS,
   payload: { isAddToMyPassengersSuccess },

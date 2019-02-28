@@ -56,8 +56,8 @@ export default compose(
         store.popupsModals.allPassengersDropOffOptionsPopup,
     }),
     dispatch => ({
-      popupsModalsActionHandler: data => {
-        dispatch(popupsModalsAction(data));
+      popupsModalsActionHandler: () => {
+        dispatch(popupsModalsAction());
       },
     }),
   ),
