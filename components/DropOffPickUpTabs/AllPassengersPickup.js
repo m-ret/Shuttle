@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { RefreshControl, ScrollView } from 'react-native';
 import PropTypes from 'prop-types';
 
 import { compose } from 'redux';
@@ -11,13 +12,13 @@ import FetchPickupPassengers from '../../APICalls/FetchPickupPassengers';
 import { unassignedPickUpPassengersAction } from '../../screens/HomeScreen/actions/homeScreen';
 
 class AllPassengersPickup extends Component {
+  state = {
+    refreshing: false,
+  };
+
   componentDidMount() {
     const { unassignedPickUpPassengersActionHandler, userToken } = this.props;
     FetchPickupPassengers(unassignedPickUpPassengersActionHandler, userToken);
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    return nextProps !== this.props;
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -27,9 +28,28 @@ class AllPassengersPickup extends Component {
     }
   }
 
+  onRefresh = async () => {
+    const { unassignedPickUpPassengersActionHandler, userToken } = this.props;
+    this.setState({ refreshing: true });
+    await FetchPickupPassengers(
+      unassignedPickUpPassengersActionHandler,
+      userToken,
+    );
+    this.setState({ refreshing: false });
+  };
+
   render() {
     const { pickupTabColor } = this.props;
-    return <AllPassengersContainer fill={pickupTabColor} />;
+    const { refreshing } = this.state;
+    return (
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={this.onRefresh} />
+        }
+      >
+        <AllPassengersContainer fill={pickupTabColor} />
+      </ScrollView>
+    );
   }
 }
 

@@ -17,11 +17,11 @@ import SearchBox from '../SearchBox/SearchBox';
 import FetchUndoAddToMyPassenger from '../../APICalls/FetchUndoAddToMyPassenger';
 
 import {
-  isAddToMyPassengersSuccessAction,
   searchParamAction,
   toggleSearchAction,
-  unassignedDropOffPassengersAction,
   unassignedPickUpPassengersAction,
+  isAddToMyPassengersSuccessAction,
+  unassignedDropOffPassengersAction,
 } from '../../screens/HomeScreen/actions/homeScreen';
 
 class AllPassengersList extends Component {

@@ -6,7 +6,7 @@ import PassengersCircle from '../SVGs/Passengers/PassengersCircle';
 import AllPassengersList from './AllPassengersList';
 
 const AllPassengersContainer = ({ fill }) => (
-  <ScrollView>
+  <>
     <View style={{ height: 50 }} />
     <View
       style={[
@@ -21,7 +21,7 @@ const AllPassengersContainer = ({ fill }) => (
       <PassengersCircle fill={fill} />
     </View>
     <AllPassengersList />
-  </ScrollView>
+  </>
 );
 
 AllPassengersContainer.propTypes = {

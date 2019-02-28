@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { ScrollView, RefreshControl } from 'react-native';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -10,13 +11,13 @@ import AllPassengersContainer from './AllPassengersContainer';
 import { unassignedDropOffPassengersAction } from '../../screens/HomeScreen/actions/homeScreen';
 
 class AllPassengersDropOff extends Component {
+  state = {
+    refreshing: false,
+  };
+
   componentDidMount() {
     const { unassignedDropOffPassengersActionHandler, userToken } = this.props;
     FetchDropOffPassengers(unassignedDropOffPassengersActionHandler, userToken);
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    return nextProps !== this.props;
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -29,9 +30,28 @@ class AllPassengersDropOff extends Component {
     }
   }
 
+  onRefresh = async () => {
+    const { unassignedDropOffPassengersActionHandler, userToken } = this.props;
+    this.setState({ refreshing: true });
+    await FetchDropOffPassengers(
+      unassignedDropOffPassengersActionHandler,
+      userToken,
+    );
+    this.setState({ refreshing: false });
+  };
+
   render() {
     const { dropOffTabColor } = this.props;
-    return <AllPassengersContainer fill={dropOffTabColor} />;
+    const { refreshing } = this.state;
+    return (
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={this.onRefresh} />
+        }
+      >
+        <AllPassengersContainer fill={dropOffTabColor} />
+      </ScrollView>
+    );
   }
 }
 
