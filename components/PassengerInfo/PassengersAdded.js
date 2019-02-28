@@ -1,22 +1,18 @@
 import React from 'react';
-import { View, Button, Text } from 'react-native';
+import { View, Text } from 'react-native';
 import PropTypes from 'prop-types';
+
 import PassengerAddedSvg from '../SVGs/Passengers/PassengerAdded';
 import PassengerAddedStyles from '../../styles/PassengerAdded';
 
-const PassengersAdded = ({ id }) => {
-  const handleUndo = () => console.log('handleUndo');
+import HandleUndoButton from '../HandleUndoButton/HandleUndoButton';
 
+const PassengersAdded = ({ id, handleUndo }) => {
   return (
     <View style={PassengerAddedStyles.Container}>
       <View>
         <PassengerAddedSvg />
-        <Button
-          onPress={handleUndo}
-          title="Undo"
-          color="#000"
-          accessibilityLabel="Learn more about this purple button"
-        />
+        <HandleUndoButton handleUndo={handleUndo} />
         <Text style={{ textAlign: 'center' }}>Passenger ID: {id}</Text>
       </View>
     </View>
@@ -24,6 +20,7 @@ const PassengersAdded = ({ id }) => {
 };
 
 PassengersAdded.propTypes = {
+  handleUndo: PropTypes.func.isRequired,
   id: PropTypes.oneOfType([PropTypes.number]).isRequired,
 };
 

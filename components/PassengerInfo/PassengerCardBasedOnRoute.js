@@ -17,12 +17,15 @@ import { popupsModalsAction } from '../PopupsModals/actions/popupsModals';
 class PassengerCardBasedOnRoute extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     const {
-      unassignedDropOffPassengers,
+      searchParam,
       unassignedPickUpPassengers,
+      unassignedDropOffPassengers,
     } = this.props;
+
     return (
-      nextProps.unassignedDropOffPassengers !== unassignedDropOffPassengers ||
-      nextProps.unassignedPickUpPassengers !== unassignedPickUpPassengers
+      nextProps.searchParam !== searchParam ||
+      nextProps.unassignedPickUpPassengers !== unassignedPickUpPassengers ||
+      nextProps.unassignedDropOffPassengers !== unassignedDropOffPassengers
     );
   }
 

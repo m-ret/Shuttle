@@ -3,10 +3,11 @@ import ActionTypes from '../constants/ActionTypes';
 
 const initialState = {
   searchParam: '',
+  toggleSearch: false,
   passengerCardId: null,
-  pickupPassengerCardId: null,
   pickupTabColor: '#3DA7DC',
   dropOffTabColor: '#ff5252',
+  pickupPassengerCardId: null,
   unassignedPickUpPassengers: [],
   unassignedDropOffPassengers: [],
   isAddToMyPassengersSuccess: false,
@@ -30,6 +31,20 @@ const handlers = {
     };
   },
 
+  [ActionTypes.SEARCH_PARAM](state, action) {
+    return {
+      ...state,
+      searchParam: action.payload.searchParam,
+    };
+  },
+
+  [ActionTypes.TOGGLE_SEARCH](state, action) {
+    return {
+      ...state,
+      toggleSearch: !state.toggleSearch,
+    };
+  },
+
   [ActionTypes.PASSENGERS_CARD_ID](state, action) {
     return {
       ...state,
@@ -44,10 +59,10 @@ const handlers = {
     };
   },
 
-  [ActionTypes.SEARCH_PARAM](state, action) {
+  [ActionTypes.UNASSIGNED_PICKUP_PASSENGERS](state, action) {
     return {
       ...state,
-      searchParam: action.payload.searchParam,
+      unassignedPickUpPassengers: action.payload.unassignedPickUpPassengers,
     };
   },
 
@@ -63,13 +78,6 @@ const handlers = {
       ...state,
       ...state.passengerCardId,
       unassignedDropOffPassengers: action.payload.unassignedDropOffPassengers,
-    };
-  },
-
-  [ActionTypes.UNASSIGNED_PICKUP_PASSENGERS](state, action) {
-    return {
-      ...state,
-      unassignedPickUpPassengers: action.payload.unassignedPickUpPassengers,
     };
   },
 };

@@ -1,5 +1,9 @@
 import ActionTypes from '../constants/ActionTypes';
 
+export const toggleSearchAction = () => ({
+  type: ActionTypes.TOGGLE_SEARCH,
+});
+
 export const indexRouteAction = index => ({
   type: ActionTypes.INDEX_ROUTE,
   payload: { index },

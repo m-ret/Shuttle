@@ -1,7 +1,15 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import { Svg } from 'expo';
 
-const PassengerAddedSvg = () => (
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+
+const pickupTabColor = '#3DA7DC';
+const dropOffTabColor = '#ff5252';
+
+const PassengerAddedSvg = ({ navigationStore }) => (
   <Svg width={214} height={125}>
     <Svg.Defs>
       <Svg.Path
@@ -14,17 +22,26 @@ const PassengerAddedSvg = () => (
         opacity={0.87}
         fontFamily="Montserrat-Regular, Montserrat"
         fontSize={24}
-        fill="#FF5252"
+        fill={navigationStore.index ? pickupTabColor : dropOffTabColor}
       >
         <Svg.TSpan x={20} y={118}>
           {'Passenger Added'}
         </Svg.TSpan>
       </Svg.Text>
-      <Svg.Use fill="#FF5252" xlinkHref="#prefix__a" href="#prefix__a" />
+      <Svg.Use
+        fill={navigationStore.index ? pickupTabColor : dropOffTabColor}
+        xlinkHref="#prefix__a"
+        href="#prefix__a"
+      />
       <Svg.Use stroke="#FFF" xlinkHref="#prefix__a" href="#prefix__a" />
-      <Svg.Use stroke="#FFF" strokeWidth={2} xlinkHref="#prefix__a" href="#prefix__a" />
+      <Svg.Use
+        stroke="#FFF"
+        strokeWidth={2}
+        xlinkHref="#prefix__a"
+        href="#prefix__a"
+      />
       <Svg.Ellipse
-        stroke="#FF5252"
+        stroke={navigationStore.index ? pickupTabColor : dropOffTabColor}
         strokeWidth={3}
         cx={109.5}
         cy={33}
@@ -35,4 +52,12 @@ const PassengerAddedSvg = () => (
   </Svg>
 );
 
-export default PassengerAddedSvg;
+PassengerAddedSvg.propTypes = {
+  navigationStore: PropTypes.shape({}).isRequired,
+};
+
+export default compose(
+  connect(store => ({
+    navigationStore: store.homeScreen.navigation,
+  })),
+)(PassengerAddedSvg);

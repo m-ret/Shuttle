@@ -5,12 +5,10 @@ import { has } from 'lodash';
 import FetchDropOffPassengers from './FetchDropOffPassengers';
 import FetchPickupPassengers from './FetchPickupPassengers';
 
-const FetchAddToMyPassengers = async (
+const FetchUndoAddToMyPassenger = async (
   // These are params. So be careful before you change its order
   id,
   navigationStore,
-  passengerCardIdActionHandler,
-  pickupPassengerCardIdActionHandler,
   unassignedPickUpPassengersActionHandler,
   unassignedDropOffPassengersActionHandler,
   isAddToMyPassengersSuccessActionHandler,
@@ -19,7 +17,9 @@ const FetchAddToMyPassengers = async (
   const userToken = await AsyncStorage.getItem('userToken');
   try {
     const response = await fetch(
-      `http://34.235.222.72/public/api/addToMy${route}Passengers`,
+      `http://34.235.222.72/public/api/remove${
+        route === 'DropOff' ? 'DropOff' : 'PickUp'
+      }PassengerFromMyList`,
       {
         method: 'POST',
         body: JSON.stringify({ id }),
@@ -32,18 +32,15 @@ const FetchAddToMyPassengers = async (
     );
     const responseJson = await response.json();
     if (has(responseJson, 'error')) {
-      Alert.alert('Error', 'Unable to process your request at this time.');
+      Alert.alert('Error', 'Unable to process your Undo request at this time.');
     } else {
-      await isAddToMyPassengersSuccessActionHandler(responseJson.success);
+      await isAddToMyPassengersSuccessActionHandler(false);
       if (route === 'DropOff') {
-        passengerCardIdActionHandler(id);
         FetchDropOffPassengers(
           unassignedDropOffPassengersActionHandler,
           userToken,
         );
       } else {
-        console.log('FetchPickupPassengers route PickUp !');
-        pickupPassengerCardIdActionHandler(id);
         FetchPickupPassengers(
           unassignedPickUpPassengersActionHandler,
           userToken,
@@ -53,9 +50,9 @@ const FetchAddToMyPassengers = async (
   } catch (error) {
     Alert.alert(
       'Error',
-      'There was an error with your request, please try again later.',
+      'There was an error with your Undo request, please try again later.',
     );
   }
 };
 
-export default FetchAddToMyPassengers;
+export default FetchUndoAddToMyPassenger;
