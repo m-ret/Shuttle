@@ -1,21 +1,24 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, TextInput } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
+
+import { View, Text, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+
 import globalStyles from '../../styles/GlobalStyles';
 import PassengersStyles from '../../styles/Passengers';
 import Colors from '../../constants/Colors';
+
 import PassengerCardBasedOnRoute from '../PassengerInfo/PassengerCardBasedOnRoute';
+import PassengersAdded from '../PassengerInfo/PassengersAdded';
+
 import { searchParamAction } from '../../screens/HomeScreen/actions/homeScreen';
+import SearchBox from '../SearchBox/SearchBox';
 
 class AllPassengersList extends Component {
-  constructor() {
-    super();
-    this.searchRef = React.createRef();
-    this.state = { isVisible: false };
-  }
+  state = { isVisible: false };
 
   toggleSearchBarVisibility = async () => {
     const { isVisible } = this.state;
@@ -26,13 +29,22 @@ class AllPassengersList extends Component {
     if (isVisible) searchParamActionHandler('');
   };
 
+  showProperSuccessMessageBasedOnRoute = (nav, isSuccess, cardId) => {
+    return nav && isSuccess && cardId ? (
+      <PassengersAdded id={cardId} key={cardId} />
+    ) : null;
+  };
+
   render() {
     const {
       searchParam,
       navigationStore,
+      passengerCardId,
+      pickupPassengerCardId,
       searchParamActionHandler,
       unassignedPickUpPassengers,
       unassignedDropOffPassengers,
+      isAddToMyPassengersSuccess,
     } = this.props;
     const { isVisible } = this.state;
     return (
@@ -93,28 +105,42 @@ class AllPassengersList extends Component {
           </TouchableOpacity>
         </View>
         {isVisible && (
-          <View>
-            <TextInput
-              autoFocus
-              style={PassengersStyles.SearchBox}
-              onChangeText={text => searchParamActionHandler(text)}
-              value={searchParam}
-              placeholder="Search..."
-              autoCapitalize="none"
-              ref={this.searchRef}
-            />
-          </View>
+          <SearchBox
+            onChangeText={text => searchParamActionHandler(text)}
+            searchParam={searchParam}
+          />
         )}
+
+        {this.showProperSuccessMessageBasedOnRoute(
+          !navigationStore.index,
+          isAddToMyPassengersSuccess,
+          passengerCardId,
+        )}
+
+        {this.showProperSuccessMessageBasedOnRoute(
+          navigationStore.index,
+          isAddToMyPassengersSuccess,
+          pickupPassengerCardId,
+        )}
+
         <PassengerCardBasedOnRoute searchParam={searchParam} />
       </View>
     );
   }
 }
 
+AllPassengersList.defaultProps = {
+  passengerCardId: '',
+  pickupPassengerCardId: '',
+};
+
 AllPassengersList.propTypes = {
   navigationStore: PropTypes.shape({}).isRequired,
+  passengerCardId: PropTypes.oneOfType([PropTypes.number]),
+  pickupPassengerCardId: PropTypes.oneOfType([PropTypes.number]),
   searchParam: PropTypes.oneOfType([PropTypes.string]).isRequired,
   searchParamActionHandler: PropTypes.oneOfType([PropTypes.func]).isRequired,
+  isAddToMyPassengersSuccess: PropTypes.oneOfType([PropTypes.bool]).isRequired,
   unassignedPickUpPassengers: PropTypes.oneOfType([PropTypes.array]).isRequired,
   unassignedDropOffPassengers: PropTypes.oneOfType([PropTypes.array])
     .isRequired,
@@ -125,8 +151,10 @@ export default compose(
     store => ({
       searchParam: store.homeScreen.searchParam,
       navigationStore: store.homeScreen.navigation,
-      passengersData: store.homeScreen.passengersData,
+      passengerCardId: store.homeScreen.passengerCardId,
+      pickupPassengerCardId: store.homeScreen.pickupPassengerCardId,
       unassignedPickUpPassengers: store.homeScreen.unassignedPickUpPassengers,
+      isAddToMyPassengersSuccess: store.homeScreen.isAddToMyPassengersSuccess,
       unassignedDropOffPassengers: store.homeScreen.unassignedDropOffPassengers,
     }),
     dispatch => ({

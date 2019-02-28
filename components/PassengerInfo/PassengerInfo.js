@@ -16,7 +16,9 @@ import FetchAddToMyPassengers from '../../APICalls/FetchAddToMyPassengers';
 
 import {
   passengerCardIdAction,
+  pickupPassengerCardIdAction,
   isAddToMyPassengersSuccessAction,
+  unassignedPickUpPassengersAction,
   unassignedDropOffPassengersAction,
 } from '../../screens/HomeScreen/actions/homeScreen';
 
@@ -29,7 +31,9 @@ const PassengersInfo = ({
   cardinalpoint,
   navigationStore,
   passengerCardIdActionHandler,
+  pickupPassengerCardIdActionHandler,
   isAddToMyPassengersSuccessActionHandler,
+  unassignedPickUpPassengersActionHandler,
   unassignedDropOffPassengersActionHandler,
 }) => {
   const handleAddToMyPassengers = () => {
@@ -37,6 +41,8 @@ const PassengersInfo = ({
       id,
       navigationStore,
       passengerCardIdActionHandler,
+      pickupPassengerCardIdActionHandler,
+      unassignedPickUpPassengersActionHandler,
       unassignedDropOffPassengersActionHandler,
       isAddToMyPassengersSuccessActionHandler,
     );
@@ -46,11 +52,8 @@ const PassengersInfo = ({
     <View>
       <View style={{ height: 30 }} />
       <View>
-        <View className="c-tile-list" style={PassengersStyles.CTileList}>
-          <View
-            className="c-tile-list__item"
-            style={PassengersStyles.CTileListItem}
-          >
+        <View style={PassengersStyles.CTileList}>
+          <View style={PassengersStyles.CTileListItem}>
             <View>
               <View style={PassengersStyles.CArticleTileHeader}>
                 <View style={PassengersStyles.CardinalPointWrapper}>
@@ -123,8 +126,10 @@ PassengersInfo.propTypes = {
   address: PropTypes.oneOfType([PropTypes.string]).isRequired,
   callModal: PropTypes.oneOfType([PropTypes.func]).isRequired,
   datetime: PropTypes.oneOfType([PropTypes.string]).isRequired,
+  pickupPassengerCardIdActionHandler: PropTypes.func.isRequired,
   cardinalpoint: PropTypes.oneOfType([PropTypes.string]).isRequired,
   isAddToMyPassengersSuccessActionHandler: PropTypes.func.isRequired,
+  unassignedPickUpPassengersActionHandler: PropTypes.func.isRequired,
   unassignedDropOffPassengersActionHandler: PropTypes.func.isRequired,
 };
 
@@ -133,12 +138,20 @@ export default compose(
     store => ({
       navigationStore: store.homeScreen.navigation,
       passengerCardId: store.homeScreen.passengerCardId,
+      pickupPassengerCardId: store.homeScreen.pickupPassengerCardId,
       isAddToMyPassengersSuccess: store.homeScreen.isAddToMyPassengersSuccess,
+      unassignedPickUpPassengers: store.homeScreen.unassignedPickUpPassengers,
       unassignedDropOffPassengers: store.homeScreen.unassignedDropOffPassengers,
     }),
     dispatch => ({
       passengerCardIdActionHandler: id => {
         dispatch(passengerCardIdAction(id));
+      },
+      pickupPassengerCardIdActionHandler: data => {
+        dispatch(pickupPassengerCardIdAction(data));
+      },
+      unassignedPickUpPassengersActionHandler: data => {
+        dispatch(unassignedPickUpPassengersAction(data));
       },
       unassignedDropOffPassengersActionHandler: data => {
         dispatch(unassignedDropOffPassengersAction(data));

@@ -29,17 +29,17 @@ class PassengersCircle extends Component {
 
   callFilter = (dropff, pickup) => {
     ({
-      N: passengersGoingNorth,
-      S: passengersGoingSouth,
-      W: passengersGoingWest,
-      E: passengersGoingEast,
+      North: passengersGoingNorth,
+      South: passengersGoingSouth,
+      West: passengersGoingWest,
+      East: passengersGoingEast,
     } = countBy(dropff, property('cardinalpoint')));
 
     ({
-      N: passengersGoingNorthPickup,
-      S: passengersGoingSouthPickup,
-      W: passengersGoingWestPickup,
-      E: passengersGoingEastPickup,
+      North: passengersGoingNorthPickup,
+      South: passengersGoingSouthPickup,
+      West: passengersGoingWestPickup,
+      East: passengersGoingEastPickup,
     } = countBy(pickup, property('cardinalpoint')));
   };
 

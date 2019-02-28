@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
-import { Alert } from 'react-native';
 import PropTypes from 'prop-types';
-
-import { has } from 'lodash';
 
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 
 import AllPassengersContainer from './AllPassengersContainer';
+
+import FetchPickupPassengers from '../../APICalls/FetchPickupPassengers';
+
 import { unassignedPickUpPassengersAction } from '../../screens/HomeScreen/actions/homeScreen';
 
 class AllPassengersPickup extends Component {
   componentDidMount() {
-    this.fetchPickupPassengers();
+    const { unassignedPickUpPassengersActionHandler, userToken } = this.props;
+    FetchPickupPassengers(unassignedPickUpPassengersActionHandler, userToken);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -20,43 +21,11 @@ class AllPassengersPickup extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    const { unassignedPickUpPassengersActionHandler, userToken } = this.props;
     if (prevProps.userToken !== this.props.userToken) {
-      this.fetchPickupPassengers();
+      FetchPickupPassengers(unassignedPickUpPassengersActionHandler, userToken);
     }
   }
-
-  fetchPickupPassengers = async () => {
-    const { unassignedPickUpPassengersActionHandler, userToken } = this.props;
-    if (userToken) {
-      try {
-        const response = await fetch(
-          'http://34.235.222.72/public/api/getUnassignedPickUpPassengers',
-          {
-            method: 'POST',
-            headers: {
-              Authorization: `Bearer ${userToken}`,
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-            },
-          },
-        );
-        const responseJson = await response.json();
-        if (has(responseJson, 'error')) {
-          Alert.alert(
-            'Error',
-            'There was an error trying to fetch Unassigned Pickup Passengers data. Please try again later.',
-          );
-        } else {
-          unassignedPickUpPassengersActionHandler(responseJson.success.data);
-        }
-      } catch (error) {
-        Alert.alert(
-          'Error',
-          'There was an error while attempting to load Unassigned Pickup Passengers data. Please try again later.',
-        );
-      }
-    }
-  };
 
   render() {
     const { pickupTabColor } = this.props;

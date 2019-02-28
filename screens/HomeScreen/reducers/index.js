@@ -4,6 +4,7 @@ import ActionTypes from '../constants/ActionTypes';
 const initialState = {
   searchParam: '',
   passengerCardId: null,
+  pickupPassengerCardId: null,
   pickupTabColor: '#3DA7DC',
   dropOffTabColor: '#ff5252',
   unassignedPickUpPassengers: [],
@@ -36,6 +37,13 @@ const handlers = {
     };
   },
 
+  [ActionTypes.PICKUP_PASSENGER_CARD_ID](state, action) {
+    return {
+      ...state,
+      pickupPassengerCardId: action.payload.pickupPassengerCardId,
+    };
+  },
+
   [ActionTypes.SEARCH_PARAM](state, action) {
     return {
       ...state,
@@ -53,6 +61,7 @@ const handlers = {
   [ActionTypes.UNASSIGNED_DROP_OFF_PASSENGERS](state, action) {
     return {
       ...state,
+      ...state.passengerCardId,
       unassignedDropOffPassengers: action.payload.unassignedDropOffPassengers,
     };
   },

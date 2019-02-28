@@ -6,7 +6,8 @@ const PassengerAddedStyles = StyleSheet.create({
     alignContent: 'center',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 20,
+    marginTop: 50,
+    marginBottom: -20,
   },
 });
 

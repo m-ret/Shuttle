@@ -1,5 +1,5 @@
 import { View } from 'react-native';
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import { compose } from 'redux';
@@ -13,81 +13,88 @@ import AllPassengersOptionsModal from '../PopupsModals/AllPassengersOptionsModal
 import EmptyState from '../EmptyState/EmptyState';
 
 import { popupsModalsAction } from '../PopupsModals/actions/popupsModals';
-import PassengersAdded from './PassengersAdded';
 
-const PassengerCardBasedOnRoute = ({
-  searchParam,
-  passengerCardId,
-  navigationStore,
-  popupsModalsActionHandler,
-  unassignedPickUpPassengers,
-  isAddToMyPassengersSuccess,
-  unassignedDropOffPassengers,
-}) => {
-  const filteredData = filterByParam =>
-    filterByParam.filter(obj =>
+class PassengerCardBasedOnRoute extends Component {
+  shouldComponentUpdate(nextProps, nextState) {
+    const {
+      unassignedDropOffPassengers,
+      unassignedPickUpPassengers,
+    } = this.props;
+    return (
+      nextProps.unassignedDropOffPassengers !== unassignedDropOffPassengers ||
+      nextProps.unassignedPickUpPassengers !== unassignedPickUpPassengers
+    );
+  }
+
+  filteredData = filterByParam => {
+    const { searchParam } = this.props;
+    return filterByParam.filter(obj =>
       Object.keys(obj).some(key =>
         String(obj[key])
           .toLowerCase()
           .includes(searchParam.toLowerCase()),
       ),
     );
+  };
 
-  const componentToRenderBasedOnParams = info => (
-    <View key={info.id}>
-      {isAddToMyPassengersSuccess && passengerCardId === info.id && (
-        <PassengersAdded />
-      )}
-      <PassengersInfo
-        id={info.id}
-        name={info.name}
-        address={info.address}
-        datetime={info.timestamp}
-        searchParam={searchParam}
-        cardinalpoint={info.cardinalpoint}
-        callModal={popupsModalsActionHandler}
-      />
-    </View>
-  );
+  componentToRenderBasedOnParams = info => {
+    const { popupsModalsActionHandler, searchParam } = this.props;
+    return (
+      <View key={info.id}>
+        <PassengersInfo
+          id={info.id}
+          name={info.name}
+          address={info.address}
+          datetime={info.timestamp}
+          searchParam={searchParam}
+          cardinalpoint={info.cardinalpoint}
+          callModal={popupsModalsActionHandler}
+        />
+      </View>
+    );
+  };
 
-  const showFeedbackIfNoLength = data => {
-    if (size(filteredData(data))) {
-      filteredData(data).map(info => (
-        <>{componentToRenderBasedOnParams(info)}</>
-      ));
+  showFeedbackIfNoLength = data => {
+    if (size(this.filteredData(data))) {
+      this.filteredData(data).map(info =>
+        this.componentToRenderBasedOnParams(info),
+      );
     } else {
       return <EmptyState>No records found</EmptyState>;
     }
 
-    return filteredData(data).map(info => componentToRenderBasedOnParams(info));
+    return this.filteredData(data).map(info =>
+      this.componentToRenderBasedOnParams(info),
+    );
   };
 
-  return (
-    <>
-      <OptionsModal>{<AllPassengersOptionsModal />}</OptionsModal>
-      <View>
-        {!navigationStore.index && unassignedDropOffPassengers
-          ? showFeedbackIfNoLength(unassignedDropOffPassengers)
-          : null}
+  render() {
+    const {
+      navigationStore,
+      unassignedPickUpPassengers,
+      unassignedDropOffPassengers,
+    } = this.props;
+    return (
+      <>
+        <OptionsModal>{<AllPassengersOptionsModal />}</OptionsModal>
+        <View>
+          {!navigationStore.index && unassignedDropOffPassengers
+            ? this.showFeedbackIfNoLength(unassignedDropOffPassengers)
+            : null}
 
-        {navigationStore.index && unassignedPickUpPassengers
-          ? showFeedbackIfNoLength(unassignedPickUpPassengers)
-          : null}
-      </View>
-    </>
-  );
-};
-
-PassengerCardBasedOnRoute.defaultProps = {
-  passengerCardId: '',
-};
+          {navigationStore.index && unassignedPickUpPassengers
+            ? this.showFeedbackIfNoLength(unassignedPickUpPassengers)
+            : null}
+        </View>
+      </>
+    );
+  }
+}
 
 PassengerCardBasedOnRoute.propTypes = {
   navigationStore: PropTypes.shape({}).isRequired,
   popupsModalsActionHandler: PropTypes.func.isRequired,
-  passengerCardId: PropTypes.oneOfType([PropTypes.number]),
   searchParam: PropTypes.oneOfType([PropTypes.string]).isRequired,
-  isAddToMyPassengersSuccess: PropTypes.oneOfType([PropTypes.bool]).isRequired,
   unassignedPickUpPassengers: PropTypes.oneOfType([PropTypes.array]).isRequired,
   unassignedDropOffPassengers: PropTypes.oneOfType([PropTypes.array])
     .isRequired,
@@ -98,9 +105,6 @@ export default compose(
     store => ({
       searchParam: store.homeScreen.searchParam,
       navigationStore: store.homeScreen.navigation,
-      passengersData: store.homeScreen.passengersData,
-      passengerCardId: store.homeScreen.passengerCardId,
-      isAddToMyPassengersSuccess: store.homeScreen.isAddToMyPassengersSuccess,
       unassignedPickUpPassengers: store.homeScreen.unassignedPickUpPassengers,
       unassignedDropOffPassengers: store.homeScreen.unassignedDropOffPassengers,
     }),
