@@ -22,6 +22,8 @@ import {
   unassignedDropOffPassengersAction,
 } from '../../screens/HomeScreen/actions/homeScreen';
 
+import momentDateFormatter from '../../utils/DateFormatter';
+
 const PassengersInfo = ({
   id,
   name,
@@ -89,7 +91,9 @@ const PassengersInfo = ({
                 <Text style={PassengersStyles.Address}>{address}</Text>
                 <Text style={PassengersStyles.RequestedTimeText}>
                   Requested at{' '}
-                  <Text style={PassengersStyles.RequestedTime}>{datetime}</Text>
+                  <Text style={PassengersStyles.RequestedTime}>
+                    {momentDateFormatter(datetime)}
+                  </Text>
                 </Text>
               </View>
 
