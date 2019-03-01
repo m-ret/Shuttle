@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import { View, Linking } from 'react-native';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
@@ -12,18 +12,31 @@ import PassengersInfo from './PassengerInfo';
 import EmptyState from '../EmptyState/EmptyState';
 
 import { popupsModalsAction } from '../PopupsModals/actions/popupsModals';
-import FetchDeletePassenger from "../../APICalls/FetchDeletePassenger";
+import FetchDeletePassenger from '../../APICalls/FetchDeletePassenger';
+
+import {
+  passengerCardIdAction,
+  pickupPassengerCardIdAction,
+  isDeletePassengerSuccessAction,
+  unassignedPickUpPassengersAction,
+  unassignedDropOffPassengersAction,
+} from '../../screens/HomeScreen/actions/homeScreen';
+
+import AllPassengersOptionsModal from '../PopupsModals/AllPassengersOptionsModal';
+import OptionsModal from '../PopupsModals/OptionsAlertPassenger';
 
 class PassengerCardBasedOnRoute extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     const {
       searchParam,
+      passengerInfo,
       unassignedPickUpPassengers,
       unassignedDropOffPassengers,
     } = this.props;
 
     return (
       nextProps.searchParam !== searchParam ||
+      nextProps.passengerInfo !== passengerInfo ||
       nextProps.unassignedPickUpPassengers !== unassignedPickUpPassengers ||
       nextProps.unassignedDropOffPassengers !== unassignedDropOffPassengers
     );
@@ -40,9 +53,8 @@ class PassengerCardBasedOnRoute extends Component {
     );
   };
 
-  handleDeletePassenger = async () => {
+  handleDeletePassenger = async id => {
     const {
-      id,
       navigationStore,
       popupsModalsActionHandler,
       passengerCardIdActionHandler,
@@ -61,7 +73,7 @@ class PassengerCardBasedOnRoute extends Component {
       unassignedDropOffPassengersActionHandler,
     );
 
-    popupsModalsActionHandler();
+    popupsModalsActionHandler(id);
   };
 
   componentToRenderBasedOnParams = info => {
@@ -75,8 +87,7 @@ class PassengerCardBasedOnRoute extends Component {
           datetime={info.timestamp}
           searchParam={searchParam}
           cardinalpoint={info.cardinalpoint}
-          callModal={popupsModalsActionHandler}
-          handleDeleteOptionsModal={this.handleDeletePassenger}
+          callModal={() => popupsModalsActionHandler(info)}
         />
       </View>
     );
@@ -98,6 +109,7 @@ class PassengerCardBasedOnRoute extends Component {
 
   render() {
     const {
+      passengerInfo,
       navigationStore,
       unassignedPickUpPassengers,
       unassignedDropOffPassengers,
@@ -105,6 +117,21 @@ class PassengerCardBasedOnRoute extends Component {
     return (
       <>
         <View>
+          {passengerInfo && (
+            <OptionsModal>
+              {
+                <AllPassengersOptionsModal
+                  id={passengerInfo.id}
+                  handleDeleteOptionsModal={() =>
+                    this.handleDeletePassenger(passengerInfo.id)
+                  }
+                  handleCallOptionsModal={() =>
+                    Linking.openURL(`tel:${passengerInfo.phone}`)
+                  }
+                />
+              }
+            </OptionsModal>
+          )}
           {!navigationStore.index && unassignedDropOffPassengers
             ? this.showFeedbackIfNoLength(unassignedDropOffPassengers)
             : null}
@@ -119,12 +146,22 @@ class PassengerCardBasedOnRoute extends Component {
 }
 
 PassengerCardBasedOnRoute.propTypes = {
+  passengerInfo: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+    PropTypes.object,
+  ]).isRequired,
   navigationStore: PropTypes.shape({}).isRequired,
   popupsModalsActionHandler: PropTypes.func.isRequired,
+  passengerCardIdActionHandler: PropTypes.func.isRequired,
+  pickupPassengerCardIdActionHandler: PropTypes.func.isRequired,
   searchParam: PropTypes.oneOfType([PropTypes.string]).isRequired,
-  unassignedPickUpPassengers: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  isDeletePassengerSuccessActionHandler: PropTypes.func.isRequired,
+  unassignedPickUpPassengersActionHandler: PropTypes.func.isRequired,
+  unassignedDropOffPassengersActionHandler: PropTypes.func.isRequired,
   unassignedDropOffPassengers: PropTypes.oneOfType([PropTypes.array])
     .isRequired,
+  unassignedPickUpPassengers: PropTypes.oneOfType([PropTypes.array]).isRequired,
 };
 
 export default compose(
@@ -132,12 +169,32 @@ export default compose(
     store => ({
       searchParam: store.homeScreen.searchParam,
       navigationStore: store.homeScreen.navigation,
+      passengerInfo: store.popupsModals.passengerInfo,
+      passengerCardId: store.homeScreen.passengerCardId,
+      pickupPassengerCardId: store.homeScreen.pickupPassengerCardId,
+      toggleCardOptionsModal: store.popupsModals.toggleCardOptionsModal,
+      isDeletePassengerSuccess: store.homeScreen.isDeletePassengerSuccess,
       unassignedPickUpPassengers: store.homeScreen.unassignedPickUpPassengers,
       unassignedDropOffPassengers: store.homeScreen.unassignedDropOffPassengers,
     }),
     dispatch => ({
       popupsModalsActionHandler: data => {
         dispatch(popupsModalsAction(data));
+      },
+      passengerCardIdActionHandler: id => {
+        dispatch(passengerCardIdAction(id));
+      },
+      pickupPassengerCardIdActionHandler: id => {
+        dispatch(pickupPassengerCardIdAction(id));
+      },
+      unassignedPickUpPassengersActionHandler: data => {
+        dispatch(unassignedPickUpPassengersAction(data));
+      },
+      unassignedDropOffPassengersActionHandler: data => {
+        dispatch(unassignedDropOffPassengersAction(data));
+      },
+      isDeletePassengerSuccessActionHandler: isSuccess => {
+        dispatch(isDeletePassengerSuccessAction(isSuccess));
       },
     }),
   ),

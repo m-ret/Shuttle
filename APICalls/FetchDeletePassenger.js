@@ -34,7 +34,7 @@ const FetchDeletePassenger = async (
       Alert.alert('Error', 'Unable to process your request at this time.');
     } else {
       isDeletePassengerSuccessActionHandler(responseJson.success);
-      if (route) {
+      if (route === 'PickUp') {
         pickupPassengerCardIdActionHandler(id);
         FetchPickupPassengers(
           unassignedPickUpPassengersActionHandler,

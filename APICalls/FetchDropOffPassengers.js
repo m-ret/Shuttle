@@ -10,7 +10,6 @@ const FetchDropOffPassengers = async (
 ) => {
   if (userToken) {
     try {
-      console.log('CALLING');
       const response = await fetch(`${API_URL}getUnassignedDropOffPassengers`, {
         method: 'POST',
         headers: {
@@ -26,7 +25,6 @@ const FetchDropOffPassengers = async (
           'There was an error trying to fetch Unassigned DropOff Passengers data. Please try again later.',
         );
       } else {
-        console.log({ response: responseJson.success.data });
         unassignedDropOffPassengersActionHandler(responseJson.success.data);
       }
     } catch (error) {

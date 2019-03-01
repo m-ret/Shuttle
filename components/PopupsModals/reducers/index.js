@@ -2,14 +2,16 @@ import createReducer from '../../../redux/createReducer';
 import ActionTypes from '../constants/ActionTypes';
 
 const initialState = {
-  allPassengersDropOffOptionsPopup: false,
+  toggleCardOptionsModal: false,
+  passengerInfo: {},
 };
 
 const handlers = {
-  [ActionTypes.TOGGLE_ALL_PASSENGERS_MODAL](state) {
+  [ActionTypes.TOGGLE_ALL_PASSENGERS_MODAL](state, action) {
     return {
       ...state,
-      allPassengersDropOffOptionsPopup: !state.allPassengersDropOffOptionsPopup,
+      toggleCardOptionsModal: !state.toggleCardOptionsModal,
+      passengerInfo: action.payload.passengerInfo,
     };
   },
 };

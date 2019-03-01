@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { popupsModalsAction } from './actions/popupsModals';
 
 const OptionsModal = ({
-  allPassengersDropOffOptionsPopup,
+  toggleCardOptionsModal,
   popupsModalsActionHandler,
   children,
 }) => (
@@ -14,7 +14,7 @@ const OptionsModal = ({
     <Modal
       animationType="fade"
       transparent
-      visible={allPassengersDropOffOptionsPopup}
+      visible={toggleCardOptionsModal}
       onRequestClose={popupsModalsActionHandler}
     >
       <View
@@ -45,15 +45,15 @@ const OptionsModal = ({
 OptionsModal.propTypes = {
   popupsModalsActionHandler: PropTypes.oneOfType([PropTypes.func]).isRequired,
   children: PropTypes.oneOfType([PropTypes.object]).isRequired,
-  allPassengersDropOffOptionsPopup: PropTypes.oneOfType([PropTypes.bool])
+  toggleCardOptionsModal: PropTypes.oneOfType([PropTypes.bool])
     .isRequired,
 };
 
 export default compose(
   connect(
     store => ({
-      allPassengersDropOffOptionsPopup:
-        store.popupsModals.allPassengersDropOffOptionsPopup,
+      toggleCardOptionsModal:
+        store.popupsModals.toggleCardOptionsModal,
     }),
     dispatch => ({
       popupsModalsActionHandler: () => {
