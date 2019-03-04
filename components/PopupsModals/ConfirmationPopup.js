@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
 
 import PropTypes from 'prop-types';
@@ -8,44 +8,42 @@ import styles from '../../styles/PopupsModals';
 
 import { confirmationPopupAction } from './actions/popupsModals';
 
-class ConfirmationPopup extends Component {
-  
-
-  render() {
-    const {
-      handleDeleteOptionsModal,
-      confirmationPopupActionHandler,
-    } = this.props;
-    return (
-      <View style={styles.WrapperContainer}>
-        <View style={styles.Container}>
-          <TouchableOpacity
-            style={styles.Option}
-            background={TouchableOpacity.Ripple('#ccc', false)}
-            onPress={confirmationPopupActionHandler}
-          >
-            <View style={{ flexDirection: 'row' }}>
-              <View style={styles.OptionTextContainer}>
-                <Text style={styles.OptionText}>Cancel</Text>
-              </View>
+const ConfirmationPopup = ({
+  handleDeleteOptionsModal,
+  confirmationPopupActionHandler,
+}) => (
+  <View style={styles.ConfirmationWrapperContainer}>
+    <View style={styles.ConfirmationContainer}>
+      <Text style={styles.ConfirmationText}>
+        Are you sure you want to delete this passenger?
+      </Text>
+      <View style={styles.ButtonsWrapper}>
+        <TouchableOpacity
+          style={styles.ConfirmationOption}
+          background={TouchableOpacity.Ripple('#ccc', false)}
+          onPress={confirmationPopupActionHandler}
+        >
+          <View>
+            <View>
+              <Text style={styles.ConfirmationOptionText}>Cancel</Text>
             </View>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.Option}
-            background={TouchableOpacity.Ripple('#ccc', false)}
-            onPress={handleDeleteOptionsModal}
-          >
-            <View style={{ flexDirection: 'row' }}>
-              <View style={styles.OptionTextContainer}>
-                <Text style={styles.OptionText}>Delete</Text>
-              </View>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.ConfirmationOption}
+          background={TouchableOpacity.Ripple('#ccc', false)}
+          onPress={handleDeleteOptionsModal}
+        >
+          <View>
+            <View>
+              <Text style={styles.ConfirmationOptionText}>Delete</Text>
             </View>
-          </TouchableOpacity>
-        </View>
+          </View>
+        </TouchableOpacity>
       </View>
-    );
-  }
-}
+    </View>
+  </View>
+);
 
 ConfirmationPopup.propTypes = {
   handleDeleteOptionsModal: PropTypes.func.isRequired,

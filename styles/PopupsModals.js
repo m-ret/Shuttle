@@ -62,6 +62,48 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+
+  ConfirmationContainer: {
+    padding: 30,
+  },
+
+  ConfirmationContainerParent: {
+    alignItems: 'center',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+
+  ConfirmationWrapperContainer: {
+    width: 300,
+    borderColor: '#d8d8d8',
+    backgroundColor: '#f4f4f4',
+  },
+
+  ConfirmationOption: {
+    paddingHorizontal: 15,
+  },
+
+  ConfirmationText: {
+    fontSize: 14,
+    fontWeight: '600',
+  },
+
+  ConfirmationOptionText: {
+    fontSize: 12,
+    marginTop: 1,
+    color: '#c50e29',
+    fontWeight: '600',
+  },
+
+  ButtonsWrapper: {
+    display: 'flex',
+    flexDirection: 'row',
+    marginTop: 20,
+    alignItems: 'flex-end',
+    alignContent: 'flex-end',
+    justifyContent: 'flex-end',
+  },
 });
 
 export default styles;

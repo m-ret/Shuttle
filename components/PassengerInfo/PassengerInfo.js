@@ -67,7 +67,7 @@ const PassengersInfo = ({
                 <View>
                   <TouchableOpacity
                     style={{ paddingHorizontal: 10 }}
-                    onPress={() => callModal(id)}
+                    onPress={callModal}
                   >
                     <View>
                       <Ionicons name="md-more" color="#979797" size={24} />

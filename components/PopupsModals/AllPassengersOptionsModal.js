@@ -21,21 +21,18 @@ class AllPassengersOptionsModal extends Component {
     WebBrowser.openBrowserAsync('https://slack.expo.io');
   };
 
-  handleModalsToggle = () => {
+  callModal = async () => {
     const {
       popupsModalsActionHandler,
       confirmationPopupActionHandler,
     } = this.props;
-    popupsModalsActionHandler({});
+
+    await popupsModalsActionHandler();
     confirmationPopupActionHandler();
   };
 
   render() {
-    const {
-      handleCallOptionsModal,
-      handleDeleteOptionsModal,
-      popupsModalsActionHandler,
-    } = this.props;
+    const { handleCallOptionsModal, popupsModalsActionHandler } = this.props;
     return (
       <View style={styles.WrapperContainer}>
         <View style={styles.Container}>
@@ -74,22 +71,7 @@ class AllPassengersOptionsModal extends Component {
           <TouchableOpacity
             background={TouchableOpacity.Ripple('#ccc', false)}
             style={styles.Option}
-            onPress={this.handleModalsToggle}
-          >
-            <View style={{ flexDirection: 'row' }}>
-              <View style={styles.OptionIconContainer}>
-                <MaterialIcons name="delete-forever" size={24} />
-              </View>
-              <View style={styles.OptionTextContainer}>
-                <Text style={styles.OptionText}>Open Confirmation</Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            background={TouchableOpacity.Ripple('#ccc', false)}
-            style={styles.Option}
-            onPress={handleDeleteOptionsModal}
+            onPress={this.callModal}
           >
             <View style={{ flexDirection: 'row' }}>
               <View style={styles.OptionIconContainer}>
@@ -104,7 +86,7 @@ class AllPassengersOptionsModal extends Component {
           <TouchableOpacity
             background={TouchableOpacity.Ripple('#ccc', false)}
             style={[styles.Option, styles.LastOption]}
-            onPress={() => popupsModalsActionHandler({})}
+            onPress={popupsModalsActionHandler}
           >
             <View style={{ flexDirection: 'row' }}>
               <View style={styles.OptionIconContainer}>
@@ -123,7 +105,6 @@ class AllPassengersOptionsModal extends Component {
 
 AllPassengersOptionsModal.propTypes = {
   handleCallOptionsModal: PropTypes.func.isRequired,
-  handleDeleteOptionsModal: PropTypes.func.isRequired,
   confirmationPopupActionHandler: PropTypes.func.isRequired,
   popupsModalsActionHandler: PropTypes.oneOfType([PropTypes.func]).isRequired,
 };

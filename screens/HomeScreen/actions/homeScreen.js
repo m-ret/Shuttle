@@ -14,6 +14,11 @@ export const searchParamAction = searchParam => ({
   payload: { searchParam },
 });
 
+export const holdPassengerInfoAction = passengerInfo => ({
+  type: ActionTypes.PASSENGER_INFO,
+  payload: { passengerInfo },
+});
+
 export const passengerCardIdAction = passengerCardId => ({
   type: ActionTypes.PASSENGERS_CARD_ID,
   payload: { passengerCardId },

@@ -20,6 +20,7 @@ import FetchDeletePassenger from '../../APICalls/FetchDeletePassenger';
 
 import {
   passengerCardIdAction,
+  holdPassengerInfoAction,
   pickupPassengerCardIdAction,
   isDeletePassengerSuccessAction,
   unassignedPickUpPassengersAction,
@@ -35,6 +36,8 @@ class PassengerCardBasedOnRoute extends Component {
     const {
       searchParam,
       passengerInfo,
+      confirmationPopup,
+      toggleCardOptionsModal,
       unassignedPickUpPassengers,
       unassignedDropOffPassengers,
     } = this.props;
@@ -42,6 +45,8 @@ class PassengerCardBasedOnRoute extends Component {
     return (
       nextProps.searchParam !== searchParam ||
       nextProps.passengerInfo !== passengerInfo ||
+      nextProps.confirmationPopup !== confirmationPopup ||
+      nextProps.toggleCardOptionsModal !== toggleCardOptionsModal ||
       nextProps.unassignedPickUpPassengers !== unassignedPickUpPassengers ||
       nextProps.unassignedDropOffPassengers !== unassignedDropOffPassengers
     );
@@ -61,8 +66,8 @@ class PassengerCardBasedOnRoute extends Component {
   handleDeletePassenger = async id => {
     const {
       navigationStore,
-      popupsModalsActionHandler,
       passengerCardIdActionHandler,
+      confirmationPopupActionHandler,
       pickupPassengerCardIdActionHandler,
       isDeletePassengerSuccessActionHandler,
       unassignedPickUpPassengersActionHandler,
@@ -78,11 +83,25 @@ class PassengerCardBasedOnRoute extends Component {
       unassignedDropOffPassengersActionHandler,
     );
 
-    popupsModalsActionHandler(id);
+    confirmationPopupActionHandler();
+  };
+
+  callModalAndSetPassengerInfo = passengerInfo => {
+    const {
+      confirmationPopup,
+      popupsModalsActionHandler,
+      holdPassengerInfoActionHandler,
+      confirmationPopupActionHandler,
+    } = this.props;
+
+    if (confirmationPopup) confirmationPopupActionHandler();
+
+    popupsModalsActionHandler();
+    holdPassengerInfoActionHandler(passengerInfo);
   };
 
   componentToRenderBasedOnParams = info => {
-    const { popupsModalsActionHandler, searchParam } = this.props;
+    const { searchParam } = this.props;
     return (
       <View key={info.id}>
         <PassengersInfo
@@ -92,7 +111,7 @@ class PassengerCardBasedOnRoute extends Component {
           datetime={info.timestamp}
           searchParam={searchParam}
           cardinalpoint={info.cardinalpoint}
-          callModal={() => popupsModalsActionHandler(info)}
+          callModal={() => this.callModalAndSetPassengerInfo(info)}
         />
       </View>
     );
@@ -126,7 +145,7 @@ class PassengerCardBasedOnRoute extends Component {
     return (
       <>
         <View>
-          {passengerInfo && (
+          {!confirmationPopup && (
             <>
               <OptionsModal
                 openBy={toggleCardOptionsModal}
@@ -141,27 +160,28 @@ class PassengerCardBasedOnRoute extends Component {
                     handleCallOptionsModal={() =>
                       Linking.openURL(`tel:${passengerInfo.phone}`)
                     }
-                    openConfirmationPopup={() =>
-                      confirmationPopupActionHandler()
-                    }
-                  />
-                }
-              </OptionsModal>
-              <OptionsModal
-                openBy={confirmationPopup}
-                onRequestClose={() => confirmationPopupActionHandler()}
-              >
-                {
-                  <ConfirmationPopup
-                    id={passengerInfo.id}
-                    handleDeleteOptionsModal={() =>
-                      this.handleDeletePassenger(passengerInfo.id)
-                    }
+                    openConfirmationPopup={confirmationPopupActionHandler}
                   />
                 }
               </OptionsModal>
             </>
           )}
+          {console.log({ confirmationPopup })}
+
+          <OptionsModal
+            openBy={confirmationPopup}
+            onRequestClose={confirmationPopupActionHandler}
+          >
+            {
+              <ConfirmationPopup
+                id={passengerInfo.id}
+                handleDeleteOptionsModal={() =>
+                  this.handleDeletePassenger(passengerInfo.id)
+                }
+              />
+            }
+          </OptionsModal>
+
           {!navigationStore.index && unassignedDropOffPassengers
             ? this.showFeedbackIfNoLength(unassignedDropOffPassengers)
             : null}
@@ -185,6 +205,7 @@ PassengerCardBasedOnRoute.propTypes = {
   popupsModalsActionHandler: PropTypes.func.isRequired,
   passengerCardIdActionHandler: PropTypes.func.isRequired,
   confirmationPopupActionHandler: PropTypes.func.isRequired,
+  holdPassengerInfoActionHandler: PropTypes.func.isRequired,
   pickupPassengerCardIdActionHandler: PropTypes.func.isRequired,
   searchParam: PropTypes.oneOfType([PropTypes.string]).isRequired,
   isDeletePassengerSuccessActionHandler: PropTypes.func.isRequired,
@@ -202,7 +223,7 @@ export default compose(
     store => ({
       searchParam: store.homeScreen.searchParam,
       navigationStore: store.homeScreen.navigation,
-      passengerInfo: store.popupsModals.passengerInfo,
+      passengerInfo: store.homeScreen.passengerInfo,
       passengerCardId: store.homeScreen.passengerCardId,
       confirmationPopup: store.popupsModals.confirmationPopup,
       pickupPassengerCardId: store.homeScreen.pickupPassengerCardId,
@@ -212,8 +233,11 @@ export default compose(
       unassignedDropOffPassengers: store.homeScreen.unassignedDropOffPassengers,
     }),
     dispatch => ({
-      popupsModalsActionHandler: data => {
-        dispatch(popupsModalsAction(data));
+      holdPassengerInfoActionHandler: passengerInfo => {
+        dispatch(holdPassengerInfoAction(passengerInfo));
+      },
+      popupsModalsActionHandler: () => {
+        dispatch(popupsModalsAction());
       },
       passengerCardIdActionHandler: id => {
         dispatch(passengerCardIdAction(id));

@@ -3,6 +3,7 @@ import ActionTypes from '../constants/ActionTypes';
 
 const initialState = {
   searchParam: '',
+  passengerInfo: {},
   toggleSearch: false,
   passengerCardId: null,
   pickupTabColor: '#3DA7DC',
@@ -38,10 +39,17 @@ const handlers = {
     };
   },
 
-  [ActionTypes.TOGGLE_SEARCH](state, action) {
+  [ActionTypes.TOGGLE_SEARCH](state) {
     return {
       ...state,
       toggleSearch: !state.toggleSearch,
+    };
+  },
+
+  [ActionTypes.PASSENGER_INFO](state, action) {
+    return {
+      ...state,
+      passengerInfo: action.payload.passengerInfo,
     };
   },
 
