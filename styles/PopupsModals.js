@@ -1,6 +1,27 @@
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
+  WrapperContainerParent: {
+    marginTop: 22,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+
+  ContainerParent: {
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  WrapperContainer: {
+    width: 200,
+    height: 225,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#d8d8d8',
+  },
+
   Container: {
     flex: 1,
   },

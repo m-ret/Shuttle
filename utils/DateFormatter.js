@@ -8,7 +8,7 @@ const momentDateFormatter = date => {
     },
   });
 
-  return moment(date).isValid() ? moment(date).format('h:mma') : '— —';
+  return moment(date).isValid() ? moment(date).format('h:mma') : 'Invalid Date';
 };
 
 export default momentDateFormatter;

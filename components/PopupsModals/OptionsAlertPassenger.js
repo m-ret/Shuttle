@@ -1,64 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, View } from 'react-native';
-import { compose } from 'redux';
-import { connect } from 'react-redux';
-import { popupsModalsAction } from './actions/popupsModals';
 
-const OptionsModal = ({
-  toggleCardOptionsModal,
-  popupsModalsActionHandler,
-  children,
-}) => (
-  <View style={{ marginTop: 22, backgroundColor: 'rgba(255,255,255,0.5)' }}>
+import styles from '../../styles/PopupsModals';
+
+const OptionsModal = ({ openBy, children, onRequestClose }) => (
+  <View style={styles.WrapperContainerParent}>
     <Modal
-      animationType="fade"
       transparent
-      visible={toggleCardOptionsModal}
-      onRequestClose={popupsModalsActionHandler}
+      visible={openBy}
+      animationType="fade"
+      onRequestClose={onRequestClose}
     >
-      <View
-        style={{
-          backgroundColor: 'rgba(255,255,255,0.8)',
-          flex: 1,
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <View
-          style={{
-            width: 200,
-            height: 225,
-            backgroundColor: '#FFFFFF',
-            borderWidth: 1,
-            borderColor: '#d8d8d8',
-          }}
-        >
-          {children}
-        </View>
-      </View>
+      <View style={styles.ContainerParent}>{children}</View>
     </Modal>
   </View>
 );
 
 OptionsModal.propTypes = {
-  popupsModalsActionHandler: PropTypes.oneOfType([PropTypes.func]).isRequired,
+  onRequestClose: PropTypes.func.isRequired,
+  openBy: PropTypes.oneOfType([PropTypes.bool]).isRequired,
   children: PropTypes.oneOfType([PropTypes.object]).isRequired,
-  toggleCardOptionsModal: PropTypes.oneOfType([PropTypes.bool])
-    .isRequired,
 };
 
-export default compose(
-  connect(
-    store => ({
-      toggleCardOptionsModal:
-        store.popupsModals.toggleCardOptionsModal,
-    }),
-    dispatch => ({
-      popupsModalsActionHandler: () => {
-        dispatch(popupsModalsAction());
-      },
-    }),
-  ),
-)(OptionsModal);
+export default OptionsModal;

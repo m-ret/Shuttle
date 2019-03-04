@@ -11,7 +11,11 @@ import PassengersInfo from './PassengerInfo';
 
 import EmptyState from '../EmptyState/EmptyState';
 
-import { popupsModalsAction } from '../PopupsModals/actions/popupsModals';
+import {
+  popupsModalsAction,
+  confirmationPopupAction,
+} from '../PopupsModals/actions/popupsModals';
+
 import FetchDeletePassenger from '../../APICalls/FetchDeletePassenger';
 
 import {
@@ -23,6 +27,7 @@ import {
 } from '../../screens/HomeScreen/actions/homeScreen';
 
 import AllPassengersOptionsModal from '../PopupsModals/AllPassengersOptionsModal';
+import ConfirmationPopup from '../PopupsModals/ConfirmationPopup';
 import OptionsModal from '../PopupsModals/OptionsAlertPassenger';
 
 class PassengerCardBasedOnRoute extends Component {
@@ -111,26 +116,51 @@ class PassengerCardBasedOnRoute extends Component {
     const {
       passengerInfo,
       navigationStore,
+      confirmationPopup,
+      toggleCardOptionsModal,
+      popupsModalsActionHandler,
       unassignedPickUpPassengers,
       unassignedDropOffPassengers,
+      confirmationPopupActionHandler,
     } = this.props;
     return (
       <>
         <View>
           {passengerInfo && (
-            <OptionsModal>
-              {
-                <AllPassengersOptionsModal
-                  id={passengerInfo.id}
-                  handleDeleteOptionsModal={() =>
-                    this.handleDeletePassenger(passengerInfo.id)
-                  }
-                  handleCallOptionsModal={() =>
-                    Linking.openURL(`tel:${passengerInfo.phone}`)
-                  }
-                />
-              }
-            </OptionsModal>
+            <>
+              <OptionsModal
+                openBy={toggleCardOptionsModal}
+                onRequestClose={() => popupsModalsActionHandler}
+              >
+                {
+                  <AllPassengersOptionsModal
+                    id={passengerInfo.id}
+                    handleDeleteOptionsModal={() =>
+                      this.handleDeletePassenger(passengerInfo.id)
+                    }
+                    handleCallOptionsModal={() =>
+                      Linking.openURL(`tel:${passengerInfo.phone}`)
+                    }
+                    openConfirmationPopup={() =>
+                      confirmationPopupActionHandler()
+                    }
+                  />
+                }
+              </OptionsModal>
+              <OptionsModal
+                openBy={confirmationPopup}
+                onRequestClose={() => confirmationPopupActionHandler()}
+              >
+                {
+                  <ConfirmationPopup
+                    id={passengerInfo.id}
+                    handleDeleteOptionsModal={() =>
+                      this.handleDeletePassenger(passengerInfo.id)
+                    }
+                  />
+                }
+              </OptionsModal>
+            </>
           )}
           {!navigationStore.index && unassignedDropOffPassengers
             ? this.showFeedbackIfNoLength(unassignedDropOffPassengers)
@@ -154,13 +184,16 @@ PassengerCardBasedOnRoute.propTypes = {
   navigationStore: PropTypes.shape({}).isRequired,
   popupsModalsActionHandler: PropTypes.func.isRequired,
   passengerCardIdActionHandler: PropTypes.func.isRequired,
+  confirmationPopupActionHandler: PropTypes.func.isRequired,
   pickupPassengerCardIdActionHandler: PropTypes.func.isRequired,
   searchParam: PropTypes.oneOfType([PropTypes.string]).isRequired,
   isDeletePassengerSuccessActionHandler: PropTypes.func.isRequired,
   unassignedPickUpPassengersActionHandler: PropTypes.func.isRequired,
   unassignedDropOffPassengersActionHandler: PropTypes.func.isRequired,
+  confirmationPopup: PropTypes.oneOfType([PropTypes.bool]).isRequired,
   unassignedDropOffPassengers: PropTypes.oneOfType([PropTypes.array])
     .isRequired,
+  toggleCardOptionsModal: PropTypes.oneOfType([PropTypes.bool]).isRequired,
   unassignedPickUpPassengers: PropTypes.oneOfType([PropTypes.array]).isRequired,
 };
 
@@ -171,6 +204,7 @@ export default compose(
       navigationStore: store.homeScreen.navigation,
       passengerInfo: store.popupsModals.passengerInfo,
       passengerCardId: store.homeScreen.passengerCardId,
+      confirmationPopup: store.popupsModals.confirmationPopup,
       pickupPassengerCardId: store.homeScreen.pickupPassengerCardId,
       toggleCardOptionsModal: store.popupsModals.toggleCardOptionsModal,
       isDeletePassengerSuccess: store.homeScreen.isDeletePassengerSuccess,
@@ -183,6 +217,9 @@ export default compose(
       },
       passengerCardIdActionHandler: id => {
         dispatch(passengerCardIdAction(id));
+      },
+      confirmationPopupActionHandler: () => {
+        dispatch(confirmationPopupAction());
       },
       pickupPassengerCardIdActionHandler: id => {
         dispatch(pickupPassengerCardIdAction(id));

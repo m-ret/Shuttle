@@ -2,8 +2,9 @@ import createReducer from '../../../redux/createReducer';
 import ActionTypes from '../constants/ActionTypes';
 
 const initialState = {
-  toggleCardOptionsModal: false,
   passengerInfo: {},
+  confirmationPopup: false,
+  toggleCardOptionsModal: false,
 };
 
 const handlers = {
@@ -12,6 +13,13 @@ const handlers = {
       ...state,
       toggleCardOptionsModal: !state.toggleCardOptionsModal,
       passengerInfo: action.payload.passengerInfo,
+    };
+  },
+
+  [ActionTypes.TOGGLE_CONFIRMATION_POPUP](state) {
+    return {
+      ...state,
+      confirmationPopup: !state.confirmationPopup,
     };
   },
 };
