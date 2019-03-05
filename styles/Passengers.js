@@ -1,13 +1,6 @@
 import { StyleSheet } from 'react-native';
 
 const PassengersStyles = StyleSheet.create({
-  CTileList: {
-    margin: 0,
-    padding: 0,
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-
   CTileListItem: {
     display: 'flex',
     flexDirection: 'column',
@@ -46,7 +39,7 @@ const PassengersStyles = StyleSheet.create({
     display: 'flex',
     paddingLeft: 20,
     paddingRight: 20,
-    paddingBottom: 20,
+    paddingBottom: 10,
   },
 
   CArticleTileFooter: {
@@ -55,7 +48,6 @@ const PassengersStyles = StyleSheet.create({
     paddingRight: 20,
     paddingTop: 1,
     paddingBottom: 15,
-    marginTop: 'auto',
     color: '#949494',
   },
 

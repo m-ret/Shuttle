@@ -30,14 +30,14 @@ const globalStyles = StyleSheet.create({
     fontFamily: 'montserratBold',
   },
   touchableBtnDropOffItem: {
+    height: 36,
     display: 'flex',
+    borderRadius: 2,
+    flexBasis: '47%',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     alignContent: 'space-around',
-    height: 36,
-    borderRadius: 2,
-    flexBasis: '47%',
   },
   stretchContent: {
     flex: 1,

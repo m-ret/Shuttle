@@ -1,10 +1,10 @@
-import { TextInput, View } from 'react-native';
+import { KeyboardAvoidingView, TextInput, View } from 'react-native';
 import React from 'react';
 import PropTypes from 'prop-types';
 import PassengersStyles from '../../styles/Passengers';
 
 const SearchBox = ({ onChangeText, searchParam }) => (
-  <View>
+  <KeyboardAvoidingView behavior="padding" enabled>
     <TextInput
       autoFocus
       style={PassengersStyles.SearchBox}
@@ -13,7 +13,7 @@ const SearchBox = ({ onChangeText, searchParam }) => (
       placeholder="Search..."
       autoCapitalize="none"
     />
-  </View>
+  </KeyboardAvoidingView>
 );
 
 SearchBox.propTypes = {

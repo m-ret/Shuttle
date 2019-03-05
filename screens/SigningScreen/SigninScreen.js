@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import SigninSubmitButton from '../../components/SigninScreen/SubmitButton';
@@ -21,14 +21,19 @@ class SigninScreen extends React.Component {
   signInAsync = () => {
     const { username, password } = this.state;
     const { navigation, userTokenActionHandler } = this.props;
-    FetchLoginData(username, password, navigation, userTokenActionHandler);
+    return FetchLoginData(
+      username,
+      password,
+      navigation,
+      userTokenActionHandler,
+    );
   };
 
   render() {
     const { username, password } = this.state;
 
     return (
-      <View style={globalStyles.container}>
+      <ScrollView style={globalStyles.container}>
         <TopComponent />
 
         <View style={signingStyles.formContainer}>
@@ -58,7 +63,7 @@ class SigninScreen extends React.Component {
             />
           </View>
         </View>
-      </View>
+      </ScrollView>
     );
   }
 }

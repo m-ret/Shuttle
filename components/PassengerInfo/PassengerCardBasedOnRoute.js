@@ -21,6 +21,7 @@ import { holdPassengerInfoAction } from '../../screens/HomeScreen/actions/homeSc
 import CardOptionsModalParent from '../PopupsModals/CardOptionsModalParent';
 import ConfirmationPopupParent from '../PopupsModals/ConfirmationPopupParent';
 import PassengerFormModalParent from '../PopupsModals/PassengerFormModalParent';
+import EditAddressInput from '../PopupsModals/EditAddressInput';
 
 class PassengerCardBasedOnRoute extends Component {
   shouldComponentUpdate(nextProps, nextState) {
@@ -117,14 +118,7 @@ class PassengerCardBasedOnRoute extends Component {
     } = this.props;
     return (
       <>
-        <View>
-          {console.log('I AM RENDERING')}
-          <CardOptionsModalParent />
-
-          <ConfirmationPopupParent />
-
-          <PassengerFormModalParent />
-
+        <View style={{ marginTop: 38 }}>
           {!navigationStore.index && unassignedDropOffPassengers
             ? this.showFeedbackIfNoLength(unassignedDropOffPassengers)
             : null}
@@ -133,6 +127,10 @@ class PassengerCardBasedOnRoute extends Component {
             ? this.showFeedbackIfNoLength(unassignedPickUpPassengers)
             : null}
         </View>
+        <EditAddressInput />
+        <CardOptionsModalParent />
+        <ConfirmationPopupParent />
+        <PassengerFormModalParent />
       </>
     );
   }

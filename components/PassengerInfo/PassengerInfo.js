@@ -51,70 +51,65 @@ const PassengersInfo = ({
   };
 
   return (
-    <View>
-      <View style={{ height: 30 }} />
-      <View>
-        <View style={PassengersStyles.CTileList}>
-          <View style={PassengersStyles.CTileListItem}>
-            <View>
-              <View style={PassengersStyles.CArticleTileHeader}>
-                <View style={PassengersStyles.CardinalPointWrapper}>
-                  <Text style={PassengersStyles.CArticleTileCategory}>
-                    {cardinalpoint}
-                  </Text>
-                </View>
-
-                <View>
-                  <TouchableOpacity
-                    style={{ paddingHorizontal: 10 }}
-                    onPress={callModal}
-                  >
-                    <View>
-                      <Ionicons name="md-more" color="#979797" size={24} />
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              </View>
-              <View style={PassengersStyles.CArticleTileBody}>
-                <Text
-                  style={[
-                    PassengersStyles.NameOfClient,
-                    {
-                      color: navigationStore.index
-                        ? Colors.pickupTabColor
-                        : Colors.dropOffTabColor,
-                    },
-                  ]}
-                >
-                  {name}
-                </Text>
-                <Text style={PassengersStyles.Address}>{address}</Text>
-                <Text style={PassengersStyles.RequestedTimeText}>
-                  Requested at{' '}
-                  <Text style={PassengersStyles.RequestedTime}>
-                    {momentDateFormatter(datetime)}
-                  </Text>
-                </Text>
-              </View>
-
-              <View style={PassengersStyles.CArticleTileFooter}>
-                <TouchableOpacity
-                  onPress={handleAddToMyPassengers}
-                  style={[
-                    globalStyles.touchableBtnDropOffItem,
-                    {
-                      backgroundColor: navigationStore.index
-                        ? Colors.pickupTabColor
-                        : Colors.dropOffTabColor,
-                    },
-                  ]}
-                >
-                  <Text style={{ color: '#fff', fontWeight: 'bold' }}>
-                    ADD TO MY PASSENGERS
-                  </Text>
-                </TouchableOpacity>
-              </View>
+    <View style={{ marginBottom: 38 }}>
+      <View style={PassengersStyles.CTileListItem}>
+        <View>
+          <View style={PassengersStyles.CArticleTileHeader}>
+            <View style={PassengersStyles.CardinalPointWrapper}>
+              <Text style={PassengersStyles.CArticleTileCategory}>
+                {cardinalpoint}
+              </Text>
             </View>
+
+            <View>
+              <TouchableOpacity
+                style={{ paddingHorizontal: 10 }}
+                onPress={callModal}
+              >
+                <View>
+                  <Ionicons name="md-more" color="#979797" size={24} />
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={PassengersStyles.CArticleTileBody}>
+            <Text
+              style={[
+                PassengersStyles.NameOfClient,
+                {
+                  color: navigationStore.index
+                    ? Colors.pickupTabColor
+                    : Colors.dropOffTabColor,
+                },
+              ]}
+            >
+              {name}
+            </Text>
+            <Text style={PassengersStyles.Address}>{address}</Text>
+            <Text style={PassengersStyles.RequestedTimeText}>
+              Requested at{' '}
+              <Text style={PassengersStyles.RequestedTime}>
+                {momentDateFormatter(datetime)}
+              </Text>
+            </Text>
+          </View>
+
+          <View style={PassengersStyles.CArticleTileFooter}>
+            <TouchableOpacity
+              onPress={handleAddToMyPassengers}
+              style={[
+                globalStyles.touchableBtnDropOffItem,
+                {
+                  backgroundColor: navigationStore.index
+                    ? Colors.pickupTabColor
+                    : Colors.dropOffTabColor,
+                },
+              ]}
+            >
+              <Text style={{ color: '#fff', fontWeight: 'bold' }}>
+                ADD TO MY PASSENGERS
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>

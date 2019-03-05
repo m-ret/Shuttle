@@ -1,5 +1,10 @@
 import React from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import {
+  Platform,
+  StatusBar,
+  StyleSheet,
+  KeyboardAvoidingView,
+} from 'react-native';
 import { Provider as ReduxProvider } from 'react-redux';
 import { AppLoading, Font, Icon } from 'expo';
 import store from './redux/store';
@@ -53,12 +58,12 @@ class App extends React.Component {
       );
     }
     return (
-      <ReduxProvider store={store}>
-        <View style={styles.container}>
+      <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
+        <ReduxProvider store={store}>
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
           <AppNavigator />
-        </View>
-      </ReduxProvider>
+        </ReduxProvider>
+      </KeyboardAvoidingView>
     );
   }
 }
