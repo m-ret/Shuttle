@@ -4,7 +4,7 @@ import { View } from 'react-native';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import SigninSubmitButton from '../../components/SigninScreen/SubmitButton';
-import SigningInputs from '../../components/SigninScreen/Inputs';
+import FormInputs from '../../components/SigninScreen/Inputs';
 import TopComponent from '../../components/SigninScreen/TopComponent';
 import globalStyles from '../../styles/GlobalStyles';
 import signingStyles from '../../styles/SigningScreenStyles';
@@ -32,13 +32,13 @@ class SigninScreen extends React.Component {
         <TopComponent />
 
         <View style={signingStyles.formContainer}>
-          <SigningInputs
+          <FormInputs
             onChangeText={user => this.setState({ username: user })}
             labelText="User Name"
             inputLength={username.length}
           />
 
-          <SigningInputs
+          <FormInputs
             onChangeText={pass => this.setState({ password: pass })}
             secureTextEntry
             labelText="Password"

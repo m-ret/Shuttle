@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { View, TextInput, Animated } from 'react-native';
 import signingStyles from '../../styles/SigningScreenStyles';
 
-export default class SigningInputs extends Component {
+export default class FormInputs extends Component {
   componentWillMount() {
     this.animatedIsFocused = new Animated.Value(0);
   }
@@ -69,11 +69,11 @@ export default class SigningInputs extends Component {
   }
 }
 
-SigningInputs.defaultProps = {
+FormInputs.defaultProps = {
   secureTextEntry: false,
 };
 
-SigningInputs.propTypes = {
+FormInputs.propTypes = {
   secureTextEntry: PropTypes.oneOfType([PropTypes.bool]),
   onChangeText: PropTypes.func.isRequired,
   labelText: PropTypes.oneOfType([PropTypes.string]).isRequired,

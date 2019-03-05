@@ -1,4 +1,4 @@
-import { View, Linking } from 'react-native';
+import { View } from 'react-native';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
@@ -16,37 +16,38 @@ import {
   confirmationPopupAction,
 } from '../PopupsModals/actions/popupsModals';
 
-import FetchDeletePassenger from '../../APICalls/FetchDeletePassenger';
+import { holdPassengerInfoAction } from '../../screens/HomeScreen/actions/homeScreen';
 
-import {
-  passengerCardIdAction,
-  holdPassengerInfoAction,
-  pickupPassengerCardIdAction,
-  isDeletePassengerSuccessAction,
-  unassignedPickUpPassengersAction,
-  unassignedDropOffPassengersAction,
-} from '../../screens/HomeScreen/actions/homeScreen';
-
-import AllPassengersOptionsModal from '../PopupsModals/AllPassengersOptionsModal';
-import ConfirmationPopup from '../PopupsModals/ConfirmationPopup';
-import OptionsModal from '../PopupsModals/OptionsAlertPassenger';
+import CardOptionsModalParent from '../PopupsModals/CardOptionsModalParent';
+import ConfirmationPopupParent from '../PopupsModals/ConfirmationPopupParent';
+import PassengerFormModalParent from '../PopupsModals/PassengerFormModalParent';
 
 class PassengerCardBasedOnRoute extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     const {
       searchParam,
       passengerInfo,
+      navigationStore,
       confirmationPopup,
       toggleCardOptionsModal,
+      popupsModalsActionHandler,
       unassignedPickUpPassengers,
       unassignedDropOffPassengers,
+      confirmationPopupActionHandler,
+      holdPassengerInfoActionHandler,
     } = this.props;
 
     return (
+      nextProps.confirmationPopupActionHandler !==
+        confirmationPopupActionHandler ||
+      nextProps.holdPassengerInfoActionHandler !==
+        holdPassengerInfoActionHandler ||
       nextProps.searchParam !== searchParam ||
       nextProps.passengerInfo !== passengerInfo ||
+      nextProps.navigationStore !== navigationStore ||
       nextProps.confirmationPopup !== confirmationPopup ||
       nextProps.toggleCardOptionsModal !== toggleCardOptionsModal ||
+      nextProps.popupsModalsActionHandler !== popupsModalsActionHandler ||
       nextProps.unassignedPickUpPassengers !== unassignedPickUpPassengers ||
       nextProps.unassignedDropOffPassengers !== unassignedDropOffPassengers
     );
@@ -61,29 +62,6 @@ class PassengerCardBasedOnRoute extends Component {
           .includes(searchParam.toLowerCase()),
       ),
     );
-  };
-
-  handleDeletePassenger = async id => {
-    const {
-      navigationStore,
-      passengerCardIdActionHandler,
-      confirmationPopupActionHandler,
-      pickupPassengerCardIdActionHandler,
-      isDeletePassengerSuccessActionHandler,
-      unassignedPickUpPassengersActionHandler,
-      unassignedDropOffPassengersActionHandler,
-    } = this.props;
-    await FetchDeletePassenger(
-      id,
-      navigationStore,
-      passengerCardIdActionHandler,
-      pickupPassengerCardIdActionHandler,
-      isDeletePassengerSuccessActionHandler,
-      unassignedPickUpPassengersActionHandler,
-      unassignedDropOffPassengersActionHandler,
-    );
-
-    confirmationPopupActionHandler();
   };
 
   callModalAndSetPassengerInfo = passengerInfo => {
@@ -133,54 +111,19 @@ class PassengerCardBasedOnRoute extends Component {
 
   render() {
     const {
-      passengerInfo,
       navigationStore,
-      confirmationPopup,
-      toggleCardOptionsModal,
-      popupsModalsActionHandler,
       unassignedPickUpPassengers,
       unassignedDropOffPassengers,
-      confirmationPopupActionHandler,
     } = this.props;
     return (
       <>
         <View>
-          {!confirmationPopup && (
-            <>
-              <OptionsModal
-                openBy={toggleCardOptionsModal}
-                onRequestClose={() => popupsModalsActionHandler}
-              >
-                {
-                  <AllPassengersOptionsModal
-                    id={passengerInfo.id}
-                    handleDeleteOptionsModal={() =>
-                      this.handleDeletePassenger(passengerInfo.id)
-                    }
-                    handleCallOptionsModal={() =>
-                      Linking.openURL(`tel:${passengerInfo.phone}`)
-                    }
-                    openConfirmationPopup={confirmationPopupActionHandler}
-                  />
-                }
-              </OptionsModal>
-            </>
-          )}
-          {console.log({ confirmationPopup })}
+          {console.log('I AM RENDERING')}
+          <CardOptionsModalParent />
 
-          <OptionsModal
-            openBy={confirmationPopup}
-            onRequestClose={confirmationPopupActionHandler}
-          >
-            {
-              <ConfirmationPopup
-                id={passengerInfo.id}
-                handleDeleteOptionsModal={() =>
-                  this.handleDeletePassenger(passengerInfo.id)
-                }
-              />
-            }
-          </OptionsModal>
+          <ConfirmationPopupParent />
+
+          <PassengerFormModalParent />
 
           {!navigationStore.index && unassignedDropOffPassengers
             ? this.showFeedbackIfNoLength(unassignedDropOffPassengers)
@@ -203,14 +146,9 @@ PassengerCardBasedOnRoute.propTypes = {
   ]).isRequired,
   navigationStore: PropTypes.shape({}).isRequired,
   popupsModalsActionHandler: PropTypes.func.isRequired,
-  passengerCardIdActionHandler: PropTypes.func.isRequired,
   confirmationPopupActionHandler: PropTypes.func.isRequired,
   holdPassengerInfoActionHandler: PropTypes.func.isRequired,
-  pickupPassengerCardIdActionHandler: PropTypes.func.isRequired,
   searchParam: PropTypes.oneOfType([PropTypes.string]).isRequired,
-  isDeletePassengerSuccessActionHandler: PropTypes.func.isRequired,
-  unassignedPickUpPassengersActionHandler: PropTypes.func.isRequired,
-  unassignedDropOffPassengersActionHandler: PropTypes.func.isRequired,
   confirmationPopup: PropTypes.oneOfType([PropTypes.bool]).isRequired,
   unassignedDropOffPassengers: PropTypes.oneOfType([PropTypes.array])
     .isRequired,
@@ -224,9 +162,7 @@ export default compose(
       searchParam: store.homeScreen.searchParam,
       navigationStore: store.homeScreen.navigation,
       passengerInfo: store.homeScreen.passengerInfo,
-      passengerCardId: store.homeScreen.passengerCardId,
       confirmationPopup: store.popupsModals.confirmationPopup,
-      pickupPassengerCardId: store.homeScreen.pickupPassengerCardId,
       toggleCardOptionsModal: store.popupsModals.toggleCardOptionsModal,
       isDeletePassengerSuccess: store.homeScreen.isDeletePassengerSuccess,
       unassignedPickUpPassengers: store.homeScreen.unassignedPickUpPassengers,
@@ -239,23 +175,8 @@ export default compose(
       popupsModalsActionHandler: () => {
         dispatch(popupsModalsAction());
       },
-      passengerCardIdActionHandler: id => {
-        dispatch(passengerCardIdAction(id));
-      },
       confirmationPopupActionHandler: () => {
         dispatch(confirmationPopupAction());
-      },
-      pickupPassengerCardIdActionHandler: id => {
-        dispatch(pickupPassengerCardIdAction(id));
-      },
-      unassignedPickUpPassengersActionHandler: data => {
-        dispatch(unassignedPickUpPassengersAction(data));
-      },
-      unassignedDropOffPassengersActionHandler: data => {
-        dispatch(unassignedDropOffPassengersAction(data));
-      },
-      isDeletePassengerSuccessActionHandler: isSuccess => {
-        dispatch(isDeletePassengerSuccessAction(isSuccess));
       },
     }),
   ),

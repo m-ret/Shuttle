@@ -1,5 +1,7 @@
 import { StyleSheet } from 'react-native';
 
+const dropOffTabColor = '#ff5252';
+
 const styles = StyleSheet.create({
   WrapperContainerParent: {
     marginTop: 22,
@@ -7,19 +9,19 @@ const styles = StyleSheet.create({
   },
 
   ContainerParent: {
-    backgroundColor: 'rgba(0,0,0,0.5)',
     flex: 1,
+    alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
   },
 
   WrapperContainer: {
     width: 200,
     height: 225,
-    backgroundColor: '#FFFFFF',
     borderWidth: 1,
     borderColor: '#d8d8d8',
+    backgroundColor: '#FFFFFF',
   },
 
   Container: {
@@ -27,13 +29,13 @@ const styles = StyleSheet.create({
   },
 
   Option: {
-    paddingHorizontal: 15,
-    paddingVertical: 15,
+    flex: 1,
     borderBottomWidth: 1,
-    borderBottomColor: '#d8d8d8',
     alignItems: 'center',
-    justifyContent: 'center',
+    paddingHorizontal: 15,
     alignContent: 'center',
+    justifyContent: 'center',
+    borderBottomColor: '#d8d8d8',
   },
 
   LastOption: {
@@ -44,12 +46,13 @@ const styles = StyleSheet.create({
     marginRight: 9,
     flexBasis: '40%',
     alignItems: 'center',
-    justifyContent: 'center',
     alignContent: 'center',
+    justifyContent: 'center',
   },
 
   OptionTextContainer: {
     flexBasis: '60%',
+    paddingVertical: 15,
   },
 
   OptionText: {
@@ -89,7 +92,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 
-  ConfirmationOptionText: {
+  ModalButtonText: {
     fontSize: 12,
     marginTop: 1,
     color: '#c50e29',
@@ -97,12 +100,104 @@ const styles = StyleSheet.create({
   },
 
   ButtonsWrapper: {
+    marginTop: 20,
     display: 'flex',
     flexDirection: 'row',
-    marginTop: 20,
     alignItems: 'flex-end',
     alignContent: 'flex-end',
     justifyContent: 'flex-end',
+  },
+
+  AddEditWrapper: {
+    flex: 1,
+    width: 300,
+    padding: 20,
+    margin: 160,
+    borderWidth: 1,
+    borderColor: '#d8d8d8',
+    backgroundColor: '#FFFFFF',
+  },
+
+  AddEditContainer: {
+    flexDirection: 'row',
+    marginBottom: 30,
+  },
+
+  AddEditModalTitle: {
+    flex: 1,
+    flexDirection: 'row',
+    alignContent: 'stretch',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+  },
+
+  AddEditIconContainer: {
+    marginRight: 9,
+    alignItems: 'center',
+    alignContent: 'center',
+    justifyContent: 'center',
+  },
+
+  AddEditOptionTextContainer: {
+    fontSize: 16,
+    paddingTop: 5,
+    alignItems: 'center',
+    alignContent: 'center',
+    justifyContent: 'center',
+  },
+
+  AddEditInputsWrapper: {
+    flex: 1,
+    alignItems: 'stretch',
+    alignContent: 'stretch',
+    flexDirection: 'column',
+    justifyContent: 'center',
+  },
+
+  AddEditInputs: {
+    flex: 1,
+    height: 40,
+    paddingLeft: 35,
+    fontWeight: '600',
+    borderBottomWidth: 1,
+    borderBottomColor: 'gray',
+  },
+
+  IconWithinInput: {
+    left: 0,
+    padding: 10,
+    position: 'absolute',
+  },
+
+  InputContainer: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+
+  AddEditButtonsWrapper: {
+    paddingTop: 10,
+  },
+
+  SaveButtonStyle: {
+    backgroundColor: dropOffTabColor,
+    borderRadius: 4,
+    padding: 10,
+    paddingHorizontal: 25,
+  },
+
+  ButtonTextStyle: {
+    color: '#FFFFFF',
+    fontWeight: '900',
+  },
+
+  CancelButtonStyle: {
+    borderRadius: 4,
+    padding: 10,
+    marginRight: 20,
+  },
+
+  CancelButtonTextStyle: {
+    color: '#000000',
   },
 });
 

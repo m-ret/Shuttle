@@ -3,6 +3,7 @@ import ActionTypes from '../constants/ActionTypes';
 
 const initialState = {
   confirmationPopup: false,
+  editPassengerModal: false,
   toggleCardOptionsModal: false,
 };
 
@@ -18,6 +19,13 @@ const handlers = {
     return {
       ...state,
       confirmationPopup: !state.confirmationPopup,
+    };
+  },
+
+  [ActionTypes.TOGGLE_EDIT_PASSENGER_MODAL](state) {
+    return {
+      ...state,
+      editPassengerModal: !state.editPassengerModal,
     };
   },
 };

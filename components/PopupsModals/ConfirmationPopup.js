@@ -1,12 +1,16 @@
 import React from 'react';
-import { Text, View, TouchableOpacity } from 'react-native';
+import {Text, TouchableOpacity, View} from 'react-native';
 
 import PropTypes from 'prop-types';
+
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+
 import styles from '../../styles/PopupsModals';
 
 import { confirmationPopupAction } from './actions/popupsModals';
+
+import ConfirmationPopupBtn from './ConfirmationPopupBtn';
 
 const ConfirmationPopup = ({
   handleDeleteOptionsModal,
@@ -18,28 +22,16 @@ const ConfirmationPopup = ({
         Are you sure you want to delete this passenger?
       </Text>
       <View style={styles.ButtonsWrapper}>
-        <TouchableOpacity
-          style={styles.ConfirmationOption}
-          background={TouchableOpacity.Ripple('#ccc', false)}
+        <ConfirmationPopupBtn
+          text="Cancel"
           onPress={confirmationPopupActionHandler}
-        >
-          <View>
-            <View>
-              <Text style={styles.ConfirmationOptionText}>Cancel</Text>
-            </View>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.ConfirmationOption}
           background={TouchableOpacity.Ripple('#ccc', false)}
+        />
+        <ConfirmationPopupBtn
+          text="Delete"
           onPress={handleDeleteOptionsModal}
-        >
-          <View>
-            <View>
-              <Text style={styles.ConfirmationOptionText}>Delete</Text>
-            </View>
-          </View>
-        </TouchableOpacity>
+          background={TouchableOpacity.Ripple('#ccc', false)}
+        />
       </View>
     </View>
   </View>
