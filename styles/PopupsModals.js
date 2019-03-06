@@ -4,7 +4,7 @@ const dropOffTabColor = '#ff5252';
 
 const styles = StyleSheet.create({
   WrapperContainerParent: {
-    marginTop: 22,
+    // marginTop: 22,
     backgroundColor: 'rgba(0,0,0,0.5)',
   },
 

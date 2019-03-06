@@ -257,6 +257,7 @@ class PassengerFormModal extends Component {
 }
 
 PassengerFormModal.defaultProps = {
+  editPassengerData: {},
   newAddressFromGoogle: {},
 };
 
@@ -268,13 +269,13 @@ PassengerFormModal.propTypes = {
   ]).isRequired,
   navigationStore: PropTypes.shape({}).isRequired,
   editPassengerModalActionHandler: PropTypes.func.isRequired,
+  editPassengerData: PropTypes.oneOfType([PropTypes.object]),
   newAddressFromGoogleActionHandler: PropTypes.func.isRequired,
   newAddressFromGoogle: PropTypes.oneOfType([PropTypes.object]),
   toggleGooglePlacesInputActionHandler: PropTypes.func.isRequired,
   unassignedPickUpPassengersActionHandler: PropTypes.func.isRequired,
   unassignedDropOffPassengersActionHandler: PropTypes.func.isRequired,
   editPassengerModal: PropTypes.oneOfType([PropTypes.bool]).isRequired,
-  editPassengerData: PropTypes.oneOfType([PropTypes.object]).isRequired,
   toggleGooglePlacesInput: PropTypes.oneOfType([PropTypes.bool]).isRequired,
 };
 

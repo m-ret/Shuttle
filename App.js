@@ -14,6 +14,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    // paddingTop: Platform.OS === 'ios' ? StatusBar.currentHeight : 0,
   },
 });
 
@@ -58,12 +59,16 @@ class App extends React.Component {
       );
     }
     return (
-      <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
-        <ReduxProvider store={store}>
-          {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+      <ReduxProvider store={store}>
+        {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+        <KeyboardAvoidingView
+          style={styles.container}
+          behavior="padding"
+          enabled
+        >
           <AppNavigator />
-        </ReduxProvider>
-      </KeyboardAvoidingView>
+        </KeyboardAvoidingView>
+      </ReduxProvider>
     );
   }
 }

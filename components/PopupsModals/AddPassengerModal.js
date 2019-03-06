@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import {
+  View,
+  Platform,
+  StatusBar,
+  StyleSheet,
+} from 'react-native';
 
 import PropTypes from 'prop-types';
 

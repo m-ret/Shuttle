@@ -9,10 +9,10 @@ import styles from '../../styles/PopupsModals';
 import ConfirmationPopupBtn from './ConfirmationPopupBtn';
 
 const PassengerFormWrapper = ({
-  onPressCancel,
-  onPressSave,
-  onPressToToggleModal,
   children,
+  onPressSave,
+  onPressCancel,
+  onPressToToggleModal,
 }) => (
   <>
     <View style={styles.AddEditWrapper}>
@@ -29,6 +29,7 @@ const PassengerFormWrapper = ({
           <Ionicons name="ios-close" size={24} onPress={onPressToToggleModal} />
         </View>
       </View>
+
       {children}
 
       <View style={[styles.ButtonsWrapper, styles.AddEditButtonsWrapper]}>
@@ -40,9 +41,9 @@ const PassengerFormWrapper = ({
         />
         <ConfirmationPopupBtn
           text="Save"
+          onPress={onPressSave}
           saveButtonStyle={styles.SaveButtonStyle}
           buttonTextStyle={styles.ButtonTextStyle}
-          onPress={onPressSave}
         />
       </View>
     </View>

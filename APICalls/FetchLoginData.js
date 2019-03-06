@@ -17,7 +17,7 @@ const FetchLoginData = async (
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email: username, password }),
+        body: JSON.stringify({ username, password }),
       },
     );
     const responseJson = await response.json();

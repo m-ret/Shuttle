@@ -33,13 +33,6 @@ const handlers = {
     };
   },
 
-  [ActionTypes.TOGGLE_ALL_PASSENGERS_MODAL](state) {
-    return {
-      ...state,
-      toggleCardOptionsModal: !state.toggleCardOptionsModal,
-    };
-  },
-
   [ActionTypes.TOGGLE_EDIT_PASSENGER_MODAL](state) {
     return {
       ...state,
@@ -51,6 +44,13 @@ const handlers = {
     return {
       ...state,
       cancelPassengerEdit: !state.cancelPassengerEdit,
+    };
+  },
+
+  [ActionTypes.TOGGLE_ALL_PASSENGERS_MODAL](state) {
+    return {
+      ...state,
+      toggleCardOptionsModal: !state.toggleCardOptionsModal,
     };
   },
 

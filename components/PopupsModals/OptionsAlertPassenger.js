@@ -9,7 +9,7 @@ const OptionsModal = ({ openBy, children, onRequestClose }) => (
     <Modal
       transparent
       visible={openBy}
-      animationType="fade"
+      animationType="slide"
       onRequestClose={onRequestClose}
     >
       <View style={styles.ContainerParent}>{children}</View>
