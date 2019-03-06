@@ -38,13 +38,13 @@ class SigninScreen extends React.Component {
 
         <View style={signingStyles.formContainer}>
           <FormInputs
-            onChangeText={user => this.setState({ username: user })}
+            onChangeText={username => this.setState({ username })}
             labelText="User Name"
             inputLength={username.length}
           />
 
           <FormInputs
-            onChangeText={pass => this.setState({ password: pass })}
+            onChangeText={password => this.setState({ password })}
             secureTextEntry
             labelText="Password"
             inputLength={password.length}
