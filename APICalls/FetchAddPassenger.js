@@ -39,16 +39,6 @@ const FetchAddPassenger = async (
       },
     });
     responseJson = await response.json();
-
-    console.log({
-      name,
-      phone,
-      pickup: route === 'PickUp' ? 1 : 0,
-      address,
-      latitude,
-      longitude,
-    });
-
     if (has(responseJson, 'error')) {
       Alert.alert('Error', 'Unable to process your request at this time.');
     } else if (route === 'PickUp') {
