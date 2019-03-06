@@ -21,7 +21,11 @@ export const newAddressFromGoogleAction = newAddressFromGoogle => ({
   payload: { newAddressFromGoogle },
 });
 
-export const editPassengerDataAction = editPassengerData => ({
-  type: ActionTypes.EDIT_PASSENGER_DATA,
-  payload: { editPassengerData },
+export const addPassengerDataAction = addPassengerData => ({
+  type: ActionTypes.ADD_PASSENGER_DATA,
+  payload: { addPassengerData },
+});
+
+export const toggleAddPassengerModalAction = () => ({
+  type: ActionTypes.TOGGLE_ADD_PASSENGER_MODAL,
 });

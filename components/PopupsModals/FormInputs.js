@@ -12,6 +12,7 @@ class AddEditFormInputs extends Component {
       onFocus,
       iconName,
       shouldFocus,
+      placeholder,
       onChangeText,
       textStateValue,
     } = this.props;
@@ -20,6 +21,7 @@ class AddEditFormInputs extends Component {
       <View style={styles.InputContainer}>
         <Ionicons style={styles.IconWithinInput} name={iconName} size={24} />
         <TextInput
+          placeholder={placeholder}
           onFocus={onFocus}
           value={textStateValue}
           onChangeText={onChangeText}
@@ -33,15 +35,17 @@ class AddEditFormInputs extends Component {
 }
 
 AddEditFormInputs.defaultProps = {
+  placeholder: '',
   isRef: undefined,
-  onFocus: undefined,
   textStateValue: '',
+  onFocus: undefined,
 };
 
 AddEditFormInputs.propTypes = {
   isRef: PropTypes.func,
   onFocus: PropTypes.func,
   onChangeText: PropTypes.func.isRequired,
+  placeholder: PropTypes.oneOfType([PropTypes.string]),
   textStateValue: PropTypes.oneOfType([PropTypes.string]),
   iconName: PropTypes.oneOfType([PropTypes.string]).isRequired,
   shouldFocus: PropTypes.oneOfType([PropTypes.bool]).isRequired,

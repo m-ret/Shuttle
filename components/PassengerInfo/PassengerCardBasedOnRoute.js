@@ -19,6 +19,7 @@ import {
 import { holdPassengerInfoAction } from '../../screens/HomeScreen/actions/homeScreen';
 
 import CardOptionsModalParent from '../PopupsModals/CardOptionsModalParent';
+import AddPassengerModalParent from '../PopupsModals/AddPassengerModalParent';
 import ConfirmationPopupParent from '../PopupsModals/ConfirmationPopupParent';
 import PassengerFormModalParent from '../PopupsModals/PassengerFormModalParent';
 
@@ -126,6 +127,7 @@ class PassengerCardBasedOnRoute extends Component {
             ? this.showFeedbackIfNoLength(unassignedPickUpPassengers)
             : null}
         </View>
+        <AddPassengerModalParent />
         <CardOptionsModalParent />
         <ConfirmationPopupParent />
         <PassengerFormModalParent />

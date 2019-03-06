@@ -2,20 +2,28 @@ import createReducer from '../../../redux/createReducer';
 import ActionTypes from '../constants/ActionTypes';
 
 const initialState = {
-  editPassengerData: {},
+  addPassengerData: {},
   newAddressFromGoogle: {},
   confirmationPopup: false,
   editPassengerModal: false,
   cancelPassengerEdit: false,
   toggleCardOptionsModal: false,
   toggleGooglePlacesInput: false,
+  toggleAddPassengerModal: false,
 };
 
 const handlers = {
-  [ActionTypes.EDIT_PASSENGER_DATA](state, action) {
+  [ActionTypes.TOGGLE_ADD_PASSENGER_MODAL](state) {
     return {
       ...state,
-      editPassengerData: action.payload.editPassengerData,
+      toggleAddPassengerModal: !state.toggleAddPassengerModal,
+    };
+  },
+
+  [ActionTypes.ADD_PASSENGER_DATA](state, action) {
+    return {
+      ...state,
+      addPassengerData: action.payload.addPassengerData,
     };
   },
   [ActionTypes.TOGGLE_CONFIRMATION_POPUP](state) {

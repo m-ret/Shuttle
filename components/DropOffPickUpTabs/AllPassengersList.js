@@ -24,6 +24,7 @@ import {
 
 import SearchBox from '../SearchBox/SearchBox';
 import FetchUndoAddToMyPassenger from '../../APICalls/FetchUndoAddToMyPassenger';
+import { toggleAddPassengerModalAction } from '../PopupsModals/actions/popupsModals';
 
 class AllPassengersList extends Component {
   componentDidMount() {
@@ -39,10 +40,12 @@ class AllPassengersList extends Component {
       navigationStore,
       passengerCardId,
       pickupPassengerCardId,
+      toggleAddPassengerModal,
       searchParamActionHandler,
       unassignedPickUpPassengers,
       isAddToMyPassengersSuccess,
       unassignedDropOffPassengers,
+      toggleAddPassengerModalActionHandler,
     } = this.props;
 
     return (
@@ -51,10 +54,12 @@ class AllPassengersList extends Component {
       nextProps.navigationStore !== navigationStore ||
       nextProps.passengerCardId !== passengerCardId ||
       nextProps.pickupPassengerCardId !== pickupPassengerCardId ||
+      nextProps.toggleAddPassengerModal !== toggleAddPassengerModal ||
       nextProps.searchParamActionHandler !== searchParamActionHandler ||
       nextProps.unassignedPickUpPassengers !== unassignedPickUpPassengers ||
       nextProps.isAddToMyPassengersSuccess !== isAddToMyPassengersSuccess ||
-      nextProps.unassignedDropOffPassengers !== unassignedDropOffPassengers
+      nextProps.unassignedDropOffPassengers !== unassignedDropOffPassengers ||
+      nextProps.toggleAddPassengerModalActionHandler !== toggleAddPassengerModalActionHandler
     );
   }
 
@@ -65,7 +70,7 @@ class AllPassengersList extends Component {
       unassignedDropOffPassengersActionHandler,
       isAddToMyPassengersSuccessActionHandler,
     } = this.props;
-    FetchUndoAddToMyPassenger(
+    return FetchUndoAddToMyPassenger(
       id,
       navigationStore,
       unassignedPickUpPassengersActionHandler,
@@ -106,6 +111,7 @@ class AllPassengersList extends Component {
       unassignedPickUpPassengers,
       isAddToMyPassengersSuccess,
       unassignedDropOffPassengers,
+      toggleAddPassengerModalActionHandler,
     } = this.props;
     return (
       <View style={{ paddingHorizontal: 20 }}>
@@ -143,6 +149,7 @@ class AllPassengersList extends Component {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
+            onPress={toggleAddPassengerModalActionHandler}
             style={[
               globalStyles.touchableBtnDropOffItem,
               {
@@ -200,9 +207,11 @@ AllPassengersList.propTypes = {
   pickupPassengerCardId: PropTypes.oneOfType([PropTypes.number]),
   toggleSearch: PropTypes.oneOfType([PropTypes.bool]).isRequired,
   searchParam: PropTypes.oneOfType([PropTypes.string]).isRequired,
+  toggleAddPassengerModalActionHandler: PropTypes.func.isRequired,
   isAddToMyPassengersSuccessActionHandler: PropTypes.func.isRequired,
   unassignedPickUpPassengersActionHandler: PropTypes.func.isRequired,
   unassignedDropOffPassengersActionHandler: PropTypes.func.isRequired,
+  toggleAddPassengerModal: PropTypes.oneOfType([PropTypes.bool]).isRequired,
   searchParamActionHandler: PropTypes.oneOfType([PropTypes.func]).isRequired,
   toggleSearchActionHandler: PropTypes.oneOfType([PropTypes.func]).isRequired,
   isAddToMyPassengersSuccess: PropTypes.oneOfType([PropTypes.bool]).isRequired,
@@ -219,6 +228,7 @@ export default compose(
       navigationStore: store.homeScreen.navigation,
       passengerCardId: store.homeScreen.passengerCardId,
       pickupPassengerCardId: store.homeScreen.pickupPassengerCardId,
+      toggleAddPassengerModal: store.popupsModals.toggleAddPassengerModal,
       unassignedPickUpPassengers: store.homeScreen.unassignedPickUpPassengers,
       isAddToMyPassengersSuccess: store.homeScreen.isAddToMyPassengersSuccess,
       unassignedDropOffPassengers: store.homeScreen.unassignedDropOffPassengers,
@@ -229,6 +239,9 @@ export default compose(
       },
       searchParamActionHandler: value => {
         dispatch(searchParamAction(value));
+      },
+      toggleAddPassengerModalActionHandler: () => {
+        dispatch(toggleAddPassengerModalAction());
       },
       unassignedPickUpPassengersActionHandler: data => {
         dispatch(unassignedPickUpPassengersAction(data));
