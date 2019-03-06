@@ -21,7 +21,6 @@ import { holdPassengerInfoAction } from '../../screens/HomeScreen/actions/homeSc
 import CardOptionsModalParent from '../PopupsModals/CardOptionsModalParent';
 import ConfirmationPopupParent from '../PopupsModals/ConfirmationPopupParent';
 import PassengerFormModalParent from '../PopupsModals/PassengerFormModalParent';
-import EditAddressInput from '../PopupsModals/EditAddressInput';
 
 class PassengerCardBasedOnRoute extends Component {
   shouldComponentUpdate(nextProps, nextState) {
@@ -127,7 +126,6 @@ class PassengerCardBasedOnRoute extends Component {
             ? this.showFeedbackIfNoLength(unassignedPickUpPassengers)
             : null}
         </View>
-        <EditAddressInput />
         <CardOptionsModalParent />
         <ConfirmationPopupParent />
         <PassengerFormModalParent />

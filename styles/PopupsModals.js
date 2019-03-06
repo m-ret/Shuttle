@@ -109,10 +109,9 @@ const styles = StyleSheet.create({
   },
 
   AddEditWrapper: {
-    flex: 1,
     width: 300,
     padding: 20,
-    margin: 160,
+    height: 300,
     borderWidth: 1,
     borderColor: '#d8d8d8',
     backgroundColor: '#FFFFFF',

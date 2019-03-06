@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { reducer as formReducer } from 'redux-form';
 
 // HomeScreen reducer
 import homeScreen from '../screens/HomeScreen/reducers';
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   homeScreen,
   signinScreen,
   popupsModals,
+  form: formReducer,
 });
 
 export default rootReducer;

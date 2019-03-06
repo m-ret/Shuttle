@@ -2,6 +2,7 @@ import createReducer from '../../../redux/createReducer';
 import ActionTypes from '../constants/ActionTypes';
 
 const initialState = {
+  editPassengerData: {},
   newAddressFromGoogle: {},
   confirmationPopup: false,
   editPassengerModal: false,
@@ -11,6 +12,12 @@ const initialState = {
 };
 
 const handlers = {
+  [ActionTypes.EDIT_PASSENGER_DATA](state, action) {
+    return {
+      ...state,
+      editPassengerData: action.payload.editPassengerData,
+    };
+  },
   [ActionTypes.TOGGLE_CONFIRMATION_POPUP](state) {
     return {
       ...state,

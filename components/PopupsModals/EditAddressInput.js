@@ -18,15 +18,11 @@ import OptionsModal from './OptionsAlertPassenger';
 
 const EditAddressInput = ({
   toggleGooglePlacesInput,
-  editPassengerModalActionHandler,
   newAddressFromGoogleActionHandler,
   toggleGooglePlacesInputActionHandler,
 }) => {
-  const onCloseEditAddressModal = async () => {
-    await toggleGooglePlacesInputActionHandler();
-    setTimeout(() => {
-      editPassengerModalActionHandler();
-    }, 500);
+  const onCloseEditAddressModal = () => {
+    toggleGooglePlacesInputActionHandler();
   };
 
   return (
@@ -46,7 +42,6 @@ const EditAddressInput = ({
             renderDescription={row => row.description} // custom description render
             onPress={(data, details = null) => {
               // 'details' is provided when fetchDetails = true
-              console.log(data, details);
               newAddressFromGoogleActionHandler({
                 description: data.description,
                 latitude: details.geometry.location.lat,

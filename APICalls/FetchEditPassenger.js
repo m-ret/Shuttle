@@ -42,6 +42,7 @@ const FetchEditPassenger = async (
       },
     });
     responseJson = await response.json();
+    console.log({ responseJson });
     if (has(responseJson, 'error')) {
       Alert.alert('Error', 'Unable to process your request at this time.');
     } else if (route === 'PickUp') {

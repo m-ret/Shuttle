@@ -1,23 +1,17 @@
 import React, { Component } from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 
 import PropTypes from 'prop-types';
 
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 
-import {
-  Ionicons,
-  MaterialIcons,
-  MaterialCommunityIcons,
-} from '@expo/vector-icons';
-
 import { size } from 'lodash';
 
 import styles from '../../styles/PopupsModals';
 
 import AddEditFormInputs from './FormInputs';
-import ConfirmationPopupBtn from './ConfirmationPopupBtn';
+
 import FetchEditPassenger from '../../APICalls/FetchEditPassenger';
 
 import {
@@ -30,6 +24,8 @@ import {
   unassignedDropOffPassengersAction,
   unassignedPickUpPassengersAction,
 } from '../../screens/HomeScreen/actions/homeScreen';
+import EditAddressInput from './EditAddressInput';
+import PassengerFormWrapper from './PassengerFormWrapper';
 
 class PassengerFormModal extends Component {
   state = {
@@ -43,11 +39,9 @@ class PassengerFormModal extends Component {
   };
 
   componentDidMount() {
-    const {
-      passengerInfo,
-      newAddressFromGoogle,
-      editPassengerModal,
-    } = this.props;
+    const { passengerInfo } = this.props;
+
+    this.focus();
 
     if (passengerInfo) {
       this.setState({
@@ -57,10 +51,7 @@ class PassengerFormModal extends Component {
         pickup: passengerInfo.pickup,
         latitude: passengerInfo.latitude,
         longitude: passengerInfo.longitude,
-        address:
-          editPassengerModal && size(newAddressFromGoogle)
-            ? newAddressFromGoogle.description
-            : passengerInfo.address,
+        address: passengerInfo.address,
       });
     }
   }
@@ -79,8 +70,10 @@ class PassengerFormModal extends Component {
     const {
       passengerInfo,
       navigationStore,
+      editPassengerData,
       editPassengerModal,
       newAddressFromGoogle,
+      toggleGooglePlacesInput,
       editPassengerModalActionHandler,
       toggleGooglePlacesInputActionHandler,
       unassignedPickUpPassengersActionHandler,
@@ -97,8 +90,10 @@ class PassengerFormModal extends Component {
       nextState.longitude !== longitude ||
       nextProps.passengerInfo !== passengerInfo ||
       nextProps.navigationStore !== navigationStore ||
+      nextProps.editPassengerData !== editPassengerData ||
       nextProps.editPassengerModal !== editPassengerModal ||
       nextProps.newAddressFromGoogle !== newAddressFromGoogle ||
+      nextProps.toggleGooglePlacesInput !== toggleGooglePlacesInput ||
       nextProps.editPassengerModalActionHandler !==
         editPassengerModalActionHandler ||
       nextProps.toggleGooglePlacesInputActionHandler !==
@@ -110,9 +105,62 @@ class PassengerFormModal extends Component {
     );
   }
 
+  componentDidUpdate(props) {
+    const {
+      passengerInfo,
+      editPassengerData,
+      editPassengerModal,
+      toggleGooglePlacesInput,
+    } = this.props;
+
+    if (props.toggleGooglePlacesInput !== toggleGooglePlacesInput) {
+      this.focus();
+    }
+
+    if (
+      props.passengerInfo !== passengerInfo ||
+      props.editPassengerData !== editPassengerData ||
+      props.editPassengerModal !== editPassengerModal
+    ) {
+      this.newState();
+    }
+  }
+
+  focus = () => {
+    this.ref.focus();
+  };
+
+  newState = () => {
+    const { passengerInfo, newAddressFromGoogle } = this.props;
+
+    if (passengerInfo) {
+      this.setState({
+        id: passengerInfo.id,
+        name: passengerInfo.name,
+        phone: passengerInfo.phone,
+        pickup: passengerInfo.pickup,
+        address: size(newAddressFromGoogle)
+          ? newAddressFromGoogle.address
+          : passengerInfo.address,
+        latitude: size(newAddressFromGoogle)
+          ? newAddressFromGoogle.latitude
+          : passengerInfo.latitude,
+        longitude: size(newAddressFromGoogle)
+          ? newAddressFromGoogle.longitude
+          : passengerInfo.longitude,
+      });
+    }
+  };
+
+  onParamChange = (paramChanged, initialParam) => {
+    const { newAddressFromGoogle } = this.props;
+    return size(newAddressFromGoogle) ? paramChanged : initialParam;
+  };
+
   handleEditPassenger = async () => {
     const {
       navigationStore,
+      newAddressFromGoogle,
       editPassengerModalActionHandler,
       newAddressFromGoogleActionHandler,
       unassignedPickUpPassengersActionHandler,
@@ -134,34 +182,27 @@ class PassengerFormModal extends Component {
       name,
       phone,
       pickup,
-      address,
-      latitude,
-      longitude,
+      this.onParamChange(newAddressFromGoogle.description, address),
+      this.onParamChange(newAddressFromGoogle.latitude, latitude),
+      this.onParamChange(newAddressFromGoogle.longitude, longitude),
       navigationStore,
       unassignedPickUpPassengersActionHandler,
       unassignedDropOffPassengersActionHandler,
     );
 
-    await newAddressFromGoogleActionHandler({});
+    newAddressFromGoogleActionHandler({});
     editPassengerModalActionHandler();
   };
 
   callModal = async () => {
-    const {
-      editPassengerModalActionHandler,
-      newAddressFromGoogleActionHandler,
-      toggleGooglePlacesInputActionHandler,
-    } = this.props;
-
-    newAddressFromGoogleActionHandler({});
-    await editPassengerModalActionHandler();
+    const { toggleGooglePlacesInputActionHandler } = this.props;
     toggleGooglePlacesInputActionHandler();
   };
 
   onCloseEditAddressModal = async () => {
     const {
-      newAddressFromGoogleActionHandler,
       editPassengerModalActionHandler,
+      newAddressFromGoogleActionHandler,
     } = this.props;
 
     editPassengerModalActionHandler();
@@ -169,62 +210,48 @@ class PassengerFormModal extends Component {
   };
 
   render() {
-    console.log('PASSENGER FORM RENDERING');
     const { name, address, phone } = this.state;
-    const { editPassengerModalActionHandler } = this.props;
+    const {
+      newAddressFromGoogle,
+      editPassengerModalActionHandler,
+    } = this.props;
     return (
-      <View style={styles.AddEditWrapper}>
-        <View style={styles.AddEditContainer}>
-          <View style={styles.AddEditModalTitle}>
-            <View style={styles.AddEditIconContainer}>
-              <MaterialCommunityIcons name="account-edit" size={24} />
-            </View>
-            <View style={styles.AddEditOptionTextContainer}>
-              <Text style={styles.OptionText}>Edit passenger info</Text>
-            </View>
-          </View>
-          <View>
-            <Ionicons
-              name="ios-close"
-              size={24}
-              onPress={editPassengerModalActionHandler}
+      <>
+        <EditAddressInput />
+        <PassengerFormWrapper
+          onPressSave={this.handleEditPassenger}
+          onPressCancel={this.onCloseEditAddressModal}
+          onPressToToggleModal={editPassengerModalActionHandler}
+        >
+          <View style={styles.AddEditInputsWrapper}>
+            <AddEditFormInputs
+              // eslint-disable-next-line react/jsx-boolean-value
+              shouldFocus={true}
+              onChangeText={name => this.setState({ name })}
+              iconName="ios-search"
+              textStateValue={name}
+              isRef={ref => (this.ref = ref)}
+            />
+            <AddEditFormInputs
+              shouldFocus={false}
+              onChangeText={address => this.setState({ address })}
+              iconName="ios-search"
+              textStateValue={
+                size(newAddressFromGoogle)
+                  ? newAddressFromGoogle.description
+                  : address
+              }
+              onFocus={this.callModal}
+            />
+            <AddEditFormInputs
+              shouldFocus={false}
+              onChangeText={phone => this.setState({ phone })}
+              iconName="ios-search"
+              textStateValue={phone}
             />
           </View>
-        </View>
-        <View style={styles.AddEditInputsWrapper}>
-          <AddEditFormInputs
-            onChangeText={name => this.setState({ name })}
-            iconName="ios-search"
-            textStateValue={name}
-          />
-          <AddEditFormInputs
-            onChangeText={address => this.setState({ address })}
-            iconName="ios-search"
-            textStateValue={address}
-            onFocus={this.callModal}
-          />
-          <AddEditFormInputs
-            onChangeText={phone => this.setState({ phone })}
-            iconName="ios-search"
-            textStateValue={phone}
-          />
-        </View>
-
-        <View style={[styles.ButtonsWrapper, styles.AddEditButtonsWrapper]}>
-          <ConfirmationPopupBtn
-            text="Cancel"
-            onPress={this.onCloseEditAddressModal}
-            cancelButtonStyle={styles.CancelButtonStyle}
-            cancelButtonTextStyle={styles.CancelButtonTextStyle}
-          />
-          <ConfirmationPopupBtn
-            text="Save"
-            saveButtonStyle={styles.SaveButtonStyle}
-            buttonTextStyle={styles.ButtonTextStyle}
-            onPress={() => this.handleEditPassenger()}
-          />
-        </View>
-      </View>
+        </PassengerFormWrapper>
+      </>
     );
   }
 }
@@ -247,6 +274,8 @@ PassengerFormModal.propTypes = {
   unassignedPickUpPassengersActionHandler: PropTypes.func.isRequired,
   unassignedDropOffPassengersActionHandler: PropTypes.func.isRequired,
   editPassengerModal: PropTypes.oneOfType([PropTypes.bool]).isRequired,
+  editPassengerData: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  toggleGooglePlacesInput: PropTypes.oneOfType([PropTypes.bool]).isRequired,
 };
 
 export default compose(
@@ -254,8 +283,10 @@ export default compose(
     store => ({
       navigationStore: store.homeScreen.navigation,
       passengerInfo: store.homeScreen.passengerInfo,
+      editPassengerData: store.popupsModals.editPassengerData,
       editPassengerModal: store.popupsModals.editPassengerModal,
       newAddressFromGoogle: store.popupsModals.newAddressFromGoogle,
+      toggleGooglePlacesInput: store.popupsModals.toggleGooglePlacesInput,
     }),
     dispatch => ({
       editPassengerModalActionHandler: () => {
