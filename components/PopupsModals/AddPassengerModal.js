@@ -97,8 +97,8 @@ class AddPassengerModal extends Component {
     const {
       navigationStore,
       newAddressFromGoogle,
-      toggleAddPassengerModalActionHandler,
       newAddressFromGoogleActionHandler,
+      toggleAddPassengerModalActionHandler,
       unassignedPickUpPassengersActionHandler,
       unassignedDropOffPassengersActionHandler,
     } = this.props;
@@ -202,9 +202,9 @@ AddPassengerModal.propTypes = {
   toggleAddPassengerModalActionHandler: PropTypes.func.isRequired,
   unassignedPickUpPassengersActionHandler: PropTypes.func.isRequired,
   unassignedDropOffPassengersActionHandler: PropTypes.func.isRequired,
-  toggleAddPassengerModal: PropTypes.oneOfType([PropTypes.bool]).isRequired,
   addPassengerData: PropTypes.oneOfType([PropTypes.object]).isRequired,
   toggleGooglePlacesInput: PropTypes.oneOfType([PropTypes.bool]).isRequired,
+  toggleAddPassengerModal: PropTypes.oneOfType([PropTypes.bool]).isRequired,
 };
 
 export default compose(
@@ -213,16 +213,16 @@ export default compose(
       navigationStore: store.homeScreen.navigation,
       passengerInfo: store.homeScreen.passengerInfo,
       addPassengerData: store.popupsModals.addPassengerData,
-      toggleAddPassengerModal: store.popupsModals.toggleAddPassengerModal,
       newAddressFromGoogle: store.popupsModals.newAddressFromGoogle,
       toggleGooglePlacesInput: store.popupsModals.toggleGooglePlacesInput,
+      toggleAddPassengerModal: store.popupsModals.toggleAddPassengerModal,
     }),
     dispatch => ({
-      toggleAddPassengerModalActionHandler: () => {
-        dispatch(toggleAddPassengerModalAction());
-      },
       newAddressFromGoogleActionHandler: data => {
         dispatch(newAddressFromGoogleAction(data));
+      },
+      toggleAddPassengerModalActionHandler: () => {
+        dispatch(toggleAddPassengerModalAction());
       },
       toggleGooglePlacesInputActionHandler: () => {
         dispatch(toggleGooglePlacesInputAction());

@@ -53,24 +53,19 @@ const FetchEditPassenger = async (
     } else {
       passengerSuccessfullyEditedActionHandler();
       if (screenName === 'PassengerByCardinalPoint') {
-        console.log('FetchPassengersByCardinalPoint on FetchEditPassenger');
-        await FetchPassengersByCardinalPoint(
+        FetchPassengersByCardinalPoint(
           passengersGoingTo,
           navigationStore,
           passengersByCardinalPointDataActionHandler,
         );
-
-        if (route === 'PickUp') {
-          return FetchPickupPassengers(
-            unassignedPickUpPassengersActionHandler,
-            userToken,
-          );
-        }
-        return FetchDropOffPassengers(
-          unassignedDropOffPassengersActionHandler,
-          userToken,
-        );
       }
+
+      FetchPickupPassengers(unassignedPickUpPassengersActionHandler, userToken);
+
+      FetchDropOffPassengers(
+        unassignedDropOffPassengersActionHandler,
+        userToken,
+      );
     }
   } catch (error) {
     Alert.alert(

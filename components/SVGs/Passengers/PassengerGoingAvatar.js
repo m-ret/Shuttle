@@ -6,9 +6,11 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-/* SVGR has dropped some elements not supported by react-native-svg: title */
+const dropOffTabColor = '#ff5252';
+const pickupTabColor = '#3DA7DC';
 
 const PassengerGoingAvatar = ({
+  navigationStore,
   passengersGoingTo,
   passengersByCardinalPointData,
 }) => (
@@ -39,7 +41,7 @@ const PassengerGoingAvatar = ({
       </Svg.Text>
       <Svg.Path
         d="M2.667 27.333a2.33 2.33 0 0 0-2.322 2.334v14.33c0 1.106.898 2.003 2.001 2.003h21.321A2.34 2.34 0 0 0 26 43.667v-14a2.34 2.34 0 0 0-2.333-2.334h-21z"
-        fill="#FF5252"
+        fill={navigationStore.index ? pickupTabColor : dropOffTabColor}
       />
       <Svg.Text
         fontFamily="Montserrat-Medium, Montserrat"
@@ -57,6 +59,7 @@ const PassengerGoingAvatar = ({
 );
 
 PassengerGoingAvatar.propTypes = {
+  navigationStore: PropTypes.shape({}).isRequired,
   passengersGoingTo: PropTypes.oneOfType([PropTypes.string]).isRequired,
   passengersByCardinalPointData: PropTypes.oneOfType([PropTypes.array])
     .isRequired,
@@ -64,6 +67,7 @@ PassengerGoingAvatar.propTypes = {
 
 export default compose(
   connect(store => ({
+    navigationStore: store.homeScreen.navigation,
     passengersGoingTo: store.homeScreen.passengersGoingTo,
     passengersByCardinalPointData:
       store.passengersByCardinalPoint.passengersByCardinalPointData,

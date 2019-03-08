@@ -28,16 +28,18 @@ let barHeight;
 
 class EditAddressInput extends Component {
   componentDidMount() {
-    if (Platform.OS === 'ios') {
-      this.getBarHeight();
-    }
+    this.getPlatform();
   }
 
   componentDidUpdate() {
+    this.getPlatform();
+  }
+
+  getPlatform = () => {
     if (Platform.OS === 'ios') {
       this.getBarHeight();
     }
-  }
+  };
 
   getBarHeight = () => {
     barHeight = StatusBarManager.getHeight(statusBarHeight => {
@@ -67,7 +69,7 @@ class EditAddressInput extends Component {
             <GooglePlacesAutocomplete
               autoFocus
               fetchDetails
-              minLength={2} // minimum length of text to search
+              minLength={1} // minimum length of text to search
               placeholder="Search"
               returnKeyType="search" // Can be left out for default return key https://facebook.github.io/react-native/docs/textinput.html#returnkeytype
               listViewDisplayed="auto" // true/false/undefined
@@ -85,7 +87,7 @@ class EditAddressInput extends Component {
                 // available options: https://developers.google.com/places/web-service/autocomplete
                 key: 'AIzaSyCkxmIVqod03kckg1ormoZgKsje1JCc0hE',
                 language: 'en', // language of the results
-                types: '(cities)', // default: 'geocode'
+                types: '(regions)', // default: 'geocode'
               }}
               styles={{
                 container: {
