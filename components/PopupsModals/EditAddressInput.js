@@ -87,7 +87,7 @@ class EditAddressInput extends Component {
                 // available options: https://developers.google.com/places/web-service/autocomplete
                 key: 'AIzaSyCkxmIVqod03kckg1ormoZgKsje1JCc0hE',
                 language: 'en', // language of the results
-                types: '(regions)', // default: 'geocode'
+                types: 'address', // default: 'geocode'
               }}
               styles={{
                 container: {

@@ -46,8 +46,9 @@ const FetchEditPassenger = async (
         'Content-Type': 'application/json',
       },
     });
+
     responseJson = await response.json();
-    console.log({ screenName });
+
     if (has(responseJson, 'error')) {
       Alert.alert('Error', 'Unable to process your request at this time.');
     } else {

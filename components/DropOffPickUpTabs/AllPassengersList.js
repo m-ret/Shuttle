@@ -16,6 +16,7 @@ import PassengersAdded from '../PassengerInfo/PassengersAdded';
 
 import {
   isAddToMyPassengersSuccessAction,
+  screenNameAction,
   searchParamAction,
   toggleSearchAction,
   unassignedDropOffPassengersAction,
@@ -30,7 +31,12 @@ import FetchPickupPassengers from '../../APICalls/FetchPickupPassengers';
 
 class AllPassengersList extends Component {
   componentDidMount() {
-    const { toggleSearch, toggleSearchActionHandler } = this.props;
+    const {
+      toggleSearch,
+      toggleSearchActionHandler,
+      screenNameActionHandler,
+    } = this.props;
+    screenNameActionHandler('AllPassengersList');
     this.toggleSearchBarVisibility();
     if (!toggleSearch) toggleSearchActionHandler();
   }
@@ -84,15 +90,13 @@ class AllPassengersList extends Component {
     );
 
     if (route === 'DropOff') {
-      return FetchDropOffPassengers(
+      FetchDropOffPassengers(
         unassignedDropOffPassengersActionHandler,
         userToken,
       );
+    } else {
+      FetchPickupPassengers(unassignedPickUpPassengersActionHandler, userToken);
     }
-    return FetchPickupPassengers(
-      unassignedPickUpPassengersActionHandler,
-      userToken,
-    );
   };
 
   toggleSearchBarVisibility = () => {
@@ -107,14 +111,16 @@ class AllPassengersList extends Component {
     if (toggleSearch) searchParamActionHandler('');
   };
 
-  showSuccessMessageBasedOnRoute = (nav, isSuccess, cardId) =>
-    nav && isSuccess && cardId ? (
+  showSuccessMessageBasedOnRoute = (nav, isSuccess, cardId) => {
+    const { screenName } = this.props;
+    return screenName === 'AllPassengersList' && nav && isSuccess && cardId ? (
       <PassengersAdded
         id={cardId}
         key={cardId}
         handleUndo={() => this.handleUndo(cardId)}
       />
     ) : null;
+  };
 
   render() {
     const {
@@ -213,12 +219,15 @@ class AllPassengersList extends Component {
 }
 
 AllPassengersList.defaultProps = {
+  screenName: '',
   passengerCardId: '',
   pickupPassengerCardId: '',
 };
 
 AllPassengersList.propTypes = {
   navigationStore: PropTypes.shape({}).isRequired,
+  screenNameActionHandler: PropTypes.func.isRequired,
+  screenName: PropTypes.oneOfType([PropTypes.string]),
   passengerCardId: PropTypes.oneOfType([PropTypes.number]),
   pickupPassengerCardId: PropTypes.oneOfType([PropTypes.number]),
   toggleSearch: PropTypes.oneOfType([PropTypes.bool]).isRequired,
@@ -239,6 +248,7 @@ AllPassengersList.propTypes = {
 export default compose(
   connect(
     store => ({
+      screenName: store.homeScreen.screenName,
       searchParam: store.homeScreen.searchParam,
       toggleSearch: store.homeScreen.toggleSearch,
       navigationStore: store.homeScreen.navigation,
@@ -252,6 +262,9 @@ export default compose(
     dispatch => ({
       toggleSearchActionHandler: () => {
         dispatch(toggleSearchAction());
+      },
+      screenNameActionHandler: value => {
+        dispatch(screenNameAction(value));
       },
       searchParamActionHandler: value => {
         dispatch(searchParamAction(value));

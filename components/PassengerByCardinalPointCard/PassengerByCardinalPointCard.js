@@ -35,6 +35,12 @@ class PassengersByCardinalPointCard extends Component {
   };
 
   componentDidMount() {
+    const {
+      isAddToMyPassengersSuccessActionHandler,
+      screenNameActionHandler,
+    } = this.props;
+    screenNameActionHandler('PassengerByCardinalPoint');
+    isAddToMyPassengersSuccessActionHandler(false);
     this.handleFetchPassengersByCardinalPoint();
   }
 
@@ -113,11 +119,11 @@ class PassengersByCardinalPointCard extends Component {
 
   render() {
     const {
+      screenName,
       passengerCardId,
       isAddToMyPassengersSuccess,
       passengersByCardinalPointData,
     } = this.props;
-    console.log('IS RENDERING?');
 
     // this.handleFetchPassengersByCardinalPoint();
 
@@ -142,13 +148,15 @@ class PassengersByCardinalPointCard extends Component {
               <PassengerGoingAvatar />
             </View>
 
-            {passengerCardId && isAddToMyPassengersSuccess && (
-              <PassengersAdded
-                id={passengerCardId}
-                key={passengerCardId}
-                handleUndo={() => this.handleUndo(passengerCardId)}
-              />
-            )}
+            {screenName === 'PassengerByCardinalPoint' &&
+              passengerCardId &&
+              isAddToMyPassengersSuccess && (
+                <PassengersAdded
+                  id={passengerCardId}
+                  key={passengerCardId}
+                  handleUndo={() => this.handleUndo(passengerCardId)}
+                />
+              )}
 
             <View style={{ marginTop: 38 }}>
               {passengersByCardinalPointData &&
@@ -172,10 +180,14 @@ class PassengersByCardinalPointCard extends Component {
   }
 }
 
+PassengersByCardinalPointCard.defaultProps = {
+  screenName: '',
+};
+
 PassengersByCardinalPointCard.propTypes = {
-  editPassengerModal: PropTypes.oneOfType([PropTypes.bool]).isRequired,
   navigationStore: PropTypes.shape({}).isRequired,
   screenNameActionHandler: PropTypes.func.isRequired,
+  screenName: PropTypes.oneOfType([PropTypes.string]),
   popupsModalsActionHandler: PropTypes.func.isRequired,
   passengerCardId: PropTypes.oneOfType([PropTypes.number]),
   confirmationPopupActionHandler: PropTypes.func.isRequired,
@@ -183,6 +195,7 @@ PassengersByCardinalPointCard.propTypes = {
   passengersGoingTo: PropTypes.oneOfType([PropTypes.string]),
   isAddToMyPassengersSuccessActionHandler: PropTypes.func.isRequired,
   confirmationPopup: PropTypes.oneOfType([PropTypes.bool]).isRequired,
+  editPassengerModal: PropTypes.oneOfType([PropTypes.bool]).isRequired,
   passengersByCardinalPointDataActionHandler: PropTypes.func.isRequired,
   isAddToMyPassengersSuccess: PropTypes.oneOfType([PropTypes.bool]).isRequired,
   passengersByCardinalPointData: PropTypes.oneOfType([PropTypes.array])
@@ -197,6 +210,7 @@ PassengersByCardinalPointCard.defaultProps = {
 export default compose(
   connect(
     store => ({
+      screenName: store.homeScreen.screenName,
       navigationStore: store.homeScreen.navigation,
       passengerCardId: store.homeScreen.passengerCardId,
       passengersGoingTo: store.homeScreen.passengersGoingTo,

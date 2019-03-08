@@ -1,9 +1,9 @@
 import React from 'react';
+import { TouchableOpacity } from 'react-native';
 
 import {
   createStackNavigator,
   createBottomTabNavigator,
-  HeaderBackButton,
 } from 'react-navigation';
 
 import AllPassengersIcon from '../components/SVGs/BottomNavigation/AllPassengersIcon';
@@ -17,13 +17,22 @@ import PassengersByCardinalPoint from '../screens/PassengersByCardinalPoint/Pass
 
 import Colors from '../constants/Colors';
 
+import GoBackButton from '../components/SVGs/GoBackButton/GoBackButtonSVG';
+
 const tabBarOptions = {
   activeTintColor: 'black',
   activeBackgroundColor: '#f7f7f7',
 };
 
 const cardinalPointScreenNavigationOptions = ({ navigation }) => ({
-  headerLeft: <HeaderBackButton onPress={() => navigation.goBack(null)} />,
+  headerLeft: (
+    <TouchableOpacity
+      onPress={() => navigation.goBack(null)}
+      style={{ paddingHorizontal: 10 }}
+    >
+      <GoBackButton />
+    </TouchableOpacity>
+  ),
   headerStyle: { shadowColor: 'transparent', borderBottomWidth: 0 },
 });
 
