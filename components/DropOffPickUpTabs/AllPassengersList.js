@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, AsyncStorage } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import { compose } from 'redux';
@@ -25,6 +25,8 @@ import {
 import SearchBox from '../SearchBox/SearchBox';
 import FetchUndoAddToMyPassenger from '../../APICalls/FetchUndoAddToMyPassenger';
 import { toggleAddPassengerModalAction } from '../PopupsModals/actions/popupsModals';
+import FetchDropOffPassengers from '../../APICalls/FetchDropOffPassengers';
+import FetchPickupPassengers from '../../APICalls/FetchPickupPassengers';
 
 class AllPassengersList extends Component {
   componentDidMount() {
@@ -59,23 +61,37 @@ class AllPassengersList extends Component {
       nextProps.unassignedPickUpPassengers !== unassignedPickUpPassengers ||
       nextProps.isAddToMyPassengersSuccess !== isAddToMyPassengersSuccess ||
       nextProps.unassignedDropOffPassengers !== unassignedDropOffPassengers ||
-      nextProps.toggleAddPassengerModalActionHandler !== toggleAddPassengerModalActionHandler
+      nextProps.toggleAddPassengerModalActionHandler !==
+        toggleAddPassengerModalActionHandler
     );
   }
 
-  handleUndo = id => {
+  handleUndo = async id => {
     const {
       navigationStore,
       unassignedPickUpPassengersActionHandler,
-      unassignedDropOffPassengersActionHandler,
       isAddToMyPassengersSuccessActionHandler,
+      unassignedDropOffPassengersActionHandler,
     } = this.props;
-    return FetchUndoAddToMyPassenger(
+
+    const userToken = await AsyncStorage.getItem('userToken');
+    const route = navigationStore.index ? 'PickUp' : 'DropOff';
+
+    await FetchUndoAddToMyPassenger(
       id,
       navigationStore,
-      unassignedPickUpPassengersActionHandler,
-      unassignedDropOffPassengersActionHandler,
       isAddToMyPassengersSuccessActionHandler,
+    );
+
+    if (route === 'DropOff') {
+      return FetchDropOffPassengers(
+        unassignedDropOffPassengersActionHandler,
+        userToken,
+      );
+    }
+    return FetchPickupPassengers(
+      unassignedPickUpPassengersActionHandler,
+      userToken,
     );
   };
 
@@ -249,8 +265,8 @@ export default compose(
       unassignedDropOffPassengersActionHandler: data => {
         dispatch(unassignedDropOffPassengersAction(data));
       },
-      isAddToMyPassengersSuccessActionHandler: isAddToMyPassengersSuccess => {
-        dispatch(isAddToMyPassengersSuccessAction(isAddToMyPassengersSuccess));
+      isAddToMyPassengersSuccessActionHandler: value => {
+        dispatch(isAddToMyPassengersSuccessAction(value));
       },
     }),
   ),

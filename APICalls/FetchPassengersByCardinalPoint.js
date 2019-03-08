@@ -4,22 +4,24 @@ import { has } from 'lodash';
 
 import { API_URL } from '../constants/API';
 
-const FetchUndoAddToMyPassenger = async (
-  // These are params. So be careful before you change its order
-  id,
+const FetchPassengersByCardinalPoint = async (
+  cardinalpoint,
   navigationStore,
-  isAddToMyPassengersSuccessActionHandler,
+  passengersByCardinalPointDataActionHandler,
 ) => {
+  let responseJson;
   const userToken = await AsyncStorage.getItem('userToken');
   const route = navigationStore.index ? 'PickUp' : 'DropOff';
   try {
     const response = await fetch(
-      `${API_URL}remove${
+      `${API_URL}get${
         route === 'DropOff' ? 'DropOff' : 'PickUp'
-      }PassengerFromMyList`,
+      }PassengersByCardinalPoint`,
       {
         method: 'POST',
-        body: JSON.stringify({ id }),
+        body: JSON.stringify({
+          cardinalpoint,
+        }),
         headers: {
           Authorization: `Bearer ${userToken}`,
           Accept: 'application/json',
@@ -27,18 +29,21 @@ const FetchUndoAddToMyPassenger = async (
         },
       },
     );
-    const responseJson = await response.json();
+    responseJson = await response.json();
     if (has(responseJson, 'error')) {
-      Alert.alert('Error', 'Unable to process your Undo request at this time.');
+      Alert.alert(
+        'Error',
+        'Unable to process your FetchPassengersByCardinalPoint request at this time.',
+      );
     } else {
-      isAddToMyPassengersSuccessActionHandler(false);
+      passengersByCardinalPointDataActionHandler(responseJson.success.data);
     }
   } catch (error) {
     Alert.alert(
       'Error',
-      'There was an error with your Undo request, please try again later.',
+      'There was an error with your FetchPassengersByCardinalPoint request, please try again later.',
     );
   }
 };
 
-export default FetchUndoAddToMyPassenger;
+export default FetchPassengersByCardinalPoint;

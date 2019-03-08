@@ -5,11 +5,7 @@ import PropTypes from 'prop-types';
 import styles from '../../styles/PopupsModals';
 
 const ModalsOptionsBtn = ({ text, style, onPress, children }) => (
-  <TouchableOpacity
-    onPress={onPress}
-    style={[styles.Option, style]}
-    background={TouchableOpacity.Ripple('#ccc', false)}
-  >
+  <TouchableOpacity onPress={onPress} style={[styles.Option, style]}>
     <View style={{ flexDirection: 'row' }}>
       <View style={styles.OptionIconContainer}>
         <View>{children}</View>

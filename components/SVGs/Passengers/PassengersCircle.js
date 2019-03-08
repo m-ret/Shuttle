@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Alert } from 'react-native';
+import { View } from 'react-native';
 import { Svg } from 'expo';
 
 import { countBy, property } from 'lodash';
@@ -12,34 +12,54 @@ import { withNavigation } from 'react-navigation'; // Check this file first befo
 import PassengerAvatar from './PassengerAvatar';
 
 import Constants from './Constants';
+import { passengersGoingToAction } from '../../../screens/HomeScreen/actions/homeScreen';
 
-let passengersGoingNorth;
-let passengersGoingEast;
-let passengersGoingSouth;
 let passengersGoingWest;
-let passengersGoingNorthPickup;
+let passengersGoingEast;
+let passengersGoingNorth;
+let passengersGoingSouth;
+
 let passengersGoingEastPickup;
-let passengersGoingSouthPickup;
 let passengersGoingWestPickup;
+let passengersGoingNorthPickup;
+let passengersGoingSouthPickup;
 
 class PassengersCircle extends Component {
+  componentDidMount() {
+    this.setFilters();
+  }
+
   shouldComponentUpdate(nextProps, nextState) {
-    return nextProps !== this.props;
+    const {
+      fill,
+      navigation,
+      navigationStore,
+      unassignedPickUpPassengers,
+      unassignedDropOffPassengers,
+    } = this.props;
+
+    return (
+      nextProps.fill !== fill ||
+      nextProps.navigation !== navigation ||
+      nextProps.navigationStore !== navigationStore ||
+      nextProps.unassignedPickUpPassengers !== unassignedPickUpPassengers ||
+      nextProps.unassignedDropOffPassengers !== unassignedDropOffPassengers
+    );
   }
 
   callFilter = (dropff, pickup) => {
     ({
-      North: passengersGoingNorth,
-      South: passengersGoingSouth,
       West: passengersGoingWest,
       East: passengersGoingEast,
+      North: passengersGoingNorth,
+      South: passengersGoingSouth,
     } = countBy(dropff, property('cardinalpoint')));
 
     ({
-      North: passengersGoingNorthPickup,
-      South: passengersGoingSouthPickup,
       West: passengersGoingWestPickup,
       East: passengersGoingEastPickup,
+      North: passengersGoingNorthPickup,
+      South: passengersGoingSouthPickup,
     } = countBy(pickup, property('cardinalpoint')));
   };
 
@@ -54,8 +74,14 @@ class PassengersCircle extends Component {
 
   setOpacity = passengersLength => (passengersLength ? '1' : '0.459');
 
+  passengersGoingTo = value => {
+    const { navigation, passengersGoingToActionHandler } = this.props;
+    passengersGoingToActionHandler(value);
+    return navigation.navigate('CardinalPoint');
+  };
+
   render() {
-    const { navigationStore, fill } = this.props;
+    const { fill, navigationStore } = this.props;
     this.setFilters();
     return (
       <View>
@@ -82,11 +108,7 @@ class PassengersCircle extends Component {
             />
             <PassengerAvatar
               fill={fill}
-              callFunction={() =>
-                navigationStore.index
-                  ? Alert.alert('PICKUP:', 'passengersGoingNorth')
-                  : Alert.alert('DROPOFF:', 'passengersGoingNorth')
-              }
+              callFunction={() => this.passengersGoingTo('North')}
               opacity={
                 !navigationStore.index
                   ? this.setOpacity(passengersGoingNorth)
@@ -108,11 +130,7 @@ class PassengersCircle extends Component {
 
             <PassengerAvatar
               fill={fill}
-              callFunction={() =>
-                navigationStore.index
-                  ? Alert.alert('PICKUP:', 'passengersGoingSouth')
-                  : Alert.alert('DROPOFF:', 'passengersGoingSouth')
-              }
+              callFunction={() => this.passengersGoingTo('South')}
               opacity={
                 !navigationStore.index
                   ? this.setOpacity(passengersGoingSouth)
@@ -134,11 +152,7 @@ class PassengersCircle extends Component {
 
             <PassengerAvatar
               fill={fill}
-              callFunction={() =>
-                navigationStore.index
-                  ? Alert.alert('PICKUP:', 'passengersGoingEast')
-                  : Alert.alert('DROPOFF:', 'passengersGoingEast')
-              }
+              callFunction={() => this.passengersGoingTo('East')}
               opacity={
                 !navigationStore.index
                   ? this.setOpacity(passengersGoingEast)
@@ -160,11 +174,7 @@ class PassengersCircle extends Component {
 
             <PassengerAvatar
               fill={fill}
-              callFunction={() =>
-                navigationStore.index
-                  ? Alert.alert('PICKUP:', 'passengersGoingWest')
-                  : Alert.alert('DROPOFF:', 'passengersGoingWest')
-              }
+              callFunction={() => this.passengersGoingTo('West')}
               opacity={
                 !navigationStore.index
                   ? this.setOpacity(passengersGoingWest)
@@ -194,16 +204,24 @@ PassengersCircle.propTypes = {
   navigation: PropTypes.shape({}).isRequired,
   navigationStore: PropTypes.shape({}).isRequired,
   fill: PropTypes.oneOfType([PropTypes.string]).isRequired,
+  passengersGoingToActionHandler: PropTypes.func.isRequired,
   unassignedPickUpPassengers: PropTypes.oneOfType([PropTypes.array]).isRequired,
   unassignedDropOffPassengers: PropTypes.oneOfType([PropTypes.array])
     .isRequired,
 };
 
 export default compose(
-  connect(store => ({
-    tabColor: store.homeScreen.tabColor,
-    navigationStore: store.homeScreen.navigation,
-    unassignedPickUpPassengers: store.homeScreen.unassignedPickUpPassengers,
-    unassignedDropOffPassengers: store.homeScreen.unassignedDropOffPassengers,
-  })),
+  connect(
+    store => ({
+      tabColor: store.homeScreen.tabColor,
+      navigationStore: store.homeScreen.navigation,
+      unassignedPickUpPassengers: store.homeScreen.unassignedPickUpPassengers,
+      unassignedDropOffPassengers: store.homeScreen.unassignedDropOffPassengers,
+    }),
+    dispatch => ({
+      passengersGoingToActionHandler: value => {
+        dispatch(passengersGoingToAction(value));
+      },
+    }),
+  ),
 )(withNavigation(PassengersCircle));

@@ -7,15 +7,19 @@ import FetchPickupPassengers from './FetchPickupPassengers';
 
 import { API_URL } from '../constants/API';
 
+import FetchPassengersByCardinalPoint from './FetchPassengersByCardinalPoint';
+
 const FetchDeletePassenger = async (
   // These are params. So be careful before you change its order
   id,
   navigationStore,
+  passengersGoingTo,
   passengerCardIdActionHandler,
   pickupPassengerCardIdActionHandler,
   isDeletePassengerSuccessActionHandler,
   unassignedPickUpPassengersActionHandler,
   unassignedDropOffPassengersActionHandler,
+  passengersByCardinalPointDataActionHandler,
 ) => {
   const route = navigationStore.index ? 'PickUp' : 'DropOff';
   const userToken = await AsyncStorage.getItem('userToken');
@@ -47,6 +51,11 @@ const FetchDeletePassenger = async (
           userToken,
         );
       }
+      FetchPassengersByCardinalPoint(
+        passengersGoingTo,
+        navigationStore,
+        passengersByCardinalPointDataActionHandler,
+      );
     }
   } catch (error) {
     Alert.alert(

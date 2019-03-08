@@ -17,27 +17,32 @@ import {
   unassignedDropOffPassengersAction,
   unassignedPickUpPassengersAction,
 } from '../../screens/HomeScreen/actions/homeScreen';
+import { passengersByCardinalPointDataAction } from '../../screens/PassengersByCardinalPoint/actions/passengersByCardinalPoint';
 
 const ConfirmationPopupParent = ({
   passengerInfo,
   navigationStore,
   confirmationPopup,
+  passengersGoingTo,
   passengerCardIdActionHandler,
   confirmationPopupActionHandler,
   pickupPassengerCardIdActionHandler,
   isDeletePassengerSuccessActionHandler,
   unassignedPickUpPassengersActionHandler,
   unassignedDropOffPassengersActionHandler,
+  passengersByCardinalPointDataActionHandler,
 }) => {
   const handleDeletePassenger = async id => {
     await FetchDeletePassenger(
       id,
       navigationStore,
+      passengersGoingTo,
       passengerCardIdActionHandler,
       pickupPassengerCardIdActionHandler,
       isDeletePassengerSuccessActionHandler,
       unassignedPickUpPassengersActionHandler,
       unassignedDropOffPassengersActionHandler,
+      passengersByCardinalPointDataActionHandler,
     );
 
     confirmationPopupActionHandler();
@@ -64,6 +69,10 @@ const ConfirmationPopupParent = ({
   );
 };
 
+ConfirmationPopupParent.defaultProps = {
+  passengersGoingTo: '',
+};
+
 ConfirmationPopupParent.propTypes = {
   passengerInfo: PropTypes.oneOfType([
     PropTypes.string,
@@ -73,11 +82,13 @@ ConfirmationPopupParent.propTypes = {
   navigationStore: PropTypes.shape({}).isRequired,
   passengerCardIdActionHandler: PropTypes.func.isRequired,
   confirmationPopupActionHandler: PropTypes.func.isRequired,
+  passengersGoingTo: PropTypes.oneOfType([PropTypes.string]),
   pickupPassengerCardIdActionHandler: PropTypes.func.isRequired,
   isDeletePassengerSuccessActionHandler: PropTypes.func.isRequired,
   unassignedPickUpPassengersActionHandler: PropTypes.func.isRequired,
   unassignedDropOffPassengersActionHandler: PropTypes.func.isRequired,
   confirmationPopup: PropTypes.oneOfType([PropTypes.bool]).isRequired,
+  passengersByCardinalPointDataActionHandler: PropTypes.func.isRequired,
 };
 
 export default compose(
@@ -86,6 +97,7 @@ export default compose(
       navigationStore: store.homeScreen.navigation,
       passengerInfo: store.homeScreen.passengerInfo,
       passengerCardId: store.homeScreen.passengerCardId,
+      passengersGoingTo: store.homeScreen.passengersGoingTo,
       confirmationPopup: store.popupsModals.confirmationPopup,
       pickupPassengerCardId: store.homeScreen.pickupPassengerCardId,
       toggleCardOptionsModal: store.popupsModals.toggleCardOptionsModal,
@@ -111,6 +123,9 @@ export default compose(
       },
       isDeletePassengerSuccessActionHandler: isSuccess => {
         dispatch(isDeletePassengerSuccessAction(isSuccess));
+      },
+      passengersByCardinalPointDataActionHandler: data => {
+        dispatch(passengersByCardinalPointDataAction(data));
       },
     }),
   ),

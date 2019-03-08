@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux';
-import { reducer as formReducer } from 'redux-form';
 
 // HomeScreen reducer
 import homeScreen from '../screens/HomeScreen/reducers';
@@ -10,11 +9,14 @@ import signinScreen from '../screens/SigningScreen/reducers';
 // Popups and Modals reducer
 import popupsModals from '../components/PopupsModals/reducers';
 
+// Passenger By Cardinal Point reducer
+import passengersByCardinalPoint from '../screens/PassengersByCardinalPoint/reducers';
+
 const rootReducer = combineReducers({
   homeScreen,
-  signinScreen,
   popupsModals,
-  form: formReducer,
+  signinScreen,
+  passengersByCardinalPoint,
 });
 
 export default rootReducer;

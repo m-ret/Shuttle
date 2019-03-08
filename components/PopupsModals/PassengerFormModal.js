@@ -23,9 +23,11 @@ import {
 import {
   unassignedDropOffPassengersAction,
   unassignedPickUpPassengersAction,
+  passengerSuccessfullyEditedAction,
 } from '../../screens/HomeScreen/actions/homeScreen';
 import EditAddressInput from './EditAddressInput';
 import PassengerFormWrapper from './PassengerFormWrapper';
+import { passengersByCardinalPointDataAction } from '../../screens/PassengersByCardinalPoint/actions/passengersByCardinalPoint';
 
 class PassengerFormModal extends Component {
   state = {
@@ -39,9 +41,14 @@ class PassengerFormModal extends Component {
   };
 
   componentDidMount() {
-    const { passengerInfo } = this.props;
+    const {
+      passengerInfo,
+      passengerSuccessfullyEditedActionHandler,
+    } = this.props;
 
     this.focus();
+
+    passengerSuccessfullyEditedActionHandler();
 
     if (passengerInfo) {
       this.setState({
@@ -68,16 +75,20 @@ class PassengerFormModal extends Component {
     } = this.state;
 
     const {
+      passengersGoingTo,
       passengerInfo,
       navigationStore,
       editPassengerData,
       editPassengerModal,
       newAddressFromGoogle,
       toggleGooglePlacesInput,
+      passengerSuccessfullyEdited,
       editPassengerModalActionHandler,
       toggleGooglePlacesInputActionHandler,
       unassignedPickUpPassengersActionHandler,
+      passengerSuccessfullyEditedActionHandler,
       unassignedDropOffPassengersActionHandler,
+      passengersByCardinalPointDataActionHandler,
     } = this.props;
 
     return (
@@ -89,7 +100,9 @@ class PassengerFormModal extends Component {
       nextState.latitude !== latitude ||
       nextState.longitude !== longitude ||
       nextProps.passengerInfo !== passengerInfo ||
+      nextProps.passengersGoingTo !== passengersGoingTo ||
       nextProps.navigationStore !== navigationStore ||
+      nextProps.passengerSuccessfullyEdited !== passengerSuccessfullyEdited ||
       nextProps.editPassengerData !== editPassengerData ||
       nextProps.editPassengerModal !== editPassengerModal ||
       nextProps.newAddressFromGoogle !== newAddressFromGoogle ||
@@ -101,7 +114,11 @@ class PassengerFormModal extends Component {
       nextProps.unassignedPickUpPassengersActionHandler !==
         unassignedPickUpPassengersActionHandler ||
       nextProps.unassignedDropOffPassengersActionHandler !==
-        unassignedDropOffPassengersActionHandler
+        unassignedDropOffPassengersActionHandler ||
+      nextProps.passengersByCardinalPointDataActionHandler !==
+        passengersByCardinalPointDataActionHandler ||
+      nextProps.passengerSuccessfullyEditedActionHandler !==
+        passengerSuccessfullyEditedActionHandler
     );
   }
 
@@ -159,12 +176,16 @@ class PassengerFormModal extends Component {
 
   handleEditPassenger = async () => {
     const {
+      screenName,
       navigationStore,
+      passengersGoingTo,
       newAddressFromGoogle,
       editPassengerModalActionHandler,
       newAddressFromGoogleActionHandler,
       unassignedPickUpPassengersActionHandler,
+      passengerSuccessfullyEditedActionHandler,
       unassignedDropOffPassengersActionHandler,
+      passengersByCardinalPointDataActionHandler,
     } = this.props;
 
     const {
@@ -185,9 +206,13 @@ class PassengerFormModal extends Component {
       this.onParamChange(newAddressFromGoogle.description, address),
       this.onParamChange(newAddressFromGoogle.latitude, latitude),
       this.onParamChange(newAddressFromGoogle.longitude, longitude),
+      screenName,
+      passengersGoingTo,
       navigationStore,
+      passengerSuccessfullyEditedActionHandler,
       unassignedPickUpPassengersActionHandler,
       unassignedDropOffPassengersActionHandler,
+      passengersByCardinalPointDataActionHandler,
     );
 
     newAddressFromGoogleActionHandler({});
@@ -257,6 +282,8 @@ class PassengerFormModal extends Component {
 }
 
 PassengerFormModal.defaultProps = {
+  screenName: '',
+  passengersGoingTo: '',
   editPassengerData: {},
   newAddressFromGoogle: {},
 };
@@ -268,6 +295,8 @@ PassengerFormModal.propTypes = {
     PropTypes.object,
   ]).isRequired,
   navigationStore: PropTypes.shape({}).isRequired,
+  screenName: PropTypes.oneOfType([PropTypes.string]),
+  passengersGoingTo: PropTypes.oneOfType([PropTypes.string]),
   editPassengerModalActionHandler: PropTypes.func.isRequired,
   editPassengerData: PropTypes.oneOfType([PropTypes.object]),
   newAddressFromGoogleActionHandler: PropTypes.func.isRequired,
@@ -275,19 +304,25 @@ PassengerFormModal.propTypes = {
   toggleGooglePlacesInputActionHandler: PropTypes.func.isRequired,
   unassignedPickUpPassengersActionHandler: PropTypes.func.isRequired,
   unassignedDropOffPassengersActionHandler: PropTypes.func.isRequired,
+  passengerSuccessfullyEditedActionHandler: PropTypes.func.isRequired,
   editPassengerModal: PropTypes.oneOfType([PropTypes.bool]).isRequired,
+  passengersByCardinalPointDataActionHandler: PropTypes.func.isRequired,
   toggleGooglePlacesInput: PropTypes.oneOfType([PropTypes.bool]).isRequired,
+  passengerSuccessfullyEdited: PropTypes.oneOfType([PropTypes.bool]).isRequired,
 };
 
 export default compose(
   connect(
     store => ({
+      screenName: store.homeScreen.screenName,
       navigationStore: store.homeScreen.navigation,
       passengerInfo: store.homeScreen.passengerInfo,
+      passengersGoingTo: store.homeScreen.passengersGoingTo,
       editPassengerData: store.popupsModals.editPassengerData,
       editPassengerModal: store.popupsModals.editPassengerModal,
       newAddressFromGoogle: store.popupsModals.newAddressFromGoogle,
       toggleGooglePlacesInput: store.popupsModals.toggleGooglePlacesInput,
+      passengerSuccessfullyEdited: store.homeScreen.passengerSuccessfullyEdited,
     }),
     dispatch => ({
       editPassengerModalActionHandler: () => {
@@ -299,11 +334,17 @@ export default compose(
       toggleGooglePlacesInputActionHandler: () => {
         dispatch(toggleGooglePlacesInputAction());
       },
+      passengerSuccessfullyEditedActionHandler: () => {
+        dispatch(passengerSuccessfullyEditedAction());
+      },
       unassignedPickUpPassengersActionHandler: data => {
         dispatch(unassignedPickUpPassengersAction(data));
       },
       unassignedDropOffPassengersActionHandler: data => {
         dispatch(unassignedDropOffPassengersAction(data));
+      },
+      passengersByCardinalPointDataActionHandler: data => {
+        dispatch(passengersByCardinalPointDataAction(data));
       },
     }),
   ),

@@ -2,16 +2,19 @@ import createReducer from '../../../redux/createReducer';
 import ActionTypes from '../constants/ActionTypes';
 
 const initialState = {
+  screenName: '',
   searchParam: '',
   passengerInfo: {},
   toggleSearch: false,
   passengerCardId: null,
+  passengersGoingTo: '',
   pickupTabColor: '#3DA7DC',
   dropOffTabColor: '#ff5252',
   pickupPassengerCardId: null,
   unassignedPickUpPassengers: [],
   unassignedDropOffPassengers: [],
   isAddToMyPassengersSuccess: false,
+  passengerSuccessfullyEdited: false,
   navigation: {
     index: 0,
     routes: [
@@ -29,6 +32,27 @@ const handlers = {
         ...state.navigation,
         index: action.payload.index,
       },
+    };
+  },
+
+  [ActionTypes.PASSENGER_GOING_TO](state, action) {
+    return {
+      ...state,
+      passengersGoingTo: action.payload.passengersGoingTo,
+    };
+  },
+
+  [ActionTypes.PASSENGER_SUCCESSFULLY_EDITED](state) {
+    return {
+      ...state,
+      passengerSuccessfullyEdited: !state.passengerSuccessfullyEdited,
+    };
+  },
+
+  [ActionTypes.SCREEN_NAME](state, action) {
+    return {
+      ...state,
+      screenName: action.payload.screenName,
     };
   },
 

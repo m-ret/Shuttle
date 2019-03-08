@@ -14,10 +14,10 @@ const AuthStack = createStackNavigator({ SignIn: SigninScreen });
 export default createAppContainer(
   createSwitchNavigator(
     {
-      AuthLoading: AuthLoadingScreen,
+      Auth: AuthStack,
       App: MainTabNavigator,
       App2: PickupNavigator,
-      Auth: AuthStack,
+      AuthLoading: AuthLoadingScreen,
     },
     {
       initialRouteName: 'AuthLoading',

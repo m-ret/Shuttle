@@ -2,23 +2,22 @@ import { Alert } from 'react-native';
 
 import { has } from 'lodash';
 
+import { API_URL } from '../constants/API';
+
 const FetchPickupPassengers = async (
   unassignedPickUpPassengersActionHandler,
   userToken,
 ) => {
   if (userToken) {
     try {
-      const response = await fetch(
-        'http://34.235.222.72/public/api/getUnassignedPickUpPassengers',
-        {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${userToken}`,
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
+      const response = await fetch(`${API_URL}getUnassignedPickUpPassengers`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
         },
-      );
+      });
       const responseJson = await response.json();
       if (has(responseJson, 'error')) {
         Alert.alert(

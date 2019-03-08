@@ -9,9 +9,18 @@ export const indexRouteAction = index => ({
   payload: { index },
 });
 
+export const screenNameAction = screenName => ({
+  type: ActionTypes.SCREEN_NAME,
+  payload: { screenName },
+});
+
 export const searchParamAction = searchParam => ({
   type: ActionTypes.SEARCH_PARAM,
   payload: { searchParam },
+});
+
+export const passengerSuccessfullyEditedAction = () => ({
+  type: ActionTypes.PASSENGER_SUCCESSFULLY_EDITED,
 });
 
 export const holdPassengerInfoAction = passengerInfo => ({
@@ -22,6 +31,11 @@ export const holdPassengerInfoAction = passengerInfo => ({
 export const passengerCardIdAction = passengerCardId => ({
   type: ActionTypes.PASSENGERS_CARD_ID,
   payload: { passengerCardId },
+});
+
+export const passengersGoingToAction = passengersGoingTo => ({
+  type: ActionTypes.PASSENGER_GOING_TO,
+  payload: { passengersGoingTo },
 });
 
 export const pickupPassengerCardIdAction = pickupPassengerCardId => ({

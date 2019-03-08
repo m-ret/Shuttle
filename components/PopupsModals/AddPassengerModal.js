@@ -1,10 +1,5 @@
 import React, { Component } from 'react';
-import {
-  View,
-  Platform,
-  StatusBar,
-  StyleSheet,
-} from 'react-native';
+import { View } from 'react-native';
 
 import PropTypes from 'prop-types';
 
@@ -49,9 +44,9 @@ class AddPassengerModal extends Component {
       passengerInfo,
       navigationStore,
       addPassengerData,
-      toggleAddPassengerModal,
       newAddressFromGoogle,
       toggleGooglePlacesInput,
+      toggleAddPassengerModal,
       toggleAddPassengerModalActionHandler,
       toggleGooglePlacesInputActionHandler,
       unassignedPickUpPassengersActionHandler,
@@ -67,8 +62,8 @@ class AddPassengerModal extends Component {
       nextProps.passengerInfo !== passengerInfo ||
       nextProps.navigationStore !== navigationStore ||
       nextProps.addPassengerData !== addPassengerData ||
-      nextProps.toggleAddPassengerModal !== toggleAddPassengerModal ||
       nextProps.newAddressFromGoogle !== newAddressFromGoogle ||
+      nextProps.toggleAddPassengerModal !== toggleAddPassengerModal ||
       nextProps.toggleGooglePlacesInput !== toggleGooglePlacesInput ||
       nextProps.toggleAddPassengerModalActionHandler !==
         toggleAddPassengerModalActionHandler ||
@@ -161,7 +156,6 @@ class AddPassengerModal extends Component {
               onChangeText={name => this.setState({ name })}
               iconName="ios-search"
               textStateValue={name}
-              isRef={ref => (this.ref = ref)}
               placeholder="Enter name"
             />
             <AddEditFormInputs
@@ -178,10 +172,11 @@ class AddPassengerModal extends Component {
             />
             <AddEditFormInputs
               shouldFocus={false}
-              onChangeText={phone => this.setState({ phone })}
               iconName="ios-search"
               textStateValue={phone}
               placeholder="Enter Phone"
+              isRef={ref => (this.ref = ref)}
+              onChangeText={phone => this.setState({ phone })}
             />
           </View>
         </PassengerFormWrapper>

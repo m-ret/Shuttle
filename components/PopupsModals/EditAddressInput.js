@@ -28,11 +28,15 @@ let barHeight;
 
 class EditAddressInput extends Component {
   componentDidMount() {
-    return this.getBarHeight();
+    if (Platform.OS === 'ios') {
+      this.getBarHeight();
+    }
   }
 
   componentDidUpdate() {
-    return this.getBarHeight();
+    if (Platform.OS === 'ios') {
+      this.getBarHeight();
+    }
   }
 
   getBarHeight = () => {

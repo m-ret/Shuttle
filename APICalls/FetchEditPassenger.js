@@ -4,6 +4,7 @@ import { has } from 'lodash';
 
 import FetchDropOffPassengers from './FetchDropOffPassengers';
 import FetchPickupPassengers from './FetchPickupPassengers';
+import FetchPassengersByCardinalPoint from './FetchPassengersByCardinalPoint';
 
 import { API_URL } from '../constants/API';
 
@@ -16,9 +17,13 @@ const FetchEditPassenger = async (
   address,
   latitude,
   longitude,
+  screenName,
+  passengersGoingTo,
   navigationStore,
+  passengerSuccessfullyEditedActionHandler,
   unassignedPickUpPassengersActionHandler,
   unassignedDropOffPassengersActionHandler,
+  passengersByCardinalPointDataActionHandler,
 ) => {
   let responseJson;
   const userToken = await AsyncStorage.getItem('userToken');
@@ -42,19 +47,30 @@ const FetchEditPassenger = async (
       },
     });
     responseJson = await response.json();
-    console.log({ responseJson });
+    console.log({ screenName });
     if (has(responseJson, 'error')) {
       Alert.alert('Error', 'Unable to process your request at this time.');
-    } else if (route === 'PickUp') {
-      return FetchPickupPassengers(
-        unassignedPickUpPassengersActionHandler,
-        userToken,
-      );
     } else {
-      return FetchDropOffPassengers(
-        unassignedDropOffPassengersActionHandler,
-        userToken,
-      );
+      passengerSuccessfullyEditedActionHandler();
+      if (screenName === 'PassengerByCardinalPoint') {
+        console.log('FetchPassengersByCardinalPoint on FetchEditPassenger');
+        await FetchPassengersByCardinalPoint(
+          passengersGoingTo,
+          navigationStore,
+          passengersByCardinalPointDataActionHandler,
+        );
+
+        if (route === 'PickUp') {
+          return FetchPickupPassengers(
+            unassignedPickUpPassengersActionHandler,
+            userToken,
+          );
+        }
+        return FetchDropOffPassengers(
+          unassignedDropOffPassengersActionHandler,
+          userToken,
+        );
+      }
     }
   } catch (error) {
     Alert.alert(

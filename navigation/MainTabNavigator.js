@@ -1,7 +1,9 @@
 import React from 'react';
+
 import {
   createStackNavigator,
   createBottomTabNavigator,
+  HeaderBackButton,
 } from 'react-navigation';
 
 import AllPassengersIcon from '../components/SVGs/BottomNavigation/AllPassengersIcon';
@@ -11,6 +13,7 @@ import MoreIcon from '../components/SVGs/BottomNavigation/MoreIcon';
 import HomeScreen from '../screens/HomeScreen/HomeScreen';
 import LinksScreen from '../screens/LinksScreen/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen/SettingsScreen';
+import PassengersByCardinalPoint from '../screens/PassengersByCardinalPoint/PassengersByCardinalPoint';
 
 import Colors from '../constants/Colors';
 
@@ -19,8 +22,17 @@ const tabBarOptions = {
   activeBackgroundColor: '#f7f7f7',
 };
 
+const cardinalPointScreenNavigationOptions = ({ navigation }) => ({
+  headerLeft: <HeaderBackButton onPress={() => navigation.goBack(null)} />,
+  headerStyle: { shadowColor: 'transparent', borderBottomWidth: 0 },
+});
+
 const HomeStack = createStackNavigator({
   DropOffAllPassengers: HomeScreen,
+  CardinalPoint: {
+    screen: PassengersByCardinalPoint,
+    navigationOptions: cardinalPointScreenNavigationOptions,
+  },
 });
 
 HomeStack.navigationOptions = {

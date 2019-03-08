@@ -22,6 +22,8 @@ import {
   unassignedDropOffPassengersAction,
 } from '../../screens/HomeScreen/actions/homeScreen';
 
+import { passengersByCardinalPointDataAction } from '../../screens/PassengersByCardinalPoint/actions/passengersByCardinalPoint';
+
 import momentDateFormatter from '../../utils/DateFormatter';
 
 const PassengersInfo = ({
@@ -32,21 +34,25 @@ const PassengersInfo = ({
   callModal,
   cardinalpoint,
   navigationStore,
+  passengersGoingTo,
   passengerCardIdActionHandler,
   pickupPassengerCardIdActionHandler,
   isAddToMyPassengersSuccessActionHandler,
   unassignedPickUpPassengersActionHandler,
   unassignedDropOffPassengersActionHandler,
+  passengersByCardinalPointDataActionHandler,
 }) => {
   const handleAddToMyPassengers = () => {
     FetchAddToMyPassengers(
       id,
       navigationStore,
+      passengersGoingTo,
       passengerCardIdActionHandler,
       pickupPassengerCardIdActionHandler,
       unassignedPickUpPassengersActionHandler,
       unassignedDropOffPassengersActionHandler,
       isAddToMyPassengersSuccessActionHandler,
+      passengersByCardinalPointDataActionHandler,
     );
   };
 
@@ -117,11 +123,16 @@ const PassengersInfo = ({
   );
 };
 
+PassengersInfo.defaultProps = {
+  passengersGoingTo: '',
+};
+
 PassengersInfo.propTypes = {
   navigationStore: PropTypes.shape({}).isRequired,
   id: PropTypes.oneOfType([PropTypes.number]).isRequired,
   passengerCardIdActionHandler: PropTypes.func.isRequired,
   name: PropTypes.oneOfType([PropTypes.string]).isRequired,
+  passengersGoingTo: PropTypes.oneOfType([PropTypes.string]),
   address: PropTypes.oneOfType([PropTypes.string]).isRequired,
   callModal: PropTypes.oneOfType([PropTypes.func]).isRequired,
   datetime: PropTypes.oneOfType([PropTypes.string]).isRequired,
@@ -130,6 +141,7 @@ PassengersInfo.propTypes = {
   isAddToMyPassengersSuccessActionHandler: PropTypes.func.isRequired,
   unassignedPickUpPassengersActionHandler: PropTypes.func.isRequired,
   unassignedDropOffPassengersActionHandler: PropTypes.func.isRequired,
+  passengersByCardinalPointDataActionHandler: PropTypes.func.isRequired,
 };
 
 export default compose(
@@ -137,6 +149,7 @@ export default compose(
     store => ({
       navigationStore: store.homeScreen.navigation,
       passengerCardId: store.homeScreen.passengerCardId,
+      passengersGoingTo: store.homeScreen.passengersGoingTo,
       pickupPassengerCardId: store.homeScreen.pickupPassengerCardId,
       isAddToMyPassengersSuccess: store.homeScreen.isAddToMyPassengersSuccess,
       unassignedPickUpPassengers: store.homeScreen.unassignedPickUpPassengers,
@@ -154,6 +167,9 @@ export default compose(
       },
       unassignedDropOffPassengersActionHandler: data => {
         dispatch(unassignedDropOffPassengersAction(data));
+      },
+      passengersByCardinalPointDataActionHandler: data => {
+        dispatch(passengersByCardinalPointDataAction(data));
       },
       isAddToMyPassengersSuccessActionHandler: isAddToMyPassengersSuccess => {
         dispatch(isAddToMyPassengersSuccessAction(isAddToMyPassengersSuccess));

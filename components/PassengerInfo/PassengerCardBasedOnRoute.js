@@ -16,7 +16,10 @@ import {
   confirmationPopupAction,
 } from '../PopupsModals/actions/popupsModals';
 
-import { holdPassengerInfoAction } from '../../screens/HomeScreen/actions/homeScreen';
+import {
+  holdPassengerInfoAction,
+  screenNameAction,
+} from '../../screens/HomeScreen/actions/homeScreen';
 
 import CardOptionsModalParent from '../PopupsModals/CardOptionsModalParent';
 import AddPassengerModalParent from '../PopupsModals/AddPassengerModalParent';
@@ -68,10 +71,13 @@ class PassengerCardBasedOnRoute extends Component {
   callModalAndSetPassengerInfo = passengerInfo => {
     const {
       confirmationPopup,
+      screenNameActionHandler,
       popupsModalsActionHandler,
       holdPassengerInfoActionHandler,
       confirmationPopupActionHandler,
     } = this.props;
+
+    screenNameActionHandler('PassengerCardBasedOnRoute');
 
     if (confirmationPopup) confirmationPopupActionHandler();
 
@@ -136,6 +142,10 @@ class PassengerCardBasedOnRoute extends Component {
   }
 }
 
+PassengerCardBasedOnRoute.defaultProps = {
+  searchParam: undefined,
+};
+
 PassengerCardBasedOnRoute.propTypes = {
   passengerInfo: PropTypes.oneOfType([
     PropTypes.string,
@@ -143,10 +153,11 @@ PassengerCardBasedOnRoute.propTypes = {
     PropTypes.object,
   ]).isRequired,
   navigationStore: PropTypes.shape({}).isRequired,
+  screenNameActionHandler: PropTypes.func.isRequired,
   popupsModalsActionHandler: PropTypes.func.isRequired,
+  searchParam: PropTypes.oneOfType([PropTypes.string]),
   confirmationPopupActionHandler: PropTypes.func.isRequired,
   holdPassengerInfoActionHandler: PropTypes.func.isRequired,
-  searchParam: PropTypes.oneOfType([PropTypes.string]).isRequired,
   confirmationPopup: PropTypes.oneOfType([PropTypes.bool]).isRequired,
   unassignedDropOffPassengers: PropTypes.oneOfType([PropTypes.array])
     .isRequired,
@@ -162,11 +173,13 @@ export default compose(
       passengerInfo: store.homeScreen.passengerInfo,
       confirmationPopup: store.popupsModals.confirmationPopup,
       toggleCardOptionsModal: store.popupsModals.toggleCardOptionsModal,
-      isDeletePassengerSuccess: store.homeScreen.isDeletePassengerSuccess,
       unassignedPickUpPassengers: store.homeScreen.unassignedPickUpPassengers,
       unassignedDropOffPassengers: store.homeScreen.unassignedDropOffPassengers,
     }),
     dispatch => ({
+      screenNameActionHandler: screenName => {
+        dispatch(screenNameAction(screenName));
+      },
       holdPassengerInfoActionHandler: passengerInfo => {
         dispatch(holdPassengerInfoAction(passengerInfo));
       },

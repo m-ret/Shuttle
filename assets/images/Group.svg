@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="269px" height="57px" viewBox="0 0 269 57" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.3 (57544) - http://www.bohemiancoding.com/sketch -->
+    <title>Group</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Driver" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="01_01_A_Home-Copy" transform="translate(-37.000000, -92.000000)">
+            <g id="Group" transform="translate(37.000000, 92.000000)">
+                <path d="M38.5191987,24 C44.8931553,24 50,18.64 50,12 C50,5.36 44.8931553,0 38.5191987,0 C32.1452421,0 27,5.36 27,12 C27,18.64 32.1452421,24 38.5191987,24 L38.5191987,24 Z" id="Path" fill="#474350"></path>
+                <path d="M12,46 L12,56 L67,56 L67,46 C67,36.68 48.6535714,32 39.5,32 C30.3464286,32 12,36.68 12,46 Z" id="Path" fill="#474350"></path>
+                <text id="Passangers-going" font-family="Montserrat-Regular, Montserrat" font-size="10" font-weight="normal" line-spacing="19" fill="#474350">
+                    <tspan x="83" y="52">Passangers going</tspan>
+                </text>
+                <text id="NORTH" font-family="Montserrat-Bold, Montserrat" font-size="23" font-weight="bold" line-spacing="19" fill="#474350">
+                    <tspan x="185" y="59">NORTH</tspan>
+                </text>
+                <g id="0" transform="translate(0.000000, 26.000000)">
+                    <g id="Icon-24px">
+                        <path d="M2.66666667,1.33333333 C1.38333333,1.33333333 0.345,2.38333333 0.345,3.66666667 L0.345,17.9972127 C0.345,19.1033216 1.24253082,20 2.34615421,20 L5,20 L23.6666667,20 C24.95,20 26,18.95 26,17.6666667 L26,3.66666667 C26,2.38333333 24.95,1.33333333 23.6666667,1.33333333 L2.66666667,1.33333333 Z" id="Shape" fill="#FF5252"></path>
+                        <text id="0" font-family="Montserrat-Medium, Montserrat" font-size="14" font-weight="400" line-spacing="21.2800001" fill="#FFFFFF">
+                            <tspan x="8.87" y="14">2</tspan>
+                        </text>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
