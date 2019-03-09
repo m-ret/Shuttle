@@ -34,6 +34,9 @@ const cardinalPointScreenNavigationOptions = ({ navigation }) => ({
     </TouchableOpacity>
   ),
   headerStyle: { shadowColor: 'transparent', borderBottomWidth: 0 },
+  navigationOptions: {
+    gestureResponseDistance: 50,
+  },
 });
 
 const HomeStack = createStackNavigator({

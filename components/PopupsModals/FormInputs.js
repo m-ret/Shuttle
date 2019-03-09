@@ -1,44 +1,37 @@
-import { Ionicons } from '@expo/vector-icons';
 import { TextInput, View } from 'react-native';
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import styles from '../../styles/PopupsModals';
 
-class AddEditFormInputs extends Component {
-  render() {
-    const {
-      isRef,
-      onFocus,
-      iconName,
-      shouldFocus,
-      placeholder,
-      onChangeText,
-      textStateValue,
-    } = this.props;
-
-    return (
-      <View style={styles.InputContainer}>
-        <Ionicons style={styles.IconWithinInput} name={iconName} size={24} />
-        <TextInput
-          placeholder={placeholder}
-          onFocus={onFocus}
-          value={textStateValue}
-          onChangeText={onChangeText}
-          style={styles.AddEditInputs}
-          autoFocus={shouldFocus}
-          ref={isRef}
-        />
-      </View>
-    );
-  }
-}
+const AddEditFormInputs = ({
+  isRef,
+  onFocus,
+  children,
+  shouldFocus,
+  placeholder,
+  onChangeText,
+  textStateValue,
+}) => (
+  <View style={styles.InputContainer}>
+    {children}
+    <TextInput
+      placeholder={placeholder}
+      onFocus={onFocus}
+      value={textStateValue}
+      onChangeText={onChangeText}
+      style={styles.AddEditInputs}
+      autoFocus={shouldFocus}
+      ref={isRef}
+    />
+  </View>
+);
 
 AddEditFormInputs.defaultProps = {
   placeholder: '',
   isRef: undefined,
-  textStateValue: '',
   onFocus: undefined,
+  textStateValue: '',
 };
 
 AddEditFormInputs.propTypes = {
@@ -47,7 +40,7 @@ AddEditFormInputs.propTypes = {
   onChangeText: PropTypes.func.isRequired,
   placeholder: PropTypes.oneOfType([PropTypes.string]),
   textStateValue: PropTypes.oneOfType([PropTypes.string]),
-  iconName: PropTypes.oneOfType([PropTypes.string]).isRequired,
+  children: PropTypes.oneOfType([PropTypes.object]).isRequired,
   shouldFocus: PropTypes.oneOfType([PropTypes.bool]).isRequired,
 };
 

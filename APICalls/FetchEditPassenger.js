@@ -27,7 +27,6 @@ const FetchEditPassenger = async (
 ) => {
   let responseJson;
   const userToken = await AsyncStorage.getItem('userToken');
-  const route = navigationStore.index ? 'PickUp' : 'DropOff';
   try {
     const response = await fetch(`${API_URL}editDropOffPassenger`, {
       method: 'POST',

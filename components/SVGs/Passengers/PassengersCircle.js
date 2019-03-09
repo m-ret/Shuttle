@@ -47,6 +47,18 @@ class PassengersCircle extends Component {
     );
   }
 
+  componentWillUnmount() {
+    console.log({ hi: 'componentWillUnmount' });
+    passengersGoingWest = 0;
+    passengersGoingEast = 0;
+    passengersGoingNorth = 0;
+    passengersGoingSouth = 0;
+    passengersGoingEastPickup = 0;
+    passengersGoingWestPickup = 0;
+    passengersGoingNorthPickup = 0;
+    passengersGoingSouthPickup = 0;
+  }
+
   callFilter = (dropff, pickup) => {
     ({
       West: passengersGoingWest,
@@ -75,9 +87,15 @@ class PassengersCircle extends Component {
   setOpacity = passengersLength => (passengersLength ? '1' : '0.459');
 
   passengersGoingTo = value => {
-    const { navigation, passengersGoingToActionHandler } = this.props;
+    const {
+      navigation,
+      navigationStore,
+      passengersGoingToActionHandler,
+    } = this.props;
     passengersGoingToActionHandler(value);
-    return navigation.navigate('CardinalPoint');
+    return navigation.navigate(
+      navigationStore.index ? 'CardinalPointPickup' : 'CardinalPoint',
+    );
   };
 
   render() {

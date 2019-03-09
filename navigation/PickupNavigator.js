@@ -4,6 +4,7 @@ import {
   createBottomTabNavigator,
 } from 'react-navigation';
 
+import { TouchableOpacity } from 'react-native';
 import AllPassengersIcon from '../components/SVGs/BottomNavigation/AllPassengersIcon';
 import MyPassengersIcon from '../components/SVGs/BottomNavigation/MyPassengersIcon';
 import MoreIcon from '../components/SVGs/BottomNavigation/MoreIcon';
@@ -13,14 +14,32 @@ import LinksScreen from '../screens/LinksScreen/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen/SettingsScreen';
 
 import Colors from '../constants/Colors';
+import GoBackButton from '../components/SVGs/GoBackButton/GoBackButtonSVG';
+import PassengersByCardinalPointPickup from '../screens/PassengersByCardinalPoint/ByPickup';
 
 const tabBarOptions = {
   activeTintColor: 'black',
   activeBackgroundColor: '#f7f7f7',
 };
 
+const cardinalPointScreenNavigationOptions = ({ navigation }) => ({
+  headerLeft: (
+    <TouchableOpacity
+      onPress={() => navigation.goBack(null)}
+      style={{ paddingHorizontal: 10 }}
+    >
+      <GoBackButton />
+    </TouchableOpacity>
+  ),
+  headerStyle: { shadowColor: 'transparent', borderBottomWidth: 0 },
+});
+
 const HomeStack = createStackNavigator({
   PickupHome: HomeScreen,
+  CardinalPointPickup: {
+    screen: PassengersByCardinalPointPickup,
+    navigationOptions: cardinalPointScreenNavigationOptions,
+  },
 });
 
 HomeStack.navigationOptions = {

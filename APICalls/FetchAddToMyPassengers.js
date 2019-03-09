@@ -37,6 +37,7 @@ const FetchAddToMyPassengers = async (
       Alert.alert('Error', 'Unable to process your request at this time.');
     } else {
       await isAddToMyPassengersSuccessActionHandler(responseJson.success);
+      passengerCardIdActionHandler(id);
       if (route === 'DropOff') {
         passengerCardIdActionHandler(id);
         FetchDropOffPassengers(

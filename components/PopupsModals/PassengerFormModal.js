@@ -25,9 +25,15 @@ import {
   unassignedPickUpPassengersAction,
   passengerSuccessfullyEditedAction,
 } from '../../screens/HomeScreen/actions/homeScreen';
+
 import EditAddressInput from './EditAddressInput';
 import PassengerFormWrapper from './PassengerFormWrapper';
+
 import { passengersByCardinalPointDataAction } from '../../screens/PassengersByCardinalPoint/actions/passengersByCardinalPoint';
+
+import UserIcon from '../SVGs/ModalIcons/UserIcon';
+import PhoneIcon from '../SVGs/ModalIcons/PhoneIcon';
+import AddressIcon from '../SVGs/ModalIcons/AddressIcon';
 
 class PassengerFormModal extends Component {
   state = {
@@ -244,6 +250,7 @@ class PassengerFormModal extends Component {
       <>
         <EditAddressInput />
         <PassengerFormWrapper
+          modalTitle="Edit"
           onPressSave={this.handleEditPassenger}
           onPressCancel={this.onCloseEditAddressModal}
           onPressToToggleModal={editPassengerModalActionHandler}
@@ -253,27 +260,30 @@ class PassengerFormModal extends Component {
               // eslint-disable-next-line react/jsx-boolean-value
               shouldFocus={true}
               onChangeText={name => this.setState({ name })}
-              iconName="ios-search"
               textStateValue={name}
               isRef={ref => (this.ref = ref)}
-            />
+            >
+              <UserIcon style={styles.IconWithinInput} />
+            </AddEditFormInputs>
             <AddEditFormInputs
               shouldFocus={false}
               onChangeText={address => this.setState({ address })}
-              iconName="ios-search"
               textStateValue={
                 size(newAddressFromGoogle)
                   ? newAddressFromGoogle.description
                   : address
               }
               onFocus={this.callModal}
-            />
+            >
+              <AddressIcon style={styles.IconWithinInput} />
+            </AddEditFormInputs>
             <AddEditFormInputs
               shouldFocus={false}
               onChangeText={phone => this.setState({ phone })}
-              iconName="ios-search"
               textStateValue={phone}
-            />
+            >
+              <PhoneIcon style={styles.IconWithinInput} />
+            </AddEditFormInputs>
           </View>
         </PassengerFormWrapper>
       </>

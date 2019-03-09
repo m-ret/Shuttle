@@ -28,6 +28,7 @@ const FetchUndoAddToMyPassenger = async (
       },
     );
     const responseJson = await response.json();
+    console.log({ responseJson, id });
     if (has(responseJson, 'error')) {
       Alert.alert('Error', 'Unable to process your Undo request at this time.');
     } else {

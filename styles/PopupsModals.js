@@ -1,7 +1,5 @@
 import { StyleSheet } from 'react-native';
 
-const dropOffTabColor = '#ff5252';
-
 const styles = StyleSheet.create({
   WrapperContainerParent: {
     backgroundColor: 'rgba(0,0,0,0.5)',
@@ -77,7 +75,7 @@ const styles = StyleSheet.create({
   },
 
   ConfirmationWrapperContainer: {
-    width: 300,
+    width: 290,
     borderColor: '#d8d8d8',
     backgroundColor: '#f4f4f4',
   },
@@ -108,9 +106,9 @@ const styles = StyleSheet.create({
   },
 
   AddEditWrapper: {
-    width: 300,
+    width: 365,
     padding: 20,
-    height: 300,
+    height: 388,
     borderWidth: 1,
     borderColor: '#d8d8d8',
     backgroundColor: '#FFFFFF',
@@ -146,8 +144,8 @@ const styles = StyleSheet.create({
 
   AddEditInputsWrapper: {
     flex: 1,
-    alignItems: 'stretch',
-    alignContent: 'stretch',
+    alignItems: 'center',
+    alignContent: 'center',
     flexDirection: 'column',
     justifyContent: 'center',
   },
@@ -155,7 +153,7 @@ const styles = StyleSheet.create({
   AddEditInputs: {
     flex: 1,
     height: 40,
-    paddingLeft: 35,
+    paddingLeft: 45,
     fontWeight: '600',
     borderBottomWidth: 1,
     borderBottomColor: 'gray',
@@ -163,12 +161,13 @@ const styles = StyleSheet.create({
 
   IconWithinInput: {
     left: 0,
-    padding: 10,
+    bottom: 17,
     position: 'absolute',
   },
 
   InputContainer: {
-    flex: 1,
+    height: 50,
+    marginTop: 20,
     flexDirection: 'row',
   },
 
@@ -177,9 +176,8 @@ const styles = StyleSheet.create({
   },
 
   SaveButtonStyle: {
-    backgroundColor: dropOffTabColor,
-    borderRadius: 4,
     padding: 10,
+    borderRadius: 4,
     paddingHorizontal: 25,
   },
 

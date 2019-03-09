@@ -27,6 +27,9 @@ import {
 
 import EditAddressInput from './EditAddressInput';
 import PassengerFormWrapper from './PassengerFormWrapper';
+import UserIcon from '../SVGs/ModalIcons/UserIcon';
+import AddressIcon from '../SVGs/ModalIcons/AddressIcon';
+import PhoneIcon from '../SVGs/ModalIcons/PhoneIcon';
 
 class AddPassengerModal extends Component {
   state = {
@@ -145,6 +148,7 @@ class AddPassengerModal extends Component {
       <>
         <EditAddressInput />
         <PassengerFormWrapper
+          modalTitle="Add"
           onPressSave={this.handleAddPassenger}
           onPressCancel={this.onCloseEditAddressModal}
           onPressToToggleModal={toggleAddPassengerModalActionHandler}
@@ -154,14 +158,14 @@ class AddPassengerModal extends Component {
               // eslint-disable-next-line react/jsx-boolean-value
               shouldFocus={true}
               onChangeText={name => this.setState({ name })}
-              iconName="ios-search"
               textStateValue={name}
               placeholder="Enter name"
-            />
+            >
+              <UserIcon style={styles.IconWithinInput} />
+            </AddEditFormInputs>
             <AddEditFormInputs
               shouldFocus={false}
               onChangeText={address => this.setState({ address })}
-              iconName="ios-search"
               textStateValue={
                 size(newAddressFromGoogle)
                   ? newAddressFromGoogle.description
@@ -169,15 +173,18 @@ class AddPassengerModal extends Component {
               }
               onFocus={this.callModal}
               placeholder="Enter Address"
-            />
+            >
+              <AddressIcon style={styles.IconWithinInput} />
+            </AddEditFormInputs>
             <AddEditFormInputs
               shouldFocus={false}
-              iconName="ios-search"
               textStateValue={phone}
               placeholder="Enter Phone"
               isRef={ref => (this.ref = ref)}
               onChangeText={phone => this.setState({ phone })}
-            />
+            >
+              <PhoneIcon style={styles.IconWithinInput} />
+            </AddEditFormInputs>
           </View>
         </PassengerFormWrapper>
       </>

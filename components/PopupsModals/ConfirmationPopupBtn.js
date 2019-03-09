@@ -44,11 +44,11 @@ ConfirmationPopupBtn.defaultProps = {
 ConfirmationPopupBtn.propTypes = {
   onPress: PropTypes.func.isRequired,
   background: PropTypes.oneOfType([PropTypes.object]),
-  buttonTextStyle: PropTypes.oneOfType([PropTypes.object]),
-  saveButtonStyle: PropTypes.oneOfType([PropTypes.object]),
+  text: PropTypes.oneOfType([PropTypes.string]).isRequired,
   cancelButtonStyle: PropTypes.oneOfType([PropTypes.object]),
   cancelButtonTextStyle: PropTypes.oneOfType([PropTypes.object]),
-  text: PropTypes.oneOfType([PropTypes.string]).isRequired,
+  saveButtonStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  buttonTextStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
 };
 
 export default ConfirmationPopupBtn;

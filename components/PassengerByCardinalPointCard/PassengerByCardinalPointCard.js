@@ -65,6 +65,11 @@ class PassengersByCardinalPointCard extends Component {
     );
   }
 
+  componentWillUnmount() {
+    const { passengersByCardinalPointDataActionHandler } = this.props;
+    passengersByCardinalPointDataActionHandler([]);
+  }
+
   callModalAndSetPassengerInfo = passengerInfo => {
     const {
       confirmationPopup,
@@ -109,6 +114,10 @@ class PassengersByCardinalPointCard extends Component {
       navigationStore,
       isAddToMyPassengersSuccessActionHandler,
     );
+
+    console.log({ id });
+    console.log({ navigationStore });
+    console.log({ isAddToMyPassengersSuccessActionHandler });
 
     FetchPassengersByCardinalPoint(
       passengersGoingTo,
@@ -182,6 +191,8 @@ class PassengersByCardinalPointCard extends Component {
 
 PassengersByCardinalPointCard.defaultProps = {
   screenName: '',
+  passengerCardId: '',
+  passengersGoingTo: '',
 };
 
 PassengersByCardinalPointCard.propTypes = {
@@ -200,11 +211,6 @@ PassengersByCardinalPointCard.propTypes = {
   isAddToMyPassengersSuccess: PropTypes.oneOfType([PropTypes.bool]).isRequired,
   passengersByCardinalPointData: PropTypes.oneOfType([PropTypes.array])
     .isRequired,
-};
-
-PassengersByCardinalPointCard.defaultProps = {
-  passengerCardId: '',
-  passengersGoingTo: '',
 };
 
 export default compose(
