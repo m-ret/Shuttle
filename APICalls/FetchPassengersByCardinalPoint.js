@@ -5,6 +5,7 @@ import { has } from 'lodash';
 import { API_URL } from '../constants/API';
 
 const FetchPassengersByCardinalPoint = async (
+  // These are params. So be careful before you change its order
   cardinalpoint,
   navigationStore,
   passengersByCardinalPointDataActionHandler,
@@ -12,6 +13,7 @@ const FetchPassengersByCardinalPoint = async (
   let responseJson;
   const userToken = await AsyncStorage.getItem('userToken');
   const route = navigationStore.index ? 'PickUp' : 'DropOff';
+
   try {
     const response = await fetch(
       `${API_URL}get${
@@ -19,9 +21,7 @@ const FetchPassengersByCardinalPoint = async (
       }PassengersByCardinalPoint`,
       {
         method: 'POST',
-        body: JSON.stringify({
-          cardinalpoint,
-        }),
+        body: JSON.stringify({ cardinalpoint }),
         headers: {
           Authorization: `Bearer ${userToken}`,
           Accept: 'application/json',
@@ -29,7 +29,9 @@ const FetchPassengersByCardinalPoint = async (
         },
       },
     );
+
     responseJson = await response.json();
+
     if (has(responseJson, 'error')) {
       Alert.alert(
         'Error',

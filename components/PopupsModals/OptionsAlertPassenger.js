@@ -1,20 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, View } from 'react-native';
+import { Modal, View, ScrollView, KeyboardAvoidingView } from 'react-native';
 
 import styles from '../../styles/PopupsModals';
 
 const OptionsModal = ({ openBy, children, onRequestClose }) => (
-  <View style={styles.WrapperContainerParent}>
+  <ScrollView style={styles.WrapperContainerParent}>
     <Modal
       transparent
       visible={openBy}
       animationType="fade"
       onRequestClose={onRequestClose}
     >
-      <View style={styles.ContainerParent}>{children}</View>
+      <View style={styles.ContainerParent}>
+        <KeyboardAvoidingView behavior="position" enabled>
+          {children}
+        </KeyboardAvoidingView>
+      </View>
     </Modal>
-  </View>
+  </ScrollView>
 );
 
 OptionsModal.propTypes = {

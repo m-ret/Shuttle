@@ -3,7 +3,6 @@ import {
   Platform,
   StatusBar,
   StyleSheet,
-  KeyboardAvoidingView,
 } from 'react-native';
 import { Provider as ReduxProvider } from 'react-redux';
 import { AppLoading, Font, Icon } from 'expo';
@@ -60,13 +59,7 @@ class App extends React.Component {
     return (
       <ReduxProvider store={store}>
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-        <KeyboardAvoidingView
-          style={styles.container}
-          behavior="padding"
-          enabled
-        >
           <AppNavigator />
-        </KeyboardAvoidingView>
       </ReduxProvider>
     );
   }

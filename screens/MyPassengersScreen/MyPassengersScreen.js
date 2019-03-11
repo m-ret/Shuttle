@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
 
 class MyPassengersScreen extends Component {
   static navigationOptions = {
-    title: 'My Passengers',
+    title: 'MY PASSENGERS',
     headerStyle: { shadowColor: 'transparent', borderBottomWidth: 0 },
   };
 
