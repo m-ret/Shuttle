@@ -160,6 +160,7 @@ class AddPassengerModal extends Component {
               onChangeText={name => this.setState({ name })}
               textStateValue={name}
               placeholder="Enter name"
+              isRef={ref => (this.ref = ref)}
             >
               <UserIcon style={styles.IconWithinInput} />
             </AddEditFormInputs>
@@ -180,7 +181,6 @@ class AddPassengerModal extends Component {
               shouldFocus={false}
               textStateValue={phone}
               placeholder="Enter Phone"
-              isRef={ref => (this.ref = ref)}
               onChangeText={phone => this.setState({ phone })}
             >
               <PhoneIcon style={styles.IconWithinInput} />

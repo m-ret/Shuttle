@@ -10,7 +10,7 @@ import MyPassengersIcon from '../components/SVGs/BottomNavigation/MyPassengersIc
 import MoreIcon from '../components/SVGs/BottomNavigation/MoreIcon';
 
 import HomeScreen from '../screens/HomeScreen/HomeScreen';
-import LinksScreen from '../screens/LinksScreen/LinksScreen';
+import MyPassengersScreen from '../screens/MyPassengersScreen/MyPassengersScreen';
 import SettingsScreen from '../screens/SettingsScreen/SettingsScreen';
 
 import Colors from '../constants/Colors';
@@ -55,7 +55,7 @@ HomeStack.navigationOptions = {
 };
 
 const LinksStack = createStackNavigator({
-  PickupLinks: LinksScreen,
+  PickupLinks: MyPassengersScreen,
 });
 
 LinksStack.navigationOptions = {

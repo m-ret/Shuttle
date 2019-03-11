@@ -36,7 +36,7 @@ HomeStack.navigationOptions = {
 };
 
 const LinksStack = createStackNavigator({
-  Links: LinksScreen,
+  Links: MyPassengersScreen,
 });
 
 LinksStack.navigationOptions = {

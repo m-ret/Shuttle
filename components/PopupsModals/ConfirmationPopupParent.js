@@ -11,15 +11,17 @@ import { confirmationPopupAction } from './actions/popupsModals';
 import ConfirmationPopup from './ConfirmationPopup';
 import FetchDeletePassenger from '../../APICalls/FetchDeletePassenger';
 import {
-  isDeletePassengerSuccessAction,
   passengerCardIdAction,
   pickupPassengerCardIdAction,
-  unassignedDropOffPassengersAction,
+  isDeletePassengerSuccessAction,
   unassignedPickUpPassengersAction,
+  unassignedDropOffPassengersAction,
 } from '../../screens/HomeScreen/actions/homeScreen';
 import { passengersByCardinalPointDataAction } from '../../screens/PassengersByCardinalPoint/actions/passengersByCardinalPoint';
+import { assignedPassengersDataAction } from '../../screens/MyPassengersScreen/actions/myPassengersScreen';
 
 const ConfirmationPopupParent = ({
+  screenName,
   passengerInfo,
   navigationStore,
   confirmationPopup,
@@ -27,6 +29,7 @@ const ConfirmationPopupParent = ({
   passengerCardIdActionHandler,
   confirmationPopupActionHandler,
   pickupPassengerCardIdActionHandler,
+  assignedPassengersDataActionHandler,
   isDeletePassengerSuccessActionHandler,
   unassignedPickUpPassengersActionHandler,
   unassignedDropOffPassengersActionHandler,
@@ -35,10 +38,12 @@ const ConfirmationPopupParent = ({
   const handleDeletePassenger = async id => {
     await FetchDeletePassenger(
       id,
+      screenName,
       navigationStore,
       passengersGoingTo,
       passengerCardIdActionHandler,
       pickupPassengerCardIdActionHandler,
+      assignedPassengersDataActionHandler,
       isDeletePassengerSuccessActionHandler,
       unassignedPickUpPassengersActionHandler,
       unassignedDropOffPassengersActionHandler,
@@ -70,6 +75,7 @@ const ConfirmationPopupParent = ({
 };
 
 ConfirmationPopupParent.defaultProps = {
+  screenName: '',
   passengersGoingTo: '',
 };
 
@@ -80,10 +86,12 @@ ConfirmationPopupParent.propTypes = {
     PropTypes.object,
   ]).isRequired,
   navigationStore: PropTypes.shape({}).isRequired,
+  screenName: PropTypes.oneOfType([PropTypes.string]),
   passengerCardIdActionHandler: PropTypes.func.isRequired,
   confirmationPopupActionHandler: PropTypes.func.isRequired,
   passengersGoingTo: PropTypes.oneOfType([PropTypes.string]),
   pickupPassengerCardIdActionHandler: PropTypes.func.isRequired,
+  assignedPassengersDataActionHandler: PropTypes.func.isRequired,
   isDeletePassengerSuccessActionHandler: PropTypes.func.isRequired,
   unassignedPickUpPassengersActionHandler: PropTypes.func.isRequired,
   unassignedDropOffPassengersActionHandler: PropTypes.func.isRequired,
@@ -94,6 +102,7 @@ ConfirmationPopupParent.propTypes = {
 export default compose(
   connect(
     store => ({
+      screenName: store.homeScreen.screenName,
       navigationStore: store.homeScreen.navigation,
       passengerInfo: store.homeScreen.passengerInfo,
       passengerCardId: store.homeScreen.passengerCardId,
@@ -114,6 +123,9 @@ export default compose(
       },
       pickupPassengerCardIdActionHandler: id => {
         dispatch(pickupPassengerCardIdAction(id));
+      },
+      assignedPassengersDataActionHandler: value => {
+        dispatch(assignedPassengersDataAction(value));
       },
       unassignedPickUpPassengersActionHandler: data => {
         dispatch(unassignedPickUpPassengersAction(data));

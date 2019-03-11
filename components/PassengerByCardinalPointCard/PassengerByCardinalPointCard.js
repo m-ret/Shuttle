@@ -115,10 +115,6 @@ class PassengersByCardinalPointCard extends Component {
       isAddToMyPassengersSuccessActionHandler,
     );
 
-    console.log({ id });
-    console.log({ navigationStore });
-    console.log({ isAddToMyPassengersSuccessActionHandler });
-
     FetchPassengersByCardinalPoint(
       passengersGoingTo,
       navigationStore,
@@ -176,6 +172,7 @@ class PassengersByCardinalPointCard extends Component {
                       name={info.name}
                       address={info.address}
                       datetime={info.timestamp}
+                      buttonText="ADD TO MY PASSENGERS"
                       cardinalpoint={info.cardinalpoint}
                       callModal={() => this.callModalAndSetPassengerInfo(info)}
                     />

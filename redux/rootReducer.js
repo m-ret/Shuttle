@@ -12,10 +12,14 @@ import popupsModals from '../components/PopupsModals/reducers';
 // Passenger By Cardinal Point reducer
 import passengersByCardinalPoint from '../screens/PassengersByCardinalPoint/reducers';
 
+// My Assigned Passengers reducer
+import myPassengersScreen from '../screens/MyPassengersScreen/reducers';
+
 const rootReducer = combineReducers({
   homeScreen,
   popupsModals,
   signinScreen,
+  myPassengersScreen,
   passengersByCardinalPoint,
 });
 

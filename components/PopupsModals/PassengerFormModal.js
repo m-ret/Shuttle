@@ -34,6 +34,7 @@ import { passengersByCardinalPointDataAction } from '../../screens/PassengersByC
 import UserIcon from '../SVGs/ModalIcons/UserIcon';
 import PhoneIcon from '../SVGs/ModalIcons/PhoneIcon';
 import AddressIcon from '../SVGs/ModalIcons/AddressIcon';
+import { assignedPassengersDataAction } from '../../screens/MyPassengersScreen/actions/myPassengersScreen';
 
 class PassengerFormModal extends Component {
   state = {
@@ -62,9 +63,9 @@ class PassengerFormModal extends Component {
         name: passengerInfo.name,
         phone: passengerInfo.phone,
         pickup: passengerInfo.pickup,
+        address: passengerInfo.address,
         latitude: passengerInfo.latitude,
         longitude: passengerInfo.longitude,
-        address: passengerInfo.address,
       });
     }
   }
@@ -81,15 +82,16 @@ class PassengerFormModal extends Component {
     } = this.state;
 
     const {
-      passengersGoingTo,
       passengerInfo,
       navigationStore,
       editPassengerData,
+      passengersGoingTo,
       editPassengerModal,
       newAddressFromGoogle,
       toggleGooglePlacesInput,
       passengerSuccessfullyEdited,
       editPassengerModalActionHandler,
+      assignedPassengersDataActionHandler,
       toggleGooglePlacesInputActionHandler,
       unassignedPickUpPassengersActionHandler,
       passengerSuccessfullyEditedActionHandler,
@@ -106,15 +108,17 @@ class PassengerFormModal extends Component {
       nextState.latitude !== latitude ||
       nextState.longitude !== longitude ||
       nextProps.passengerInfo !== passengerInfo ||
-      nextProps.passengersGoingTo !== passengersGoingTo ||
       nextProps.navigationStore !== navigationStore ||
-      nextProps.passengerSuccessfullyEdited !== passengerSuccessfullyEdited ||
+      nextProps.passengersGoingTo !== passengersGoingTo ||
       nextProps.editPassengerData !== editPassengerData ||
       nextProps.editPassengerModal !== editPassengerModal ||
       nextProps.newAddressFromGoogle !== newAddressFromGoogle ||
       nextProps.toggleGooglePlacesInput !== toggleGooglePlacesInput ||
+      nextProps.passengerSuccessfullyEdited !== passengerSuccessfullyEdited ||
       nextProps.editPassengerModalActionHandler !==
         editPassengerModalActionHandler ||
+      nextProps.assignedPassengersDataActionHandler !==
+        assignedPassengersDataActionHandler ||
       nextProps.toggleGooglePlacesInputActionHandler !==
         toggleGooglePlacesInputActionHandler ||
       nextProps.unassignedPickUpPassengersActionHandler !==
@@ -188,6 +192,7 @@ class PassengerFormModal extends Component {
       newAddressFromGoogle,
       editPassengerModalActionHandler,
       newAddressFromGoogleActionHandler,
+      assignedPassengersDataActionHandler,
       unassignedPickUpPassengersActionHandler,
       passengerSuccessfullyEditedActionHandler,
       unassignedDropOffPassengersActionHandler,
@@ -215,6 +220,7 @@ class PassengerFormModal extends Component {
       screenName,
       passengersGoingTo,
       navigationStore,
+      assignedPassengersDataActionHandler,
       passengerSuccessfullyEditedActionHandler,
       unassignedPickUpPassengersActionHandler,
       unassignedDropOffPassengersActionHandler,
@@ -311,6 +317,7 @@ PassengerFormModal.propTypes = {
   editPassengerData: PropTypes.oneOfType([PropTypes.object]),
   newAddressFromGoogleActionHandler: PropTypes.func.isRequired,
   newAddressFromGoogle: PropTypes.oneOfType([PropTypes.object]),
+  assignedPassengersDataActionHandler: PropTypes.func.isRequired,
   toggleGooglePlacesInputActionHandler: PropTypes.func.isRequired,
   unassignedPickUpPassengersActionHandler: PropTypes.func.isRequired,
   unassignedDropOffPassengersActionHandler: PropTypes.func.isRequired,
@@ -355,6 +362,9 @@ export default compose(
       },
       passengersByCardinalPointDataActionHandler: data => {
         dispatch(passengersByCardinalPointDataAction(data));
+      },
+      assignedPassengersDataActionHandler: assignedPassengersData => {
+        dispatch(assignedPassengersDataAction(assignedPassengersData));
       },
     }),
   ),

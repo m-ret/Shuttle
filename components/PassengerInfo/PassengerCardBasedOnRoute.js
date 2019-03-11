@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import {Text, View} from 'react-native';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
@@ -95,6 +95,7 @@ class PassengerCardBasedOnRoute extends Component {
           address={info.address}
           datetime={info.timestamp}
           searchParam={searchParam}
+          buttonText="ADD TO MY PASSENGERS"
           cardinalpoint={info.cardinalpoint}
           callModal={() => this.callModalAndSetPassengerInfo(info)}
         />

@@ -7,6 +7,7 @@ import FetchPickupPassengers from './FetchPickupPassengers';
 import FetchPassengersByCardinalPoint from './FetchPassengersByCardinalPoint';
 
 import { API_URL } from '../constants/API';
+import FetchAssignedPassengers from './FetchMyAssignedPassengers';
 
 const FetchEditPassenger = async (
   // These are params. So be careful before you change its order
@@ -20,6 +21,7 @@ const FetchEditPassenger = async (
   screenName,
   passengersGoingTo,
   navigationStore,
+  assignedPassengersDataActionHandler,
   passengerSuccessfullyEditedActionHandler,
   unassignedPickUpPassengersActionHandler,
   unassignedDropOffPassengersActionHandler,
@@ -60,12 +62,27 @@ const FetchEditPassenger = async (
         );
       }
 
-      FetchPickupPassengers(unassignedPickUpPassengersActionHandler, userToken);
+      if (
+        screenName === 'PassengerByCardinalPoint' ||
+        screenName === 'PassengerCardBasedOnRoute'
+      ) {
+        FetchPickupPassengers(
+          unassignedPickUpPassengersActionHandler,
+          userToken,
+        );
 
-      FetchDropOffPassengers(
-        unassignedDropOffPassengersActionHandler,
-        userToken,
-      );
+        FetchDropOffPassengers(
+          unassignedDropOffPassengersActionHandler,
+          userToken,
+        );
+      }
+
+      if (screenName === 'MyPassengersScreen') {
+        FetchAssignedPassengers(
+          navigationStore,
+          assignedPassengersDataActionHandler,
+        );
+      }
     }
   } catch (error) {
     Alert.alert(

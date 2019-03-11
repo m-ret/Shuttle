@@ -43,6 +43,7 @@ class AllPassengersOptionsModal extends Component {
   };
 
   render() {
+    const { screenName } = this.props;
     const { handleCallOptionsModal, popupsModalsActionHandler } = this.props;
     return (
       <View style={styles.WrapperContainer}>
@@ -55,7 +56,15 @@ class AllPassengersOptionsModal extends Component {
             <MaterialCommunityIcons name="account-edit" size={24} />
           </ModalsOptionsBtn>
 
-          <ModalsOptionsBtn onPress={this.callModal} text="Delete">
+          <ModalsOptionsBtn
+            onPress={this.callModal}
+            text={
+              screenName === 'PassengerCardBasedOnRoute' ||
+              screenName === 'PassengerByCardinalPoint'
+                ? 'Delete'
+                : 'Remove'
+            }
+          >
             <MaterialIcons name="delete-forever" size={24} />
           </ModalsOptionsBtn>
 
@@ -72,8 +81,13 @@ class AllPassengersOptionsModal extends Component {
   }
 }
 
+AllPassengersOptionsModal.defaultProps = {
+  screenName: '',
+};
+
 AllPassengersOptionsModal.propTypes = {
   handleCallOptionsModal: PropTypes.func.isRequired,
+  screenName: PropTypes.oneOfType([PropTypes.string]),
   confirmationPopupActionHandler: PropTypes.func.isRequired,
   popupsModalsActionHandler: PropTypes.oneOfType([PropTypes.func]).isRequired,
   editPassengerModalActionHandler: PropTypes.oneOfType([PropTypes.func])
@@ -83,6 +97,7 @@ AllPassengersOptionsModal.propTypes = {
 export default compose(
   connect(
     store => ({
+      screenName: store.homeScreen.screenName,
       confirmationPopup: store.popupsModals.confirmationPopup,
       editPassengerModal: store.popupsModals.editPassengerModal,
       toggleCardOptionsModal: store.popupsModals.toggleCardOptionsModal,

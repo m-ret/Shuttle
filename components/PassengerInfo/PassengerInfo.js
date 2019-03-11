@@ -32,6 +32,7 @@ const PassengersInfo = ({
   address,
   datetime,
   callModal,
+  buttonText,
   cardinalpoint,
   navigationStore,
   passengersGoingTo,
@@ -113,7 +114,7 @@ const PassengersInfo = ({
               ]}
             >
               <Text style={{ color: '#fff', fontWeight: 'bold' }}>
-                ADD TO MY PASSENGERS
+                {buttonText}
               </Text>
             </TouchableOpacity>
           </View>
@@ -137,6 +138,7 @@ PassengersInfo.propTypes = {
   callModal: PropTypes.oneOfType([PropTypes.func]).isRequired,
   datetime: PropTypes.oneOfType([PropTypes.string]).isRequired,
   pickupPassengerCardIdActionHandler: PropTypes.func.isRequired,
+  buttonText: PropTypes.oneOfType([PropTypes.string]).isRequired,
   cardinalpoint: PropTypes.oneOfType([PropTypes.string]).isRequired,
   isAddToMyPassengersSuccessActionHandler: PropTypes.func.isRequired,
   unassignedPickUpPassengersActionHandler: PropTypes.func.isRequired,
