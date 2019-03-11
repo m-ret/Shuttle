@@ -29,8 +29,11 @@ import { toggleAddPassengerModalAction } from '../PopupsModals/actions/popupsMod
 import FetchDropOffPassengers from '../../APICalls/FetchDropOffPassengers';
 import FetchPickupPassengers from '../../APICalls/FetchPickupPassengers';
 
+let userToken;
+
 class AllPassengersList extends Component {
   componentDidMount() {
+    userToken = AsyncStorage.getItem('userToken');
     const {
       toggleSearch,
       toggleSearchActionHandler,
@@ -53,6 +56,7 @@ class AllPassengersList extends Component {
       unassignedPickUpPassengers,
       isAddToMyPassengersSuccess,
       unassignedDropOffPassengers,
+      passengersByCardinalPointData,
       toggleAddPassengerModalActionHandler,
     } = this.props;
 
@@ -67,6 +71,8 @@ class AllPassengersList extends Component {
       nextProps.unassignedPickUpPassengers !== unassignedPickUpPassengers ||
       nextProps.isAddToMyPassengersSuccess !== isAddToMyPassengersSuccess ||
       nextProps.unassignedDropOffPassengers !== unassignedDropOffPassengers ||
+      nextProps.passengersByCardinalPointData !==
+        passengersByCardinalPointData ||
       nextProps.toggleAddPassengerModalActionHandler !==
         toggleAddPassengerModalActionHandler
     );
@@ -80,7 +86,6 @@ class AllPassengersList extends Component {
       unassignedDropOffPassengersActionHandler,
     } = this.props;
 
-    const userToken = await AsyncStorage.getItem('userToken');
     const route = navigationStore.index ? 'PickUp' : 'DropOff';
 
     await FetchUndoAddToMyPassenger(
@@ -241,6 +246,7 @@ AllPassengersList.propTypes = {
   toggleSearchActionHandler: PropTypes.oneOfType([PropTypes.func]).isRequired,
   isAddToMyPassengersSuccess: PropTypes.oneOfType([PropTypes.bool]).isRequired,
   unassignedPickUpPassengers: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  passengersByCardinalPointData: PropTypes.oneOfType([PropTypes.array]).isRequired,
   unassignedDropOffPassengers: PropTypes.oneOfType([PropTypes.array])
     .isRequired,
 };
@@ -258,6 +264,8 @@ export default compose(
       unassignedPickUpPassengers: store.homeScreen.unassignedPickUpPassengers,
       isAddToMyPassengersSuccess: store.homeScreen.isAddToMyPassengersSuccess,
       unassignedDropOffPassengers: store.homeScreen.unassignedDropOffPassengers,
+      passengersByCardinalPointData:
+        store.passengersByCardinalPoint.passengersByCardinalPointData,
     }),
     dispatch => ({
       toggleSearchActionHandler: () => {

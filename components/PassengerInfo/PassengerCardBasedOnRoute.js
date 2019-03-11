@@ -1,4 +1,4 @@
-import {Text, View} from 'react-native';
+import { View } from 'react-native';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
@@ -17,14 +17,23 @@ import {
 } from '../PopupsModals/actions/popupsModals';
 
 import {
-  holdPassengerInfoAction,
   screenNameAction,
+  passengerCardIdAction,
+  holdPassengerInfoAction,
+  pickupPassengerCardIdAction,
+  isAddToMyPassengersSuccessAction,
+  unassignedPickUpPassengersAction,
+  unassignedDropOffPassengersAction,
 } from '../../screens/HomeScreen/actions/homeScreen';
+
+import FetchAddToMyPassengers from '../../APICalls/FetchAddToMyPassengers';
 
 import CardOptionsModalParent from '../PopupsModals/CardOptionsModalParent';
 import AddPassengerModalParent from '../PopupsModals/AddPassengerModalParent';
 import ConfirmationPopupParent from '../PopupsModals/ConfirmationPopupParent';
 import PassengerFormModalParent from '../PopupsModals/PassengerFormModalParent';
+
+import { passengersByCardinalPointDataAction } from '../../screens/PassengersByCardinalPoint/actions/passengersByCardinalPoint';
 
 class PassengerCardBasedOnRoute extends Component {
   shouldComponentUpdate(nextProps, nextState) {
@@ -85,6 +94,31 @@ class PassengerCardBasedOnRoute extends Component {
     holdPassengerInfoActionHandler(passengerInfo);
   };
 
+  handleAddToMyPassengers = id => {
+    const {
+      navigationStore,
+      passengersGoingTo,
+      passengerCardIdActionHandler,
+      pickupPassengerCardIdActionHandler,
+      unassignedPickUpPassengersActionHandler,
+      unassignedDropOffPassengersActionHandler,
+      isAddToMyPassengersSuccessActionHandler,
+      passengersByCardinalPointDataActionHandler,
+    } = this.props;
+
+    return FetchAddToMyPassengers(
+      id,
+      navigationStore,
+      passengersGoingTo,
+      passengerCardIdActionHandler,
+      pickupPassengerCardIdActionHandler,
+      unassignedPickUpPassengersActionHandler,
+      unassignedDropOffPassengersActionHandler,
+      isAddToMyPassengersSuccessActionHandler,
+      passengersByCardinalPointDataActionHandler,
+    );
+  };
+
   componentToRenderBasedOnParams = info => {
     const { searchParam } = this.props;
     return (
@@ -97,6 +131,7 @@ class PassengerCardBasedOnRoute extends Component {
           searchParam={searchParam}
           buttonText="ADD TO MY PASSENGERS"
           cardinalpoint={info.cardinalpoint}
+          onPress={() => this.handleAddToMyPassengers(info.id)}
           callModal={() => this.callModalAndSetPassengerInfo(info)}
         />
       </View>
@@ -144,6 +179,7 @@ class PassengerCardBasedOnRoute extends Component {
 }
 
 PassengerCardBasedOnRoute.defaultProps = {
+  passengersGoingTo: '',
   searchParam: undefined,
 };
 
@@ -157,13 +193,20 @@ PassengerCardBasedOnRoute.propTypes = {
   screenNameActionHandler: PropTypes.func.isRequired,
   popupsModalsActionHandler: PropTypes.func.isRequired,
   searchParam: PropTypes.oneOfType([PropTypes.string]),
+  passengerCardIdActionHandler: PropTypes.func.isRequired,
   confirmationPopupActionHandler: PropTypes.func.isRequired,
   holdPassengerInfoActionHandler: PropTypes.func.isRequired,
+  passengersGoingTo: PropTypes.oneOfType([PropTypes.string]),
+  pickupPassengerCardIdActionHandler: PropTypes.func.isRequired,
+  isAddToMyPassengersSuccessActionHandler: PropTypes.func.isRequired,
+  unassignedPickUpPassengersActionHandler: PropTypes.func.isRequired,
   confirmationPopup: PropTypes.oneOfType([PropTypes.bool]).isRequired,
-  unassignedDropOffPassengers: PropTypes.oneOfType([PropTypes.array])
-    .isRequired,
+  unassignedDropOffPassengersActionHandler: PropTypes.func.isRequired,
+  passengersByCardinalPointDataActionHandler: PropTypes.func.isRequired,
   toggleCardOptionsModal: PropTypes.oneOfType([PropTypes.bool]).isRequired,
   unassignedPickUpPassengers: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  unassignedDropOffPassengers: PropTypes.oneOfType([PropTypes.array])
+    .isRequired,
 };
 
 export default compose(
@@ -172,8 +215,12 @@ export default compose(
       searchParam: store.homeScreen.searchParam,
       navigationStore: store.homeScreen.navigation,
       passengerInfo: store.homeScreen.passengerInfo,
+      passengerCardId: store.homeScreen.passengerCardId,
+      passengersGoingTo: store.homeScreen.passengersGoingTo,
       confirmationPopup: store.popupsModals.confirmationPopup,
+      pickupPassengerCardId: store.homeScreen.pickupPassengerCardId,
       toggleCardOptionsModal: store.popupsModals.toggleCardOptionsModal,
+      isAddToMyPassengersSuccess: store.homeScreen.isAddToMyPassengersSuccess,
       unassignedPickUpPassengers: store.homeScreen.unassignedPickUpPassengers,
       unassignedDropOffPassengers: store.homeScreen.unassignedDropOffPassengers,
     }),
@@ -181,14 +228,32 @@ export default compose(
       screenNameActionHandler: screenName => {
         dispatch(screenNameAction(screenName));
       },
-      holdPassengerInfoActionHandler: passengerInfo => {
-        dispatch(holdPassengerInfoAction(passengerInfo));
-      },
       popupsModalsActionHandler: () => {
         dispatch(popupsModalsAction());
       },
+      passengerCardIdActionHandler: id => {
+        dispatch(passengerCardIdAction(id));
+      },
       confirmationPopupActionHandler: () => {
         dispatch(confirmationPopupAction());
+      },
+      pickupPassengerCardIdActionHandler: id => {
+        dispatch(pickupPassengerCardIdAction(id));
+      },
+      holdPassengerInfoActionHandler: passengerInfo => {
+        dispatch(holdPassengerInfoAction(passengerInfo));
+      },
+      unassignedPickUpPassengersActionHandler: data => {
+        dispatch(unassignedPickUpPassengersAction(data));
+      },
+      unassignedDropOffPassengersActionHandler: data => {
+        dispatch(unassignedDropOffPassengersAction(data));
+      },
+      passengersByCardinalPointDataActionHandler: data => {
+        dispatch(passengersByCardinalPointDataAction(data));
+      },
+      isAddToMyPassengersSuccessActionHandler: isAddToMyPassengersSuccess => {
+        dispatch(isAddToMyPassengersSuccessAction(isAddToMyPassengersSuccess));
       },
     }),
   ),

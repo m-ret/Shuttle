@@ -10,6 +10,7 @@ const FetchUndoAddToMyPassenger = async (
   navigationStore,
   isAddToMyPassengersSuccessActionHandler,
 ) => {
+  let responseJson;
   const userToken = await AsyncStorage.getItem('userToken');
   const route = navigationStore.index ? 'PickUp' : 'DropOff';
   try {
@@ -27,12 +28,13 @@ const FetchUndoAddToMyPassenger = async (
         },
       },
     );
-    const responseJson = await response.json();
-    console.log({ responseJson, id });
+
+    responseJson = await response.json();
+
     if (has(responseJson, 'error')) {
       Alert.alert('Error', 'Unable to process your Undo request at this time.');
     } else {
-      isAddToMyPassengersSuccessActionHandler(false);
+      return isAddToMyPassengersSuccessActionHandler(false);
     }
   } catch (error) {
     Alert.alert(
@@ -40,6 +42,8 @@ const FetchUndoAddToMyPassenger = async (
       'There was an error with your Undo request, please try again later.',
     );
   }
+
+  return responseJson;
 };
 
 export default FetchUndoAddToMyPassenger;

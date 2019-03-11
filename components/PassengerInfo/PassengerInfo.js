@@ -12,51 +12,18 @@ import PassengersStyles from '../../styles/Passengers';
 import Colors from '../../constants/Colors';
 import globalStyles from '../../styles/GlobalStyles';
 
-import FetchAddToMyPassengers from '../../APICalls/FetchAddToMyPassengers';
-
-import {
-  passengerCardIdAction,
-  pickupPassengerCardIdAction,
-  isAddToMyPassengersSuccessAction,
-  unassignedPickUpPassengersAction,
-  unassignedDropOffPassengersAction,
-} from '../../screens/HomeScreen/actions/homeScreen';
-
-import { passengersByCardinalPointDataAction } from '../../screens/PassengersByCardinalPoint/actions/passengersByCardinalPoint';
-
 import momentDateFormatter from '../../utils/DateFormatter';
 
 const PassengersInfo = ({
-  id,
   name,
   address,
+  onPress,
   datetime,
   callModal,
   buttonText,
   cardinalpoint,
   navigationStore,
-  passengersGoingTo,
-  passengerCardIdActionHandler,
-  pickupPassengerCardIdActionHandler,
-  isAddToMyPassengersSuccessActionHandler,
-  unassignedPickUpPassengersActionHandler,
-  unassignedDropOffPassengersActionHandler,
-  passengersByCardinalPointDataActionHandler,
 }) => {
-  const handleAddToMyPassengers = () => {
-    FetchAddToMyPassengers(
-      id,
-      navigationStore,
-      passengersGoingTo,
-      passengerCardIdActionHandler,
-      pickupPassengerCardIdActionHandler,
-      unassignedPickUpPassengersActionHandler,
-      unassignedDropOffPassengersActionHandler,
-      isAddToMyPassengersSuccessActionHandler,
-      passengersByCardinalPointDataActionHandler,
-    );
-  };
-
   return (
     <View style={{ marginBottom: 38 }}>
       <View style={PassengersStyles.CTileListItem}>
@@ -103,7 +70,7 @@ const PassengersInfo = ({
 
           <View style={PassengersStyles.CArticleTileFooter}>
             <TouchableOpacity
-              onPress={handleAddToMyPassengers}
+              onPress={onPress}
               style={[
                 globalStyles.touchableBtnDropOffItem,
                 {
@@ -124,58 +91,20 @@ const PassengersInfo = ({
   );
 };
 
-PassengersInfo.defaultProps = {
-  passengersGoingTo: '',
-};
-
 PassengersInfo.propTypes = {
   navigationStore: PropTypes.shape({}).isRequired,
-  id: PropTypes.oneOfType([PropTypes.number]).isRequired,
-  passengerCardIdActionHandler: PropTypes.func.isRequired,
   name: PropTypes.oneOfType([PropTypes.string]).isRequired,
-  passengersGoingTo: PropTypes.oneOfType([PropTypes.string]),
+  onPress: PropTypes.oneOfType([PropTypes.func]).isRequired,
   address: PropTypes.oneOfType([PropTypes.string]).isRequired,
   callModal: PropTypes.oneOfType([PropTypes.func]).isRequired,
   datetime: PropTypes.oneOfType([PropTypes.string]).isRequired,
-  pickupPassengerCardIdActionHandler: PropTypes.func.isRequired,
   buttonText: PropTypes.oneOfType([PropTypes.string]).isRequired,
   cardinalpoint: PropTypes.oneOfType([PropTypes.string]).isRequired,
-  isAddToMyPassengersSuccessActionHandler: PropTypes.func.isRequired,
-  unassignedPickUpPassengersActionHandler: PropTypes.func.isRequired,
-  unassignedDropOffPassengersActionHandler: PropTypes.func.isRequired,
-  passengersByCardinalPointDataActionHandler: PropTypes.func.isRequired,
 };
 
 export default compose(
-  connect(
-    store => ({
-      navigationStore: store.homeScreen.navigation,
-      passengerCardId: store.homeScreen.passengerCardId,
-      passengersGoingTo: store.homeScreen.passengersGoingTo,
-      pickupPassengerCardId: store.homeScreen.pickupPassengerCardId,
-      isAddToMyPassengersSuccess: store.homeScreen.isAddToMyPassengersSuccess,
-      unassignedPickUpPassengers: store.homeScreen.unassignedPickUpPassengers,
-      unassignedDropOffPassengers: store.homeScreen.unassignedDropOffPassengers,
-    }),
-    dispatch => ({
-      passengerCardIdActionHandler: id => {
-        dispatch(passengerCardIdAction(id));
-      },
-      pickupPassengerCardIdActionHandler: id => {
-        dispatch(pickupPassengerCardIdAction(id));
-      },
-      unassignedPickUpPassengersActionHandler: data => {
-        dispatch(unassignedPickUpPassengersAction(data));
-      },
-      unassignedDropOffPassengersActionHandler: data => {
-        dispatch(unassignedDropOffPassengersAction(data));
-      },
-      passengersByCardinalPointDataActionHandler: data => {
-        dispatch(passengersByCardinalPointDataAction(data));
-      },
-      isAddToMyPassengersSuccessActionHandler: isAddToMyPassengersSuccess => {
-        dispatch(isAddToMyPassengersSuccessAction(isAddToMyPassengersSuccess));
-      },
-    }),
-  ),
+  connect(store => ({
+    navigationStore: store.homeScreen.navigation,
+    passengersGoingTo: store.homeScreen.passengersGoingTo,
+  })),
 )(PassengersInfo);

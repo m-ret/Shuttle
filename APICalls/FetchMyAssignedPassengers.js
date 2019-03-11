@@ -23,8 +23,9 @@ const FetchAssignedPassengers = async (
         },
       },
     );
+
     responseJson = await response.json();
-    console.log({ responseJson });
+
     if (has(responseJson, 'error')) {
       Alert.alert(
         'Error',

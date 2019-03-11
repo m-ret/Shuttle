@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import {
-  RefreshControl,
-  ScrollView,
-  StyleSheet,
   View,
+  Linking,
+  Platform,
+  StyleSheet,
+  ScrollView,
+  RefreshControl,
 } from 'react-native';
 
 import { compose } from 'redux';
@@ -53,7 +55,8 @@ class MyPassengersScreen extends Component {
 
   componentWillUnmount() {
     const { assignedPassengersDataActionHandler } = this.props;
-    assignedPassengersDataActionHandler([]);
+
+    return assignedPassengersDataActionHandler([]);
   }
 
   handleFetchAssignedPassengers = () => {
@@ -82,6 +85,18 @@ class MyPassengersScreen extends Component {
     holdPassengerInfoActionHandler(passengerInfo);
   };
 
+  handleStartNavigating = address => {
+    const url = `https://www.google.com/maps/dir/?api=1&navigate&destination=${address}`;
+
+    Linking.canOpenURL(url).then(supported => {
+      if (supported) {
+        return Linking.openURL(url);
+      }
+
+      return Linking.openURL(url);
+    });
+  };
+
   render() {
     const { refreshing } = this.state;
     const { assignedPassengersData } = this.props;
@@ -107,6 +122,7 @@ class MyPassengersScreen extends Component {
                       datetime={info.timestamp}
                       buttonText="START NAVIGATING"
                       cardinalpoint={info.cardinalpoint}
+                      onPress={() => this.handleStartNavigating(info.address)}
                       callModal={() => this.callModalAndSetPassengerInfo(info)}
                     />
                   </View>
@@ -120,32 +136,25 @@ class MyPassengersScreen extends Component {
 }
 
 MyPassengersScreen.defaultProps = {
-  screenName: '',
   assignedPassengersData: [],
 };
 
 MyPassengersScreen.propTypes = {
   navigationStore: PropTypes.shape({}).isRequired,
   screenNameActionHandler: PropTypes.func.isRequired,
-  screenName: PropTypes.oneOfType([PropTypes.string]),
   popupsModalsActionHandler: PropTypes.func.isRequired,
-  passengerCardId: PropTypes.oneOfType([PropTypes.number]),
   confirmationPopupActionHandler: PropTypes.func.isRequired,
   holdPassengerInfoActionHandler: PropTypes.func.isRequired,
   assignedPassengersData: PropTypes.oneOfType([PropTypes.array]),
   assignedPassengersDataActionHandler: PropTypes.func.isRequired,
   confirmationPopup: PropTypes.oneOfType([PropTypes.bool]).isRequired,
-  editPassengerModal: PropTypes.oneOfType([PropTypes.bool]).isRequired,
 };
 
 export default compose(
   connect(
     store => ({
-      screenName: store.homeScreen.screenName,
       navigationStore: store.homeScreen.navigation,
-      passengerCardId: store.homeScreen.passengerCardId,
       confirmationPopup: store.popupsModals.confirmationPopup,
-      editPassengerModal: store.popupsModals.editPassengerModal,
       toggleCardOptionsModal: store.popupsModals.toggleCardOptionsModal,
       assignedPassengersData: store.myPassengersScreen.assignedPassengersData,
     }),
