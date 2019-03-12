@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { AsyncStorage, RefreshControl, ScrollView, View } from 'react-native';
+import { RefreshControl, ScrollView, View } from 'react-native';
 
 import { withNavigation } from 'react-navigation';
 
@@ -35,8 +35,6 @@ import PassengerGoingAvatar from '../SVGs/Passengers/PassengerGoingAvatar';
 
 import FetchAddToMyPassengers from '../../APICalls/FetchAddToMyPassengers';
 
-import FetchPickupPassengers from '../../APICalls/FetchPickupPassengers';
-import FetchDropOffPassengers from '../../APICalls/FetchDropOffPassengers';
 import FetchUndoAddToMyPassenger from '../../APICalls/FetchUndoAddToMyPassenger';
 
 class PassengersByCardinalPointCard extends Component {
@@ -59,6 +57,7 @@ class PassengersByCardinalPointCard extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     const { refreshing } = this.state;
     const {
+      screenName,
       navigationStore,
       passengerCardId,
       confirmationPopup,
@@ -68,6 +67,7 @@ class PassengersByCardinalPointCard extends Component {
     } = this.props;
 
     return (
+      nextProps.screenName !== screenName ||
       nextState.refreshing !== refreshing ||
       nextProps.navigationStore !== navigationStore ||
       nextProps.passengerCardId !== passengerCardId ||
@@ -117,35 +117,26 @@ class PassengersByCardinalPointCard extends Component {
 
   handleUndo = async id => {
     const {
+      screenName,
       navigationStore,
       passengersGoingTo,
+      screenNameActionHandler,
       isAddToMyPassengersSuccessActionHandler,
       unassignedPickUpPassengersActionHandler,
       unassignedDropOffPassengersActionHandler,
       passengersByCardinalPointDataActionHandler,
     } = this.props;
 
-    const userToken = await AsyncStorage.getItem('userToken');
-    const route = navigationStore.index ? 'PickUp' : 'DropOff';
+    screenNameActionHandler('PassengerByCardinalPoint');
 
-    await FetchUndoAddToMyPassenger(
+    return FetchUndoAddToMyPassenger(
       id,
+      screenName,
       navigationStore,
-      isAddToMyPassengersSuccessActionHandler,
-    );
-
-    if (route === 'DropOff') {
-      FetchDropOffPassengers(
-        unassignedDropOffPassengersActionHandler,
-        userToken,
-      );
-    } else {
-      FetchPickupPassengers(unassignedPickUpPassengersActionHandler, userToken);
-    }
-
-    return FetchPassengersByCardinalPoint(
       passengersGoingTo,
-      navigationStore,
+      isAddToMyPassengersSuccessActionHandler,
+      unassignedPickUpPassengersActionHandler,
+      unassignedDropOffPassengersActionHandler,
       passengersByCardinalPointDataActionHandler,
     );
   };
@@ -154,6 +145,7 @@ class PassengersByCardinalPointCard extends Component {
     const {
       navigationStore,
       passengersGoingTo,
+      screenNameActionHandler,
       passengerCardIdActionHandler,
       pickupPassengerCardIdActionHandler,
       unassignedPickUpPassengersActionHandler,
@@ -161,6 +153,8 @@ class PassengersByCardinalPointCard extends Component {
       isAddToMyPassengersSuccessActionHandler,
       passengersByCardinalPointDataActionHandler,
     } = this.props;
+
+    screenNameActionHandler('PassengerByCardinalPoint');
 
     return FetchAddToMyPassengers(
       id,

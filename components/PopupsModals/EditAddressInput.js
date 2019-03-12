@@ -15,7 +15,6 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import {
-  editPassengerModalAction,
   newAddressFromGoogleAction,
   toggleGooglePlacesInputAction,
 } from './actions/popupsModals';
@@ -87,7 +86,7 @@ class EditAddressInput extends Component {
                 // available options: https://developers.google.com/places/web-service/autocomplete
                 key: 'AIzaSyCkxmIVqod03kckg1ormoZgKsje1JCc0hE',
                 language: 'en', // language of the results
-                types: 'address', // default: 'geocode'
+                // types: 'geocode', // default: 'geocode'
               }}
               styles={{
                 container: {
@@ -110,31 +109,13 @@ class EditAddressInput extends Component {
                 predefinedPlacesDescription: {
                   color: '#1faadb',
                 },
+                poweredContainer: {
+                  display: 'none',
+                },
               }}
-              currentLocation={false} // Will add a 'Current location' button at the top of the predefined places list
-              // currentLocationLabel="Current location"
-              nearbyPlacesAPI="GooglePlacesSearch" // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch
-              GoogleReverseGeocodingQuery={
-                {
-                  // available options for GoogleReverseGeocoding API : https://developers.google.com/maps/documentation/geocoding/intro
-                }
-              }
-              GooglePlacesSearchQuery={{
-                // available options for GooglePlacesSearch API : https://developers.google.com/places/web-service/search
-
-                rankby: 'distance',
-                // types: 'food',
-              }}
-              filterReverseGeocodingByTypes={[
-                'country',
-                'locality',
-                'sublocality',
-                'postal_code',
-                'administrative_area_level_1',
-                'administrative_area_level_2',
-              ]} // filter the reverse geocoding results by types - ['locality', 'administrative_area_level_3'] if you want to display only cities
-              // predefinedPlaces={[homePlace, workPlace]}
-              debounce={100} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
+              currentLocation // Will add a 'Current location' button at the top of the predefined places list
+              currentLocationLabel="Current location"
+              // nearbyPlacesAPI="GooglePlacesSearch" // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch
               // renderLeftButton={() => <Text>Custom text before the input</Text>}
               renderRightButton={() => (
                 <View
@@ -160,7 +141,6 @@ class EditAddressInput extends Component {
 }
 
 EditAddressInput.propTypes = {
-  editPassengerModalActionHandler: PropTypes.func.isRequired,
   newAddressFromGoogleActionHandler: PropTypes.func.isRequired,
   toggleGooglePlacesInputActionHandler: PropTypes.func.isRequired,
   toggleGooglePlacesInput: PropTypes.oneOfType([PropTypes.bool]).isRequired,
@@ -174,9 +154,6 @@ export default compose(
       toggleGooglePlacesInput: store.popupsModals.toggleGooglePlacesInput,
     }),
     dispatch => ({
-      editPassengerModalActionHandler: () => {
-        dispatch(editPassengerModalAction());
-      },
       toggleGooglePlacesInputActionHandler: () => {
         dispatch(toggleGooglePlacesInputAction());
       },

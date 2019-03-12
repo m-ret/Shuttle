@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import { KeyboardAvoidingView, View } from 'react-native';
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -14,18 +14,18 @@ import PassengerFormModal from './PassengerFormModal';
 const PassengerFormModalParent = ({
   editPassengerModal,
   editPassengerModalActionHandler,
-}) => {
-  return (
-    <View>
-      <OptionsModal
-        openBy={editPassengerModal}
-        onRequestClose={editPassengerModalActionHandler}
-      >
+}) => (
+  <View>
+    <OptionsModal
+      openBy={editPassengerModal}
+      onRequestClose={editPassengerModalActionHandler}
+    >
+      <KeyboardAvoidingView behavior="position" enabled>
         {<PassengerFormModal />}
-      </OptionsModal>
-    </View>
-  );
-};
+      </KeyboardAvoidingView>
+    </OptionsModal>
+  </View>
+);
 
 PassengerFormModalParent.propTypes = {
   editPassengerModalActionHandler: PropTypes.func.isRequired,

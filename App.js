@@ -3,11 +3,17 @@ import {
   Platform,
   StatusBar,
   StyleSheet,
+  KeyboardAvoidingView,
 } from 'react-native';
 import { Provider as ReduxProvider } from 'react-redux';
 import { AppLoading, Font, Icon } from 'expo';
 import store from './redux/store';
 import AppNavigator from './navigation/AppNavigator';
+
+import AddPassengerModalParent from './components/PopupsModals/AddPassengerModalParent';
+import CardOptionsModalParent from './components/PopupsModals/CardOptionsModalParent';
+import ConfirmationPopupParent from './components/PopupsModals/ConfirmationPopupParent';
+import PassengerFormModalParent from './components/PopupsModals/PassengerFormModalParent';
 
 const styles = StyleSheet.create({
   container: {
@@ -27,6 +33,8 @@ class App extends React.Component {
       Font.loadAsync({
         // This is the font that we are using for our tab bar
         ...Icon.Ionicons.font,
+        ...Icon.MaterialIcons.font,
+        ...Icon.MaterialCommunityIcons.font,
         montserratRegular: require('./assets/fonts/Montserrat-Regular.ttf'),
         montserratSemibold: require('./assets/fonts/Montserrat-SemiBold.ttf'),
         montserratBold: require('./assets/fonts/Montserrat-Bold.ttf'),
@@ -59,7 +67,17 @@ class App extends React.Component {
     return (
       <ReduxProvider store={store}>
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+        <KeyboardAvoidingView
+          enabled
+          behavior="padding"
+          style={styles.container}
+        >
           <AppNavigator />
+          <CardOptionsModalParent />
+          <ConfirmationPopupParent />
+          <AddPassengerModalParent />
+          <PassengerFormModalParent />
+        </KeyboardAvoidingView>
       </ReduxProvider>
     );
   }

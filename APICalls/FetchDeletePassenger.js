@@ -34,7 +34,9 @@ const FetchDeletePassenger = async (
         route === 'DropOff' ? 'DropOff' : 'PickUp'
       }PassengerFromMyList`;
     } else {
-      chosenEndPoint = `${API_URL}deletePassenger`;
+      chosenEndPoint = `${API_URL}delete${
+        route === 'DropOff' ? 'DropOff' : 'PickUp'
+      }Passenger`;
     }
 
     return chosenEndPoint;
@@ -42,13 +44,14 @@ const FetchDeletePassenger = async (
 
   try {
     await endPointBasedOnScreeName();
+
     const response = await fetch(chosenEndPoint, {
       method: 'POST',
       body: JSON.stringify({ id }),
       headers: {
-        Authorization: `Bearer ${userToken}`,
         Accept: 'application/json',
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${userToken}`,
       },
     });
     const responseJson = await response.json();
@@ -56,6 +59,7 @@ const FetchDeletePassenger = async (
       Alert.alert('Error', 'Unable to process your request at this time.');
     } else {
       isDeletePassengerSuccessActionHandler(responseJson.success);
+      passengerCardIdActionHandler(id);
       pickupPassengerCardIdActionHandler(id);
       if (route === 'PickUp') {
         pickupPassengerCardIdActionHandler(id);

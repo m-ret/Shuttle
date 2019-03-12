@@ -21,23 +21,26 @@ const FetchAddPassenger = async (
   let responseJson;
   const userToken = await AsyncStorage.getItem('userToken');
   const route = navigationStore.index ? 'PickUp' : 'DropOff';
+
   try {
-    const response = await fetch(`${API_URL}addDropOffPassenger`, {
-      method: 'POST',
-      body: JSON.stringify({
-        name,
-        phone,
-        pickup: route === 'PickUp' ? 1 : 0,
-        address,
-        latitude,
-        longitude,
-      }),
-      headers: {
-        Authorization: `Bearer ${userToken}`,
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
+    const response = await fetch(
+      `${API_URL}add${route === 'DropOff' ? 'DropOff' : 'PickUp'}Passenger`,
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          name,
+          phone,
+          address,
+          latitude,
+          longitude,
+        }),
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
       },
-    });
+    );
     responseJson = await response.json();
     if (has(responseJson, 'error')) {
       Alert.alert('Error', 'Unable to process your request at this time.');

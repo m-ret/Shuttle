@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import { KeyboardAvoidingView, View } from 'react-native';
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -21,7 +21,9 @@ const AddPassengerModalParent = ({
         openBy={toggleAddPassengerModal}
         onRequestClose={toggleAddPassengerModalActionHandler}
       >
-        {<AddPassengerModal />}
+        <KeyboardAvoidingView behavior="position" enabled>
+          {<AddPassengerModal />}
+        </KeyboardAvoidingView>
       </OptionsModal>
     </View>
   );

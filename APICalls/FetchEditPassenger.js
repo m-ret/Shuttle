@@ -14,7 +14,6 @@ const FetchEditPassenger = async (
   id,
   name,
   phone,
-  pickup,
   address,
   latitude,
   longitude,
@@ -29,24 +28,27 @@ const FetchEditPassenger = async (
 ) => {
   let responseJson;
   const userToken = await AsyncStorage.getItem('userToken');
+  const route = navigationStore.index ? 'PickUp' : 'DropOff';
   try {
-    const response = await fetch(`${API_URL}editDropOffPassenger`, {
-      method: 'POST',
-      body: JSON.stringify({
-        id,
-        name,
-        phone,
-        pickup,
-        address,
-        latitude,
-        longitude,
-      }),
-      headers: {
-        Authorization: `Bearer ${userToken}`,
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
+    const response = await fetch(
+      `${API_URL}edit${route === 'DropOff' ? 'DropOff' : 'PickUp'}Passenger`,
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          id,
+          name,
+          phone,
+          address,
+          latitude,
+          longitude,
+        }),
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
       },
-    });
+    );
 
     responseJson = await response.json();
 

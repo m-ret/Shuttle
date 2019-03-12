@@ -28,39 +28,27 @@ import {
 
 import FetchAddToMyPassengers from '../../APICalls/FetchAddToMyPassengers';
 
-import CardOptionsModalParent from '../PopupsModals/CardOptionsModalParent';
-import AddPassengerModalParent from '../PopupsModals/AddPassengerModalParent';
-import ConfirmationPopupParent from '../PopupsModals/ConfirmationPopupParent';
-import PassengerFormModalParent from '../PopupsModals/PassengerFormModalParent';
-
 import { passengersByCardinalPointDataAction } from '../../screens/PassengersByCardinalPoint/actions/passengersByCardinalPoint';
 
 class PassengerCardBasedOnRoute extends Component {
+  componentDidMount() {
+    const { screenNameActionHandler } = this.props;
+    screenNameActionHandler('PassengerCardBasedOnRoute');
+  }
+
   shouldComponentUpdate(nextProps, nextState) {
     const {
       searchParam,
       passengerInfo,
       navigationStore,
-      confirmationPopup,
-      toggleCardOptionsModal,
-      popupsModalsActionHandler,
       unassignedPickUpPassengers,
       unassignedDropOffPassengers,
-      confirmationPopupActionHandler,
-      holdPassengerInfoActionHandler,
     } = this.props;
 
     return (
-      nextProps.confirmationPopupActionHandler !==
-        confirmationPopupActionHandler ||
-      nextProps.holdPassengerInfoActionHandler !==
-        holdPassengerInfoActionHandler ||
       nextProps.searchParam !== searchParam ||
       nextProps.passengerInfo !== passengerInfo ||
       nextProps.navigationStore !== navigationStore ||
-      nextProps.confirmationPopup !== confirmationPopup ||
-      nextProps.toggleCardOptionsModal !== toggleCardOptionsModal ||
-      nextProps.popupsModalsActionHandler !== popupsModalsActionHandler ||
       nextProps.unassignedPickUpPassengers !== unassignedPickUpPassengers ||
       nextProps.unassignedDropOffPassengers !== unassignedDropOffPassengers
     );
@@ -77,7 +65,7 @@ class PassengerCardBasedOnRoute extends Component {
     );
   };
 
-  callModalAndSetPassengerInfo = passengerInfo => {
+  callModalAndSetPassengerInfo = async passengerInfo => {
     const {
       confirmationPopup,
       screenNameActionHandler,
@@ -86,7 +74,7 @@ class PassengerCardBasedOnRoute extends Component {
       confirmationPopupActionHandler,
     } = this.props;
 
-    screenNameActionHandler('PassengerCardBasedOnRoute');
+    await screenNameActionHandler('PassengerCardBasedOnRoute');
 
     if (confirmationPopup) confirmationPopupActionHandler();
 
@@ -94,10 +82,11 @@ class PassengerCardBasedOnRoute extends Component {
     holdPassengerInfoActionHandler(passengerInfo);
   };
 
-  handleAddToMyPassengers = id => {
+  handleAddToMyPassengers = async id => {
     const {
       navigationStore,
       passengersGoingTo,
+      screenNameActionHandler,
       passengerCardIdActionHandler,
       pickupPassengerCardIdActionHandler,
       unassignedPickUpPassengersActionHandler,
@@ -105,6 +94,8 @@ class PassengerCardBasedOnRoute extends Component {
       isAddToMyPassengersSuccessActionHandler,
       passengersByCardinalPointDataActionHandler,
     } = this.props;
+
+    await screenNameActionHandler('PassengerCardBasedOnRoute');
 
     return FetchAddToMyPassengers(
       id,
@@ -158,6 +149,7 @@ class PassengerCardBasedOnRoute extends Component {
       unassignedPickUpPassengers,
       unassignedDropOffPassengers,
     } = this.props;
+
     return (
       <>
         <View style={{ marginTop: 38 }}>
@@ -169,10 +161,6 @@ class PassengerCardBasedOnRoute extends Component {
             ? this.showFeedbackIfNoLength(unassignedPickUpPassengers)
             : null}
         </View>
-        <AddPassengerModalParent />
-        <CardOptionsModalParent />
-        <ConfirmationPopupParent />
-        <PassengerFormModalParent />
       </>
     );
   }
@@ -203,7 +191,6 @@ PassengerCardBasedOnRoute.propTypes = {
   confirmationPopup: PropTypes.oneOfType([PropTypes.bool]).isRequired,
   unassignedDropOffPassengersActionHandler: PropTypes.func.isRequired,
   passengersByCardinalPointDataActionHandler: PropTypes.func.isRequired,
-  toggleCardOptionsModal: PropTypes.oneOfType([PropTypes.bool]).isRequired,
   unassignedPickUpPassengers: PropTypes.oneOfType([PropTypes.array]).isRequired,
   unassignedDropOffPassengers: PropTypes.oneOfType([PropTypes.array])
     .isRequired,
@@ -219,7 +206,6 @@ export default compose(
       passengersGoingTo: store.homeScreen.passengersGoingTo,
       confirmationPopup: store.popupsModals.confirmationPopup,
       pickupPassengerCardId: store.homeScreen.pickupPassengerCardId,
-      toggleCardOptionsModal: store.popupsModals.toggleCardOptionsModal,
       isAddToMyPassengersSuccess: store.homeScreen.isAddToMyPassengersSuccess,
       unassignedPickUpPassengers: store.homeScreen.unassignedPickUpPassengers,
       unassignedDropOffPassengers: store.homeScreen.unassignedDropOffPassengers,

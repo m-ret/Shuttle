@@ -11,7 +11,7 @@ const AllPassengersContainer = ({ fill }) => (
     <View
       style={[
         tabViewStyles.container,
-        { alignItems: 'center', justifyContent: 'center' },
+        { alignItems: 'center', justifyContent: 'center', flex: 1 },
       ]}
     >
       <Text style={{ fontWeight: 'bold' }}>
@@ -20,6 +20,7 @@ const AllPassengersContainer = ({ fill }) => (
       <View style={{ height: 50 }} />
       <PassengersCircle fill={fill} />
     </View>
+
     <AllPassengersList />
   </>
 );

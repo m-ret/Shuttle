@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { View, Text, TouchableOpacity, AsyncStorage } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import { compose } from 'redux';
@@ -26,20 +30,12 @@ import {
 import SearchBox from '../SearchBox/SearchBox';
 import FetchUndoAddToMyPassenger from '../../APICalls/FetchUndoAddToMyPassenger';
 import { toggleAddPassengerModalAction } from '../PopupsModals/actions/popupsModals';
-import FetchDropOffPassengers from '../../APICalls/FetchDropOffPassengers';
-import FetchPickupPassengers from '../../APICalls/FetchPickupPassengers';
-
-let userToken;
+import { passengersByCardinalPointDataAction } from '../../screens/PassengersByCardinalPoint/actions/passengersByCardinalPoint';
 
 class AllPassengersList extends Component {
   componentDidMount() {
-    userToken = AsyncStorage.getItem('userToken');
-    const {
-      toggleSearch,
-      toggleSearchActionHandler,
-      screenNameActionHandler,
-    } = this.props;
-    screenNameActionHandler('AllPassengersList');
+    const { toggleSearch, toggleSearchActionHandler } = this.props;
+
     this.toggleSearchBarVisibility();
     if (!toggleSearch) toggleSearchActionHandler();
   }
@@ -57,7 +53,6 @@ class AllPassengersList extends Component {
       isAddToMyPassengersSuccess,
       unassignedDropOffPassengers,
       passengersByCardinalPointData,
-      toggleAddPassengerModalActionHandler,
     } = this.props;
 
     return (
@@ -71,37 +66,33 @@ class AllPassengersList extends Component {
       nextProps.unassignedPickUpPassengers !== unassignedPickUpPassengers ||
       nextProps.isAddToMyPassengersSuccess !== isAddToMyPassengersSuccess ||
       nextProps.unassignedDropOffPassengers !== unassignedDropOffPassengers ||
-      nextProps.passengersByCardinalPointData !==
-        passengersByCardinalPointData ||
-      nextProps.toggleAddPassengerModalActionHandler !==
-        toggleAddPassengerModalActionHandler
+      nextProps.passengersByCardinalPointData !== passengersByCardinalPointData
     );
   }
 
   handleUndo = async id => {
     const {
       navigationStore,
+      passengersGoingTo,
+      screenNameActionHandler,
       unassignedPickUpPassengersActionHandler,
       isAddToMyPassengersSuccessActionHandler,
       unassignedDropOffPassengersActionHandler,
+      passengersByCardinalPointDataActionHandler,
     } = this.props;
 
-    const route = navigationStore.index ? 'PickUp' : 'DropOff';
+    await screenNameActionHandler('PassengerCardBasedOnRoute');
 
-    await FetchUndoAddToMyPassenger(
+    return FetchUndoAddToMyPassenger(
       id,
+      null,
       navigationStore,
+      passengersGoingTo,
       isAddToMyPassengersSuccessActionHandler,
+      unassignedPickUpPassengersActionHandler,
+      unassignedDropOffPassengersActionHandler,
+      passengersByCardinalPointDataActionHandler,
     );
-
-    if (route === 'DropOff') {
-      FetchDropOffPassengers(
-        unassignedDropOffPassengersActionHandler,
-        userToken,
-      );
-    } else {
-      FetchPickupPassengers(unassignedPickUpPassengersActionHandler, userToken);
-    }
   };
 
   toggleSearchBarVisibility = () => {
@@ -118,7 +109,10 @@ class AllPassengersList extends Component {
 
   showSuccessMessageBasedOnRoute = (nav, isSuccess, cardId) => {
     const { screenName } = this.props;
-    return screenName === 'AllPassengersList' && nav && isSuccess && cardId ? (
+    return screenName === 'PassengerCardBasedOnRoute' &&
+      nav &&
+      isSuccess &&
+      cardId ? (
       <PassengersAdded
         id={cardId}
         key={cardId}
@@ -226,6 +220,7 @@ class AllPassengersList extends Component {
 AllPassengersList.defaultProps = {
   screenName: '',
   passengerCardId: '',
+  passengersGoingTo: '',
   pickupPassengerCardId: '',
 };
 
@@ -234,6 +229,7 @@ AllPassengersList.propTypes = {
   screenNameActionHandler: PropTypes.func.isRequired,
   screenName: PropTypes.oneOfType([PropTypes.string]),
   passengerCardId: PropTypes.oneOfType([PropTypes.number]),
+  passengersGoingTo: PropTypes.oneOfType([PropTypes.string]),
   pickupPassengerCardId: PropTypes.oneOfType([PropTypes.number]),
   toggleSearch: PropTypes.oneOfType([PropTypes.bool]).isRequired,
   searchParam: PropTypes.oneOfType([PropTypes.string]).isRequired,
@@ -241,12 +237,14 @@ AllPassengersList.propTypes = {
   isAddToMyPassengersSuccessActionHandler: PropTypes.func.isRequired,
   unassignedPickUpPassengersActionHandler: PropTypes.func.isRequired,
   unassignedDropOffPassengersActionHandler: PropTypes.func.isRequired,
+  passengersByCardinalPointDataActionHandler: PropTypes.func.isRequired,
   toggleAddPassengerModal: PropTypes.oneOfType([PropTypes.bool]).isRequired,
   searchParamActionHandler: PropTypes.oneOfType([PropTypes.func]).isRequired,
   toggleSearchActionHandler: PropTypes.oneOfType([PropTypes.func]).isRequired,
   isAddToMyPassengersSuccess: PropTypes.oneOfType([PropTypes.bool]).isRequired,
   unassignedPickUpPassengers: PropTypes.oneOfType([PropTypes.array]).isRequired,
-  passengersByCardinalPointData: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  passengersByCardinalPointData: PropTypes.oneOfType([PropTypes.array])
+    .isRequired,
   unassignedDropOffPassengers: PropTypes.oneOfType([PropTypes.array])
     .isRequired,
 };
@@ -259,6 +257,7 @@ export default compose(
       toggleSearch: store.homeScreen.toggleSearch,
       navigationStore: store.homeScreen.navigation,
       passengerCardId: store.homeScreen.passengerCardId,
+      passengersGoingTo: store.homeScreen.passengersGoingTo,
       pickupPassengerCardId: store.homeScreen.pickupPassengerCardId,
       toggleAddPassengerModal: store.popupsModals.toggleAddPassengerModal,
       unassignedPickUpPassengers: store.homeScreen.unassignedPickUpPassengers,
@@ -288,6 +287,9 @@ export default compose(
       },
       isAddToMyPassengersSuccessActionHandler: value => {
         dispatch(isAddToMyPassengersSuccessAction(value));
+      },
+      passengersByCardinalPointDataActionHandler: data => {
+        dispatch(passengersByCardinalPointDataAction(data));
       },
     }),
   ),

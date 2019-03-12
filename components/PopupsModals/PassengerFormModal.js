@@ -41,7 +41,6 @@ class PassengerFormModal extends Component {
     id: '',
     name: '',
     phone: '',
-    pickup: '',
     address: '',
     latitude: '',
     longitude: '',
@@ -62,7 +61,6 @@ class PassengerFormModal extends Component {
         id: passengerInfo.id,
         name: passengerInfo.name,
         phone: passengerInfo.phone,
-        pickup: passengerInfo.pickup,
         address: passengerInfo.address,
         latitude: passengerInfo.latitude,
         longitude: passengerInfo.longitude,
@@ -71,15 +69,7 @@ class PassengerFormModal extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    const {
-      id,
-      name,
-      phone,
-      pickup,
-      address,
-      latitude,
-      longitude,
-    } = this.state;
+    const { id, name, phone, address, latitude, longitude } = this.state;
 
     const {
       passengerInfo,
@@ -90,20 +80,12 @@ class PassengerFormModal extends Component {
       newAddressFromGoogle,
       toggleGooglePlacesInput,
       passengerSuccessfullyEdited,
-      editPassengerModalActionHandler,
-      assignedPassengersDataActionHandler,
-      toggleGooglePlacesInputActionHandler,
-      unassignedPickUpPassengersActionHandler,
-      passengerSuccessfullyEditedActionHandler,
-      unassignedDropOffPassengersActionHandler,
-      passengersByCardinalPointDataActionHandler,
     } = this.props;
 
     return (
       nextState.id !== id ||
       nextState.name !== name ||
       nextState.phone !== phone ||
-      nextState.pickup !== pickup ||
       nextState.address !== address ||
       nextState.latitude !== latitude ||
       nextState.longitude !== longitude ||
@@ -114,21 +96,7 @@ class PassengerFormModal extends Component {
       nextProps.editPassengerModal !== editPassengerModal ||
       nextProps.newAddressFromGoogle !== newAddressFromGoogle ||
       nextProps.toggleGooglePlacesInput !== toggleGooglePlacesInput ||
-      nextProps.passengerSuccessfullyEdited !== passengerSuccessfullyEdited ||
-      nextProps.editPassengerModalActionHandler !==
-        editPassengerModalActionHandler ||
-      nextProps.assignedPassengersDataActionHandler !==
-        assignedPassengersDataActionHandler ||
-      nextProps.toggleGooglePlacesInputActionHandler !==
-        toggleGooglePlacesInputActionHandler ||
-      nextProps.unassignedPickUpPassengersActionHandler !==
-        unassignedPickUpPassengersActionHandler ||
-      nextProps.unassignedDropOffPassengersActionHandler !==
-        unassignedDropOffPassengersActionHandler ||
-      nextProps.passengersByCardinalPointDataActionHandler !==
-        passengersByCardinalPointDataActionHandler ||
-      nextProps.passengerSuccessfullyEditedActionHandler !==
-        passengerSuccessfullyEditedActionHandler
+      nextProps.passengerSuccessfullyEdited !== passengerSuccessfullyEdited
     );
   }
 
@@ -165,7 +133,6 @@ class PassengerFormModal extends Component {
         id: passengerInfo.id,
         name: passengerInfo.name,
         phone: passengerInfo.phone,
-        pickup: passengerInfo.pickup,
         address: size(newAddressFromGoogle)
           ? newAddressFromGoogle.address
           : passengerInfo.address,
@@ -199,21 +166,12 @@ class PassengerFormModal extends Component {
       passengersByCardinalPointDataActionHandler,
     } = this.props;
 
-    const {
-      id,
-      name,
-      phone,
-      pickup,
-      address,
-      latitude,
-      longitude,
-    } = this.state;
+    const { id, name, phone, address, latitude, longitude } = this.state;
 
     await FetchEditPassenger(
       id,
       name,
       phone,
-      pickup,
       this.onParamChange(newAddressFromGoogle.description, address),
       this.onParamChange(newAddressFromGoogle.latitude, latitude),
       this.onParamChange(newAddressFromGoogle.longitude, longitude),

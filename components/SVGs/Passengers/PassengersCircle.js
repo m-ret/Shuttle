@@ -48,7 +48,6 @@ class PassengersCircle extends Component {
   }
 
   componentWillUnmount() {
-    console.log({ hi: 'componentWillUnmount' });
     passengersGoingWest = 0;
     passengersGoingEast = 0;
     passengersGoingNorth = 0;

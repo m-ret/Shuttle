@@ -15,8 +15,8 @@ import AddEditFormInputs from './FormInputs';
 import FetchAddPassenger from '../../APICalls/FetchAddPassenger';
 
 import {
-  toggleAddPassengerModalAction,
   newAddressFromGoogleAction,
+  toggleAddPassengerModalAction,
   toggleGooglePlacesInputAction,
 } from './actions/popupsModals';
 
@@ -50,10 +50,6 @@ class AddPassengerModal extends Component {
       newAddressFromGoogle,
       toggleGooglePlacesInput,
       toggleAddPassengerModal,
-      toggleAddPassengerModalActionHandler,
-      toggleGooglePlacesInputActionHandler,
-      unassignedPickUpPassengersActionHandler,
-      unassignedDropOffPassengersActionHandler,
     } = this.props;
 
     return (
@@ -67,15 +63,7 @@ class AddPassengerModal extends Component {
       nextProps.addPassengerData !== addPassengerData ||
       nextProps.newAddressFromGoogle !== newAddressFromGoogle ||
       nextProps.toggleAddPassengerModal !== toggleAddPassengerModal ||
-      nextProps.toggleGooglePlacesInput !== toggleGooglePlacesInput ||
-      nextProps.toggleAddPassengerModalActionHandler !==
-        toggleAddPassengerModalActionHandler ||
-      nextProps.toggleGooglePlacesInputActionHandler !==
-        toggleGooglePlacesInputActionHandler ||
-      nextProps.unassignedPickUpPassengersActionHandler !==
-        unassignedPickUpPassengersActionHandler ||
-      nextProps.unassignedDropOffPassengersActionHandler !==
-        unassignedDropOffPassengersActionHandler
+      nextProps.toggleGooglePlacesInput !== toggleGooglePlacesInput
     );
   }
 
@@ -146,47 +134,49 @@ class AddPassengerModal extends Component {
     } = this.props;
     return (
       <>
-        <EditAddressInput />
-        <PassengerFormWrapper
-          modalTitle="Add"
-          onPressSave={this.handleAddPassenger}
-          onPressCancel={this.onCloseEditAddressModal}
-          onPressToToggleModal={toggleAddPassengerModalActionHandler}
-        >
-          <View style={styles.AddEditInputsWrapper}>
-            <AddEditFormInputs
-              // eslint-disable-next-line react/jsx-boolean-value
-              shouldFocus={true}
-              onChangeText={name => this.setState({ name })}
-              textStateValue={name}
-              placeholder="Enter name"
-              isRef={ref => (this.ref = ref)}
-            >
-              <UserIcon style={styles.IconWithinInput} />
-            </AddEditFormInputs>
-            <AddEditFormInputs
-              shouldFocus={false}
-              onChangeText={address => this.setState({ address })}
-              textStateValue={
-                size(newAddressFromGoogle)
-                  ? newAddressFromGoogle.description
-                  : address
-              }
-              onFocus={this.callModal}
-              placeholder="Enter Address"
-            >
-              <AddressIcon style={styles.IconWithinInput} />
-            </AddEditFormInputs>
-            <AddEditFormInputs
-              shouldFocus={false}
-              textStateValue={phone}
-              placeholder="Enter Phone"
-              onChangeText={phone => this.setState({ phone })}
-            >
-              <PhoneIcon style={styles.IconWithinInput} />
-            </AddEditFormInputs>
-          </View>
-        </PassengerFormWrapper>
+        <View style={styles.container}>
+          <EditAddressInput />
+          <PassengerFormWrapper
+            modalTitle="Add"
+            onPressSave={this.handleAddPassenger}
+            onPressCancel={this.onCloseEditAddressModal}
+            onPressToToggleModal={toggleAddPassengerModalActionHandler}
+          >
+            <View style={styles.AddEditInputsWrapper}>
+              <AddEditFormInputs
+                // eslint-disable-next-line react/jsx-boolean-value
+                shouldFocus={true}
+                onChangeText={name => this.setState({ name })}
+                textStateValue={name}
+                placeholder="Enter name"
+                isRef={ref => (this.ref = ref)}
+              >
+                <UserIcon style={styles.IconWithinInput} />
+              </AddEditFormInputs>
+              <AddEditFormInputs
+                shouldFocus={false}
+                onChangeText={address => this.setState({ address })}
+                textStateValue={
+                  size(newAddressFromGoogle)
+                    ? newAddressFromGoogle.description
+                    : address
+                }
+                onFocus={this.callModal}
+                placeholder="Enter Address"
+              >
+                <AddressIcon style={styles.IconWithinInput} />
+              </AddEditFormInputs>
+              <AddEditFormInputs
+                shouldFocus={false}
+                textStateValue={phone}
+                placeholder="Enter Phone"
+                onChangeText={phone => this.setState({ phone })}
+              >
+                <PhoneIcon style={styles.IconWithinInput} />
+              </AddEditFormInputs>
+            </View>
+          </PassengerFormWrapper>
+        </View>
       </>
     );
   }

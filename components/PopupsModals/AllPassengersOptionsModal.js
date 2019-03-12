@@ -22,6 +22,24 @@ import {
 import ModalsOptionsBtn from './ModalsOptionsBtn';
 
 class AllPassengersOptionsModal extends Component {
+  shouldComponentUpdate(props, state) {
+    const {
+      handleCallOptionsModal,
+      screenName,
+      confirmationPopup,
+      editPassengerModal,
+      toggleCardOptionsModal,
+    } = this.props;
+
+    return (
+      props.screenName !== screenName ||
+      props.confirmationPopup !== confirmationPopup ||
+      props.editPassengerModal !== editPassengerModal ||
+      props.toggleCardOptionsModal !== toggleCardOptionsModal ||
+      props.handleCallOptionsModal !== handleCallOptionsModal
+    );
+  }
+
   callModal = async () => {
     const {
       popupsModalsActionHandler,

@@ -48,9 +48,14 @@ class MyPassengersScreen extends Component {
     return this.handleFetchAssignedPassengers();
   }
 
-  shouldComponentUpdate(props) {
-    const { assignedPassengersData } = this.props;
-    return props.assignedPassengersData !== assignedPassengersData;
+  shouldComponentUpdate(props, state) {
+    const { refreshing } = this.state;
+    const { assignedPassengersData, editPassengerModal } = this.props;
+    return (
+      state.refreshing !== refreshing ||
+      props.editPassengerModal !== editPassengerModal ||
+      props.assignedPassengersData !== assignedPassengersData
+    );
   }
 
   componentWillUnmount() {
@@ -148,6 +153,8 @@ MyPassengersScreen.propTypes = {
   assignedPassengersData: PropTypes.oneOfType([PropTypes.array]),
   assignedPassengersDataActionHandler: PropTypes.func.isRequired,
   confirmationPopup: PropTypes.oneOfType([PropTypes.bool]).isRequired,
+  editPassengerModal: PropTypes.oneOfType([PropTypes.bool]).isRequired,
+  toggleCardOptionsModal: PropTypes.oneOfType([PropTypes.bool]).isRequired,
 };
 
 export default compose(
@@ -155,6 +162,7 @@ export default compose(
     store => ({
       navigationStore: store.homeScreen.navigation,
       confirmationPopup: store.popupsModals.confirmationPopup,
+      editPassengerModal: store.popupsModals.editPassengerModal,
       toggleCardOptionsModal: store.popupsModals.toggleCardOptionsModal,
       assignedPassengersData: store.myPassengersScreen.assignedPassengersData,
     }),
