@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import {
   View,
   Linking,
-  Platform,
   StyleSheet,
   ScrollView,
   RefreshControl,
+  ActivityIndicator,
 } from 'react-native';
 
 import { compose } from 'redux';
@@ -24,6 +24,7 @@ import {
   confirmationPopupAction,
   popupsModalsAction,
 } from '../../components/PopupsModals/actions/popupsModals';
+import globalStyles from '../../styles/GlobalStyles';
 
 const styles = StyleSheet.create({
   container: {
@@ -50,12 +51,33 @@ class MyPassengersScreen extends Component {
 
   shouldComponentUpdate(props, state) {
     const { refreshing } = this.state;
-    const { assignedPassengersData, editPassengerModal } = this.props;
+    const {
+      assignedPassengersData,
+      editPassengerModal,
+      unassignedPickUpPassengers,
+      unassignedDropOffPassengers,
+    } = this.props;
     return (
       state.refreshing !== refreshing ||
       props.editPassengerModal !== editPassengerModal ||
-      props.assignedPassengersData !== assignedPassengersData
+      props.assignedPassengersData !== assignedPassengersData ||
+      props.unassignedPickUpPassengers !== unassignedPickUpPassengers ||
+      props.unassignedDropOffPassengers !== unassignedDropOffPassengers
     );
+  }
+
+  componentDidUpdate(props, state) {
+    const {
+      unassignedPickUpPassengers,
+      unassignedDropOffPassengers,
+    } = this.props;
+
+    if (
+      props.unassignedPickUpPassengers !== unassignedPickUpPassengers ||
+      props.unassignedDropOffPassengers !== unassignedDropOffPassengers
+    ) {
+      this.handleFetchAssignedPassengers();
+    }
   }
 
   componentWillUnmount() {
@@ -90,8 +112,8 @@ class MyPassengersScreen extends Component {
     holdPassengerInfoActionHandler(passengerInfo);
   };
 
-  handleStartNavigating = address => {
-    const url = `https://www.google.com/maps/dir/?api=1&navigate&destination=${address}`;
+  handleStartNavigating = (latitude, longitude) => {
+    const url = `https://www.google.com/maps/dir/?api=1&navigate&destination=${latitude},${longitude}`;
 
     Linking.canOpenURL(url).then(supported => {
       if (supported) {
@@ -117,7 +139,7 @@ class MyPassengersScreen extends Component {
         <View style={{ flex: 1, paddingHorizontal: 20 }}>
           <View>
             <View style={{ marginTop: 38 }}>
-              {assignedPassengersData &&
+              {assignedPassengersData && assignedPassengersData.length ? (
                 assignedPassengersData.map(info => (
                   <View key={info.id} style={styles.container}>
                     <PassengersInfo
@@ -127,11 +149,21 @@ class MyPassengersScreen extends Component {
                       datetime={info.timestamp}
                       buttonText="START NAVIGATING"
                       cardinalpoint={info.cardinalpoint}
-                      onPress={() => this.handleStartNavigating(info.address)}
+                      onPress={() =>
+                        this.handleStartNavigating(
+                          info.latitude,
+                          info.longitude,
+                        )
+                      }
                       callModal={() => this.callModalAndSetPassengerInfo(info)}
                     />
                   </View>
-                ))}
+                ))
+              ) : (
+                <View style={globalStyles.Loader}>
+                  <ActivityIndicator size="large" />
+                </View>
+              )}
             </View>
           </View>
         </View>
@@ -154,7 +186,9 @@ MyPassengersScreen.propTypes = {
   assignedPassengersDataActionHandler: PropTypes.func.isRequired,
   confirmationPopup: PropTypes.oneOfType([PropTypes.bool]).isRequired,
   editPassengerModal: PropTypes.oneOfType([PropTypes.bool]).isRequired,
-  toggleCardOptionsModal: PropTypes.oneOfType([PropTypes.bool]).isRequired,
+  unassignedPickUpPassengers: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  unassignedDropOffPassengers: PropTypes.oneOfType([PropTypes.array])
+    .isRequired,
 };
 
 export default compose(
@@ -165,6 +199,8 @@ export default compose(
       editPassengerModal: store.popupsModals.editPassengerModal,
       toggleCardOptionsModal: store.popupsModals.toggleCardOptionsModal,
       assignedPassengersData: store.myPassengersScreen.assignedPassengersData,
+      unassignedPickUpPassengers: store.homeScreen.unassignedPickUpPassengers,
+      unassignedDropOffPassengers: store.homeScreen.unassignedDropOffPassengers,
     }),
     dispatch => ({
       screenNameActionHandler: value => {
