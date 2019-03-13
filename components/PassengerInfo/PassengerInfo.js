@@ -10,7 +10,6 @@ import { connect } from 'react-redux';
 
 import PassengersStyles from '../../styles/Passengers';
 import Colors from '../../constants/Colors';
-import globalStyles from '../../styles/GlobalStyles';
 
 import momentDateFormatter from '../../utils/DateFormatter';
 
@@ -18,10 +17,12 @@ const PassengersInfo = ({
   name,
   address,
   onPress,
+  btnStyle,
   datetime,
   callModal,
   buttonText,
   cardinalpoint,
+  isBtnDisabled,
   navigationStore,
 }) => {
   return (
@@ -69,17 +70,7 @@ const PassengersInfo = ({
           </View>
 
           <View style={PassengersStyles.CArticleTileFooter}>
-            <TouchableOpacity
-              onPress={onPress}
-              style={[
-                globalStyles.touchableBtnDropOffItem,
-                {
-                  backgroundColor: navigationStore.index
-                    ? Colors.pickupTabColor
-                    : Colors.dropOffTabColor,
-                },
-              ]}
-            >
+            <TouchableOpacity onPress={onPress} style={btnStyle} disabled={isBtnDisabled}>
               <Text style={{ color: '#fff', fontWeight: 'bold' }}>
                 {buttonText}
               </Text>
@@ -91,8 +82,13 @@ const PassengersInfo = ({
   );
 };
 
+PassengersInfo.defaultProps = {
+  isBtnDisabled: false,
+};
+
 PassengersInfo.propTypes = {
   navigationStore: PropTypes.shape({}).isRequired,
+  isBtnDisabled: PropTypes.oneOfType([PropTypes.bool]),
   name: PropTypes.oneOfType([PropTypes.string]).isRequired,
   onPress: PropTypes.oneOfType([PropTypes.func]).isRequired,
   address: PropTypes.oneOfType([PropTypes.string]).isRequired,
@@ -100,6 +96,7 @@ PassengersInfo.propTypes = {
   datetime: PropTypes.oneOfType([PropTypes.string]).isRequired,
   buttonText: PropTypes.oneOfType([PropTypes.string]).isRequired,
   cardinalpoint: PropTypes.oneOfType([PropTypes.string]).isRequired,
+  btnStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.array]).isRequired,
 };
 
 export default compose(

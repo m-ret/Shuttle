@@ -36,6 +36,8 @@ import PassengerGoingAvatar from '../SVGs/Passengers/PassengerGoingAvatar';
 import FetchAddToMyPassengers from '../../APICalls/FetchAddToMyPassengers';
 
 import FetchUndoAddToMyPassenger from '../../APICalls/FetchUndoAddToMyPassenger';
+import globalStyles from "../../styles/GlobalStyles";
+import Colors from "../../constants/Colors";
 
 class PassengersByCardinalPointCard extends Component {
   state = {
@@ -173,6 +175,7 @@ class PassengersByCardinalPointCard extends Component {
     const {
       screenName,
       passengerCardId,
+      navigationStore,
       isAddToMyPassengersSuccess,
       passengersByCardinalPointData,
     } = this.props;
@@ -221,6 +224,14 @@ class PassengersByCardinalPointCard extends Component {
                       cardinalpoint={info.cardinalpoint}
                       onPress={() => this.handleAddToMyPassengers(info.id)}
                       callModal={() => this.callModalAndSetPassengerInfo(info)}
+                      btnStyle={[
+                        globalStyles.touchableBtnDropOffItem,
+                        {
+                          backgroundColor: navigationStore.index
+                            ? Colors.pickupTabColor
+                            : Colors.dropOffTabColor,
+                        },
+                      ]}
                     />
                   </View>
                 ))}

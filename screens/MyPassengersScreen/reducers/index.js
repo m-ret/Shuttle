@@ -3,6 +3,7 @@ import ActionTypes from '../constants/ActionTypes';
 
 const initialState = {
   assignedPassengersData: [],
+  dropOffPickUpConfirmationSuccess: false,
 };
 
 const handlers = {
@@ -10,6 +11,14 @@ const handlers = {
     return {
       ...state,
       assignedPassengersData: action.payload.assignedPassengersData,
+    };
+  },
+
+  [ActionTypes.DROPOFF_PICKUP_CONFIRMATION](state, action) {
+    return {
+      ...state,
+      dropOffPickUpConfirmationSuccess:
+        action.payload.dropOffPickUpConfirmationSuccess,
     };
   },
 };

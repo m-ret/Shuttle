@@ -30,6 +30,9 @@ import FetchAddToMyPassengers from '../../APICalls/FetchAddToMyPassengers';
 
 import { passengersByCardinalPointDataAction } from '../../screens/PassengersByCardinalPoint/actions/passengersByCardinalPoint';
 
+import globalStyles from '../../styles/GlobalStyles';
+import Colors from '../../constants/Colors';
+
 class PassengerCardBasedOnRoute extends Component {
   componentDidMount() {
     const { screenNameActionHandler } = this.props;
@@ -89,9 +92,9 @@ class PassengerCardBasedOnRoute extends Component {
       screenNameActionHandler,
       passengerCardIdActionHandler,
       pickupPassengerCardIdActionHandler,
+      isAddToMyPassengersSuccessActionHandler,
       unassignedPickUpPassengersActionHandler,
       unassignedDropOffPassengersActionHandler,
-      isAddToMyPassengersSuccessActionHandler,
       passengersByCardinalPointDataActionHandler,
     } = this.props;
 
@@ -111,7 +114,8 @@ class PassengerCardBasedOnRoute extends Component {
   };
 
   componentToRenderBasedOnParams = info => {
-    const { searchParam } = this.props;
+    const { searchParam, navigationStore } = this.props;
+
     return (
       <View key={info.id}>
         <PassengersInfo
@@ -124,6 +128,14 @@ class PassengerCardBasedOnRoute extends Component {
           cardinalpoint={info.cardinalpoint}
           onPress={() => this.handleAddToMyPassengers(info.id)}
           callModal={() => this.callModalAndSetPassengerInfo(info)}
+          btnStyle={[
+            globalStyles.touchableBtnDropOffItem,
+            {
+              backgroundColor: navigationStore.index
+                ? Colors.pickupTabColor
+                : Colors.dropOffTabColor,
+            },
+          ]}
         />
       </View>
     );
