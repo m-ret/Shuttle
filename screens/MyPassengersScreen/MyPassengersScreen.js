@@ -30,8 +30,8 @@ import {
   confirmationPopupAction,
   popupsModalsAction,
 } from '../../components/PopupsModals/actions/popupsModals';
-import globalStyles from '../../styles/GlobalStyles';
 import Colors from '../../constants/Colors';
+import globalStyles from '../../styles/GlobalStyles';
 import PassengersAdded from '../../components/PassengerInfo/PassengersAdded';
 import FetchUndoDropOffPickUpConfirmation from '../../APICalls/FetchUndoDropOffPickUpConfirmation';
 import GoToAllPassengers from '../../components/MyPassengers/GoToAllPassengers';
