@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import {
-  View,
-  Text,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import { compose } from 'redux';
@@ -20,6 +16,8 @@ import PassengersAdded from '../PassengerInfo/PassengersAdded';
 
 import {
   isAddToMyPassengersSuccessAction,
+  passengerCardIdAction,
+  pickupPassengerCardIdAction,
   screenNameAction,
   searchParamAction,
   toggleSearchAction,
@@ -34,7 +32,15 @@ import { passengersByCardinalPointDataAction } from '../../screens/PassengersByC
 
 class AllPassengersList extends Component {
   componentDidMount() {
-    const { toggleSearch, toggleSearchActionHandler } = this.props;
+    const {
+      toggleSearch,
+      toggleSearchActionHandler,
+      passengerCardIdActionHandler,
+      pickupPassengerCardIdActionHandler,
+    } = this.props;
+
+    passengerCardIdActionHandler(null);
+    pickupPassengerCardIdActionHandler(null);
 
     this.toggleSearchBarVisibility();
     if (!toggleSearch) toggleSearchActionHandler();
@@ -114,8 +120,10 @@ class AllPassengersList extends Component {
       isSuccess &&
       cardId ? (
       <PassengersAdded
+        x={15}
         id={cardId}
         key={cardId}
+        buttonText="Passenger Added"
         handleUndo={() => this.handleUndo(cardId)}
       />
     ) : null;
@@ -228,8 +236,10 @@ AllPassengersList.propTypes = {
   navigationStore: PropTypes.shape({}).isRequired,
   screenNameActionHandler: PropTypes.func.isRequired,
   screenName: PropTypes.oneOfType([PropTypes.string]),
+  passengerCardIdActionHandler: PropTypes.func.isRequired,
   passengerCardId: PropTypes.oneOfType([PropTypes.number]),
   passengersGoingTo: PropTypes.oneOfType([PropTypes.string]),
+  pickupPassengerCardIdActionHandler: PropTypes.func.isRequired,
   pickupPassengerCardId: PropTypes.oneOfType([PropTypes.number]),
   toggleSearch: PropTypes.oneOfType([PropTypes.bool]).isRequired,
   searchParam: PropTypes.oneOfType([PropTypes.string]).isRequired,
@@ -278,6 +288,12 @@ export default compose(
       },
       toggleAddPassengerModalActionHandler: () => {
         dispatch(toggleAddPassengerModalAction());
+      },
+      passengerCardIdActionHandler: id => {
+        dispatch(passengerCardIdAction(id));
+      },
+      pickupPassengerCardIdActionHandler: id => {
+        dispatch(pickupPassengerCardIdAction(id));
       },
       unassignedPickUpPassengersActionHandler: data => {
         dispatch(unassignedPickUpPassengersAction(data));

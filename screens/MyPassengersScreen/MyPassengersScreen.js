@@ -1,50 +1,40 @@
+/* eslint-disable no-nested-ternary */
 import React, { Component } from 'react';
 import {
   View,
   Linking,
-  StyleSheet,
   ScrollView,
   RefreshControl,
   ActivityIndicator,
 } from 'react-native';
-
+import { isEqual } from 'lodash';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-
 import PropTypes from 'prop-types';
-
+import { withNavigation } from 'react-navigation';
 import FetchAssignedPassengers from '../../APICalls/FetchMyAssignedPassengers';
 import FetchDropOffPickupConfirmation from '../../APICalls/FetchDropOffPickupConfirmation';
-
 import {
   assignedPassengersDataAction,
   dropOffPickUpConfirmationSuccessAction,
 } from './actions/myPassengersScreen';
-
 import PassengersInfo from '../../components/PassengerInfo/PassengerInfo';
-
 import {
-  holdPassengerInfoAction,
-  passengerCardIdAction,
   screenNameAction,
+  holdPassengerInfoAction,
+  myPassengerCardIdAction,
+  myPassengerCardIdPickUpAction,
+  isAddToMyPassengersSuccessAction,
 } from '../HomeScreen/actions/homeScreen';
-
 import {
   confirmationPopupAction,
   popupsModalsAction,
 } from '../../components/PopupsModals/actions/popupsModals';
-
 import globalStyles from '../../styles/GlobalStyles';
 import Colors from '../../constants/Colors';
 import PassengersAdded from '../../components/PassengerInfo/PassengersAdded';
 import FetchUndoDropOffPickUpConfirmation from '../../APICalls/FetchUndoDropOffPickUpConfirmation';
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-});
+import GoToAllPassengers from '../../components/MyPassengers/GoToAllPassengers';
 
 class MyPassengersScreen extends Component {
   static navigationOptions = {
@@ -54,46 +44,61 @@ class MyPassengersScreen extends Component {
 
   state = {
     refreshing: false,
+    loadingState: false,
   };
 
   componentDidMount() {
     const { screenNameActionHandler } = this.props;
     screenNameActionHandler('MyPassengersScreen');
+
     return this.handleFetchAssignedPassengers();
   }
 
   shouldComponentUpdate(props, state) {
-    const { refreshing } = this.state;
+    const { refreshing, loadingState } = this.state;
     const {
       passengerInfo,
-      passengerCardId,
+      myPassengerCardId,
       editPassengerModal,
       assignedPassengersData,
+      myPassengerCardIdPickUp,
       unassignedPickUpPassengers,
       unassignedDropOffPassengers,
+      dropOffPickUpConfirmationSuccess,
     } = this.props;
     return (
-      state.refreshing !== refreshing ||
-      props.passengerInfo !== passengerInfo ||
-      props.passengerCardId !== passengerCardId ||
-      props.editPassengerModal !== editPassengerModal ||
-      props.assignedPassengersData !== assignedPassengersData ||
-      props.unassignedPickUpPassengers !== unassignedPickUpPassengers ||
-      props.unassignedDropOffPassengers !== unassignedDropOffPassengers
+      !isEqual(state.refreshing, refreshing) ||
+      !isEqual(state.loadingState, loadingState) ||
+      !isEqual(props.passengerInfo, passengerInfo) ||
+      !isEqual(props.myPassengerCardId, myPassengerCardId) ||
+      !isEqual(props.editPassengerModal, editPassengerModal) ||
+      !isEqual(props.assignedPassengersData, assignedPassengersData) ||
+      !isEqual(props.myPassengerCardIdPickUp, myPassengerCardIdPickUp) ||
+      !isEqual(props.unassignedPickUpPassengers, unassignedPickUpPassengers) ||
+      !isEqual(
+        props.unassignedDropOffPassengers,
+        unassignedDropOffPassengers,
+      ) ||
+      !isEqual(
+        props.dropOffPickUpConfirmationSuccess,
+        dropOffPickUpConfirmationSuccess,
+      )
     );
   }
 
   componentDidUpdate(props, state) {
     const {
-      passengerCardId,
+      myPassengerCardId,
+      myPassengerCardIdPickUp,
       unassignedPickUpPassengers,
       unassignedDropOffPassengers,
     } = this.props;
 
     if (
-      props.passengerCardId !== passengerCardId ||
-      props.unassignedPickUpPassengers !== unassignedPickUpPassengers ||
-      props.unassignedDropOffPassengers !== unassignedDropOffPassengers
+      !isEqual(props.myPassengerCardId, myPassengerCardId) ||
+      !isEqual(props.myPassengerCardIdPickUp, myPassengerCardIdPickUp) ||
+      !isEqual(props.unassignedPickUpPassengers, unassignedPickUpPassengers) ||
+      !isEqual(props.unassignedDropOffPassengers, unassignedDropOffPassengers)
     ) {
       this.handleFetchAssignedPassengers();
     }
@@ -101,17 +106,32 @@ class MyPassengersScreen extends Component {
 
   componentWillUnmount() {
     const { assignedPassengersDataActionHandler } = this.props;
-
     return assignedPassengersDataActionHandler([]);
   }
 
-  handleFetchAssignedPassengers = () => {
+  getOpacity = infoId => {
+    const { myPassengerCardId, dropOffPickUpConfirmationSuccess } = this.props;
+    if (
+      !dropOffPickUpConfirmationSuccess &&
+      myPassengerCardId &&
+      !isEqual(myPassengerCardId, infoId)
+    ) {
+      return 0.5;
+    }
+    return 1;
+  };
+
+  handleFetchAssignedPassengers = async () => {
     const { navigationStore, assignedPassengersDataActionHandler } = this.props;
 
-    return FetchAssignedPassengers(
+    this.setState({ loadingState: true });
+
+    await FetchAssignedPassengers(
       navigationStore,
       assignedPassengersDataActionHandler,
     );
+
+    this.setState({ loadingState: false });
   };
 
   callModalAndSetPassengerInfo = passengerInfo => {
@@ -138,20 +158,26 @@ class MyPassengersScreen extends Component {
     passengerInfoId,
   ) => {
     const {
-      passengerCardIdActionHandler,
+      myPassengerCardIdActionHandler,
       holdPassengerInfoActionHandler,
+      myPassengerCardIdPickUpActionHandler,
+      isAddToMyPassengersSuccessActionHandler,
     } = this.props;
 
     const url = `https://www.google.com/maps/dir/?api=1&navigate&destination=${latitude},${longitude}`;
 
-    await passengerCardIdActionHandler(passengerInfoId);
+    isAddToMyPassengersSuccessActionHandler(false);
+    myPassengerCardIdPickUpActionHandler(passengerInfoId);
+    myPassengerCardIdActionHandler(passengerInfoId);
+
     await holdPassengerInfoActionHandler(passengerInfo);
 
     Linking.canOpenURL(url).then(supported => {
       if (supported) {
         return Linking.openURL(url);
       }
-
+      // In a future, native OS Maps App will be used in case there is no Google Maps installed in the device.
+      // So you can set that functionality in the line below.
       return Linking.openURL(url);
     });
   };
@@ -159,14 +185,18 @@ class MyPassengersScreen extends Component {
   handleFetchDropOffPickupConfirmation = passengerId => {
     const {
       navigationStore,
+      myPassengerCardIdActionHandler,
       assignedPassengersDataActionHandler,
+      myPassengerCardIdPickUpActionHandler,
       dropOffPickUpConfirmationSuccessActionHandler,
     } = this.props;
 
     return FetchDropOffPickupConfirmation(
       passengerId,
       navigationStore,
+      myPassengerCardIdActionHandler,
       assignedPassengersDataActionHandler,
+      myPassengerCardIdPickUpActionHandler,
       dropOffPickUpConfirmationSuccessActionHandler,
     );
   };
@@ -175,14 +205,16 @@ class MyPassengersScreen extends Component {
     const {
       navigationStore,
       screenNameActionHandler,
-      passengerCardIdActionHandler,
+      myPassengerCardIdActionHandler,
       assignedPassengersDataActionHandler,
+      myPassengerCardIdPickUpActionHandler,
       dropOffPickUpConfirmationSuccessActionHandler,
     } = this.props;
 
     screenNameActionHandler('MyPassengersScreen');
 
-    passengerCardIdActionHandler(null);
+    myPassengerCardIdActionHandler(null);
+    myPassengerCardIdPickUpActionHandler(null);
 
     return FetchUndoDropOffPickUpConfirmation(
       id,
@@ -192,27 +224,30 @@ class MyPassengersScreen extends Component {
     );
   };
 
-  getOpacity = infoId => {
-    const { passengerCardId, dropOffPickUpConfirmationSuccess } = this.props;
+  showSuccessMessageBasedOnRoute = (nav, isSuccess, cardId) => {
+    const { screenName, navigationStore } = this.props;
 
-    if (
-      !dropOffPickUpConfirmationSuccess &&
-      passengerCardId &&
-      infoId !== passengerCardId
-    ) {
-      return 0.5;
-    }
-
-    return 1;
+    return screenName === 'MyPassengersScreen' && nav && isSuccess && cardId ? (
+      <PassengersAdded
+        x={navigationStore.index ? 18 : 10}
+        id={cardId}
+        key={cardId}
+        handleUndo={() => this.handleUndo(cardId)}
+        buttonText={
+          navigationStore.index ? 'Passenger Picked' : 'Passenger Dropped'
+        }
+      />
+    ) : null;
   };
 
   render() {
-    const { refreshing } = this.state;
+    const { refreshing, loadingState } = this.state;
     const {
-      screenName,
-      passengerCardId,
+      navigation,
       navigationStore,
+      myPassengerCardId,
       assignedPassengersData,
+      myPassengerCardIdPickUp,
       dropOffPickUpConfirmationSuccess,
     } = this.props;
 
@@ -225,23 +260,28 @@ class MyPassengersScreen extends Component {
           />
         }
       >
-        <View style={{ flex: 1, paddingHorizontal: 20 }}>
+        <View style={globalStyles.ContainerWithHorizontalPadding}>
           <View>
-            {screenName === 'MyPassengersScreen' &&
-              passengerCardId &&
-              dropOffPickUpConfirmationSuccess && (
-                <PassengersAdded
-                  id={passengerCardId}
-                  key={passengerCardId}
-                  handleUndo={() => this.handleUndo(passengerCardId)}
-                />
-              )}
+            {this.showSuccessMessageBasedOnRoute(
+              !navigationStore.index,
+              dropOffPickUpConfirmationSuccess,
+              myPassengerCardId,
+            )}
+            {this.showSuccessMessageBasedOnRoute(
+              navigationStore.index,
+              dropOffPickUpConfirmationSuccess,
+              myPassengerCardIdPickUp,
+            )}
             <View style={{ marginTop: 38 }}>
-              {assignedPassengersData && assignedPassengersData.length ? (
+              {loadingState ? (
+                <View style={globalStyles.Loader}>
+                  <ActivityIndicator size="large" />
+                </View>
+              ) : !loadingState && assignedPassengersData.length ? (
                 assignedPassengersData.map(info => (
                   <View
                     key={info.id}
-                    style={styles.container}
+                    style={globalStyles.RegularStylesContainer}
                     opacity={this.getOpacity(info.id)}
                   >
                     <PassengersInfo
@@ -250,22 +290,23 @@ class MyPassengersScreen extends Component {
                       address={info.address}
                       datetime={info.timestamp}
                       cardinalpoint={info.cardinalpoint}
+                      isBtnDisabled={this.getOpacity(info.id) !== 1}
                       callModal={() => this.callModalAndSetPassengerInfo(info)}
                       buttonText={
-                        passengerCardId === info.id
+                        isEqual(myPassengerCardId, info.id)
                           ? 'CONFIRM DROPOFF'
                           : 'START NAVIGATING'
                       }
                       btnStyle={[
                         globalStyles.touchableBtnDropOffItem,
-                        passengerCardId === info.id
-                          ? { backgroundColor: '#263238' }
+                        isEqual(myPassengerCardId, info.id)
+                          ? globalStyles.ConfirmActionBg
                           : navigationStore.index
                           ? { backgroundColor: Colors.pickupTabColor }
                           : { backgroundColor: Colors.dropOffTabColor },
                       ]}
                       onPress={() =>
-                        passengerCardId === info.id
+                        isEqual(myPassengerCardId, info.id)
                           ? this.handleFetchDropOffPickupConfirmation(info.id)
                           : this.handleStartNavigating(
                               info.latitude,
@@ -274,14 +315,14 @@ class MyPassengersScreen extends Component {
                               info.id,
                             )
                       }
-                      isBtnDisabled={this.getOpacity(info.id) !== 1}
                     />
                   </View>
                 ))
               ) : (
-                <View style={globalStyles.Loader}>
-                  <ActivityIndicator size="large" />
-                </View>
+                <GoToAllPassengers
+                  navigationStore={navigationStore}
+                  navigation={navigation}
+                />
               )}
             </View>
           </View>
@@ -293,8 +334,9 @@ class MyPassengersScreen extends Component {
 
 MyPassengersScreen.defaultProps = {
   screenName: '',
-  passengerCardId: '',
+  myPassengerCardId: null,
   assignedPassengersData: [],
+  myPassengerCardIdPickUp: '',
 };
 
 MyPassengersScreen.propTypes = {
@@ -303,16 +345,20 @@ MyPassengersScreen.propTypes = {
     PropTypes.number,
     PropTypes.object,
   ]).isRequired,
+  navigation: PropTypes.shape({}).isRequired,
   navigationStore: PropTypes.shape({}).isRequired,
   screenNameActionHandler: PropTypes.func.isRequired,
   screenName: PropTypes.oneOfType([PropTypes.string]),
   popupsModalsActionHandler: PropTypes.func.isRequired,
-  passengerCardIdActionHandler: PropTypes.func.isRequired,
-  passengerCardId: PropTypes.oneOfType([PropTypes.number]),
+  myPassengerCardIdActionHandler: PropTypes.func.isRequired,
   confirmationPopupActionHandler: PropTypes.func.isRequired,
   holdPassengerInfoActionHandler: PropTypes.func.isRequired,
+  myPassengerCardId: PropTypes.oneOfType([PropTypes.number]),
   assignedPassengersData: PropTypes.oneOfType([PropTypes.array]),
   assignedPassengersDataActionHandler: PropTypes.func.isRequired,
+  myPassengerCardIdPickUpActionHandler: PropTypes.func.isRequired,
+  myPassengerCardIdPickUp: PropTypes.oneOfType([PropTypes.number]),
+  isAddToMyPassengersSuccessActionHandler: PropTypes.func.isRequired,
   confirmationPopup: PropTypes.oneOfType([PropTypes.bool]).isRequired,
   editPassengerModal: PropTypes.oneOfType([PropTypes.bool]).isRequired,
   dropOffPickUpConfirmationSuccessActionHandler: PropTypes.func.isRequired,
@@ -329,10 +375,12 @@ export default compose(
       screenName: store.homeScreen.screenName,
       navigationStore: store.homeScreen.navigation,
       passengerInfo: store.homeScreen.passengerInfo,
-      passengerCardId: store.homeScreen.passengerCardId,
+      myPassengerCardId: store.homeScreen.myPassengerCardId,
       confirmationPopup: store.popupsModals.confirmationPopup,
       editPassengerModal: store.popupsModals.editPassengerModal,
+      myPassengerCardIdPickUp: store.homeScreen.myPassengerCardIdPickUp,
       toggleCardOptionsModal: store.popupsModals.toggleCardOptionsModal,
+      isAddToMyPassengersSuccess: store.homeScreen.isAddToMyPassengersSuccess,
       assignedPassengersData: store.myPassengersScreen.assignedPassengersData,
       unassignedPickUpPassengers: store.homeScreen.unassignedPickUpPassengers,
       unassignedDropOffPassengers: store.homeScreen.unassignedDropOffPassengers,
@@ -349,11 +397,17 @@ export default compose(
       confirmationPopupActionHandler: () => {
         dispatch(confirmationPopupAction());
       },
-      passengerCardIdActionHandler: passengerInfo => {
-        dispatch(passengerCardIdAction(passengerInfo));
+      myPassengerCardIdActionHandler: passengerInfo => {
+        dispatch(myPassengerCardIdAction(passengerInfo));
       },
       holdPassengerInfoActionHandler: passengerInfo => {
         dispatch(holdPassengerInfoAction(passengerInfo));
+      },
+      isAddToMyPassengersSuccessActionHandler: value => {
+        dispatch(isAddToMyPassengersSuccessAction(value));
+      },
+      myPassengerCardIdPickUpActionHandler: passengerInfo => {
+        dispatch(myPassengerCardIdPickUpAction(passengerInfo));
       },
       assignedPassengersDataActionHandler: assignedPassengersData => {
         dispatch(assignedPassengersDataAction(assignedPassengersData));
@@ -367,4 +421,4 @@ export default compose(
       },
     }),
   ),
-)(MyPassengersScreen);
+)(withNavigation(MyPassengersScreen));

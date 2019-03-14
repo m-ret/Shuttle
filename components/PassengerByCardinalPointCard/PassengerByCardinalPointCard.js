@@ -36,8 +36,8 @@ import PassengerGoingAvatar from '../SVGs/Passengers/PassengerGoingAvatar';
 import FetchAddToMyPassengers from '../../APICalls/FetchAddToMyPassengers';
 
 import FetchUndoAddToMyPassenger from '../../APICalls/FetchUndoAddToMyPassenger';
-import globalStyles from "../../styles/GlobalStyles";
-import Colors from "../../constants/Colors";
+import globalStyles from '../../styles/GlobalStyles';
+import Colors from '../../constants/Colors';
 
 class PassengersByCardinalPointCard extends Component {
   state = {
@@ -207,6 +207,7 @@ class PassengersByCardinalPointCard extends Component {
                 <PassengersAdded
                   id={passengerCardId}
                   key={passengerCardId}
+                  buttonText="Passenger Added"
                   handleUndo={() => this.handleUndo(passengerCardId)}
                 />
               )}

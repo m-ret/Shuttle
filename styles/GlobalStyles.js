@@ -4,6 +4,34 @@ const mainColor = '#ff5252';
 const white = '#ffffff';
 
 const globalStyles = StyleSheet.create({
+  CenterContent: {
+    flex: 1,
+    alignItems: 'center',
+    alignContent: 'center',
+    justifyContent: 'center',
+  },
+
+  BtnTextStyle: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+
+  EmptyView: { height: 38 },
+
+  ConfirmActionBg: {
+    backgroundColor: '#263238',
+  },
+
+  RegularStylesContainer: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+
+  ContainerWithHorizontalPadding: {
+    flex: 1,
+    paddingHorizontal: 20,
+  },
+
   container: {
     padding: 30,
   },

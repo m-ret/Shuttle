@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 const pickupTabColor = '#3DA7DC';
 const dropOffTabColor = '#ff5252';
 
-const PassengerAddedSvg = ({ navigationStore }) => (
+const PassengerAddedSvg = ({ navigationStore, buttonText, x }) => (
   <Svg width={214} height={125}>
     <Svg.Defs>
       <Svg.Path
@@ -24,8 +24,8 @@ const PassengerAddedSvg = ({ navigationStore }) => (
         fontSize={24}
         fill={navigationStore.index ? pickupTabColor : dropOffTabColor}
       >
-        <Svg.TSpan x={20} y={118}>
-          {'Passenger Added'}
+        <Svg.TSpan x={x} y={110}>
+          {buttonText}
         </Svg.TSpan>
       </Svg.Text>
       <Svg.Use
@@ -54,6 +54,8 @@ const PassengerAddedSvg = ({ navigationStore }) => (
 
 PassengerAddedSvg.propTypes = {
   navigationStore: PropTypes.shape({}).isRequired,
+  x: PropTypes.oneOfType([PropTypes.number]).isRequired,
+  buttonText: PropTypes.oneOfType([PropTypes.string]).isRequired,
 };
 
 export default compose(

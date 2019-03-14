@@ -10,7 +10,9 @@ const FetchDropOffPickUpConfirmation = async (
   // These are params. So be careful before you change its order
   passengerId,
   navigationStore,
+  myPassengerCardIdActionHandler,
   assignedPassengersDataActionHandler,
+  myPassengerCardIdPickUpActionHandler,
   dropOffPickUpConfirmationSuccessActionHandler,
 ) => {
   let responseJson;
@@ -36,6 +38,11 @@ const FetchDropOffPickUpConfirmation = async (
       Alert.alert('Error', 'Unable to process your request at this time.');
     } else {
       await dropOffPickUpConfirmationSuccessActionHandler(responseJson.success);
+      if (route === 'DropOff') {
+        myPassengerCardIdActionHandler(passengerId);
+      } else {
+        myPassengerCardIdPickUpActionHandler(passengerId);
+      }
       return FetchAssignedPassengers(
         navigationStore,
         assignedPassengersDataActionHandler,

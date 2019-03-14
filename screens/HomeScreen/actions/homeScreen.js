@@ -33,6 +33,11 @@ export const passengerCardIdAction = passengerCardId => ({
   payload: { passengerCardId },
 });
 
+export const myPassengerCardIdAction = myPassengerCardId => ({
+  type: ActionTypes.MY_PASSENGERS_CARD_ID,
+  payload: { myPassengerCardId },
+});
+
 export const passengersGoingToAction = passengersGoingTo => ({
   type: ActionTypes.PASSENGER_GOING_TO,
   payload: { passengersGoingTo },
@@ -41,6 +46,11 @@ export const passengersGoingToAction = passengersGoingTo => ({
 export const pickupPassengerCardIdAction = pickupPassengerCardId => ({
   type: ActionTypes.PICKUP_PASSENGER_CARD_ID,
   payload: { pickupPassengerCardId },
+});
+
+export const myPassengerCardIdPickUpAction = myPassengerCardIdPickUp => ({
+  type: ActionTypes.MY_PASSENGERS_CARD_ID,
+  payload: { myPassengerCardIdPickUp },
 });
 
 export const isDeletePassengerSuccessAction = isDeletePassengerSuccess => ({

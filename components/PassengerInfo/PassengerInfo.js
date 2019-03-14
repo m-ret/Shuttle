@@ -70,7 +70,11 @@ const PassengersInfo = ({
           </View>
 
           <View style={PassengersStyles.CArticleTileFooter}>
-            <TouchableOpacity onPress={onPress} style={btnStyle} disabled={isBtnDisabled}>
+            <TouchableOpacity
+              onPress={onPress}
+              style={btnStyle}
+              disabled={isBtnDisabled}
+            >
               <Text style={{ color: '#fff', fontWeight: 'bold' }}>
                 {buttonText}
               </Text>

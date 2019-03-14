@@ -8,9 +8,11 @@ const initialState = {
   toggleSearch: false,
   passengerCardId: null,
   passengersGoingTo: '',
+  myPassengerCardId: null,
   pickupTabColor: '#3DA7DC',
   dropOffTabColor: '#ff5252',
   pickupPassengerCardId: null,
+  myPassengerCardIdPickUp: null,
   unassignedPickUpPassengers: [],
   unassignedDropOffPassengers: [],
   isAddToMyPassengersSuccess: false,
@@ -81,6 +83,20 @@ const handlers = {
     return {
       ...state,
       passengerCardId: action.payload.passengerCardId,
+    };
+  },
+
+  [ActionTypes.MY_PASSENGERS_CARD_ID](state, action) {
+    return {
+      ...state,
+      myPassengerCardId: action.payload.myPassengerCardId,
+    };
+  },
+
+  [ActionTypes.MY_PASSENGERS_CARD_ID_PICKUP](state, action) {
+    return {
+      ...state,
+      myPassengerCardIdPickUp: action.payload.myPassengerCardIdPickUp,
     };
   },
 
