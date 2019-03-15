@@ -205,6 +205,7 @@ class PassengersByCardinalPointCard extends Component {
               passengerCardId &&
               isAddToMyPassengersSuccess && (
                 <PassengersAdded
+                  x={18}
                   id={passengerCardId}
                   key={passengerCardId}
                   buttonText="Passenger Added"

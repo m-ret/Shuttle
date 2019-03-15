@@ -14,11 +14,25 @@ const handlers = {
     };
   },
 
+  [ActionTypes.MY_PASSENGERS_CARD_ID](state, action) {
+    return {
+      ...state,
+      myPassengerCardId: action.payload.myPassengerCardId,
+    };
+  },
+
   [ActionTypes.DROPOFF_PICKUP_CONFIRMATION](state, action) {
     return {
       ...state,
       dropOffPickUpConfirmationSuccess:
         action.payload.dropOffPickUpConfirmationSuccess,
+    };
+  },
+
+  [ActionTypes.MY_PASSENGERS_CARD_ID_PICKUP](state, action) {
+    return {
+      ...state,
+      myPassengerCardIdPickUp: action.payload.myPassengerCardIdPickUp,
     };
   },
 };

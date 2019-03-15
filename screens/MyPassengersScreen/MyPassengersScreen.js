@@ -15,15 +15,15 @@ import { withNavigation } from 'react-navigation';
 import FetchAssignedPassengers from '../../APICalls/FetchMyAssignedPassengers';
 import FetchDropOffPickupConfirmation from '../../APICalls/FetchDropOffPickupConfirmation';
 import {
+  myPassengerCardIdAction,
   assignedPassengersDataAction,
+  myPassengerCardIdPickUpAction,
   dropOffPickUpConfirmationSuccessAction,
 } from './actions/myPassengersScreen';
 import PassengersInfo from '../../components/PassengerInfo/PassengerInfo';
 import {
   screenNameAction,
   holdPassengerInfoAction,
-  myPassengerCardIdAction,
-  myPassengerCardIdPickUpAction,
   isAddToMyPassengersSuccessAction,
 } from '../HomeScreen/actions/homeScreen';
 import {
@@ -336,7 +336,7 @@ MyPassengersScreen.defaultProps = {
   screenName: '',
   myPassengerCardId: null,
   assignedPassengersData: [],
-  myPassengerCardIdPickUp: '',
+  myPassengerCardIdPickUp: null,
 };
 
 MyPassengersScreen.propTypes = {
@@ -375,14 +375,14 @@ export default compose(
       screenName: store.homeScreen.screenName,
       navigationStore: store.homeScreen.navigation,
       passengerInfo: store.homeScreen.passengerInfo,
-      myPassengerCardId: store.homeScreen.myPassengerCardId,
       confirmationPopup: store.popupsModals.confirmationPopup,
       editPassengerModal: store.popupsModals.editPassengerModal,
-      myPassengerCardIdPickUp: store.homeScreen.myPassengerCardIdPickUp,
+      myPassengerCardId: store.myPassengersScreen.myPassengerCardId,
       toggleCardOptionsModal: store.popupsModals.toggleCardOptionsModal,
       isAddToMyPassengersSuccess: store.homeScreen.isAddToMyPassengersSuccess,
       assignedPassengersData: store.myPassengersScreen.assignedPassengersData,
       unassignedPickUpPassengers: store.homeScreen.unassignedPickUpPassengers,
+      myPassengerCardIdPickUp: store.myPassengersScreen.myPassengerCardIdPickUp,
       unassignedDropOffPassengers: store.homeScreen.unassignedDropOffPassengers,
       dropOffPickUpConfirmationSuccess:
         store.myPassengersScreen.dropOffPickUpConfirmationSuccess,

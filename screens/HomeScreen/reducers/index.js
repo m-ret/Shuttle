@@ -86,20 +86,6 @@ const handlers = {
     };
   },
 
-  [ActionTypes.MY_PASSENGERS_CARD_ID](state, action) {
-    return {
-      ...state,
-      myPassengerCardId: action.payload.myPassengerCardId,
-    };
-  },
-
-  [ActionTypes.MY_PASSENGERS_CARD_ID_PICKUP](state, action) {
-    return {
-      ...state,
-      myPassengerCardIdPickUp: action.payload.myPassengerCardIdPickUp,
-    };
-  },
-
   [ActionTypes.PICKUP_PASSENGER_CARD_ID](state, action) {
     return {
       ...state,

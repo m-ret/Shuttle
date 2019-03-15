@@ -1,22 +1,23 @@
-import React from 'react';
-import { Button, AsyncStorage, ScrollView, StyleSheet } from 'react-native';
+import React, { Component } from 'react';
+import { AsyncStorage, View } from 'react-native';
+
 import PropTypes from 'prop-types';
+
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { ExpoLinksView } from '@expo/samples';
+
+import OptionComp from '../../components/MoreOptionsList/OptionComp';
 import { removeUserTokenAction } from '../SigningScreen/actions/signinScreen';
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 15,
-    backgroundColor: '#fff',
-  },
-});
+import HelpIcon from '../../components/SVGs/MoreScreen/HelpIcon';
+import LogOutIcon from '../../components/SVGs/MoreScreen/LogOutIcon';
+import FileOptionIcon from '../../components/SVGs/MoreScreen/FileOptionIcon';
 
-class SettingsScreen extends React.Component {
+import MoreScreenStyles from '../../styles/MoreScreen';
+
+class SettingsScreen extends Component {
   static navigationOptions = {
-    title: 'Log Out Screen',
+    header: null,
   };
 
   signOutAsync = async () => {
@@ -28,10 +29,24 @@ class SettingsScreen extends React.Component {
 
   render() {
     return (
-      <ScrollView style={styles.container}>
-        <ExpoLinksView />
-        <Button onPress={this.signOutAsync} title="Log Out" />
-      </ScrollView>
+      // if this list grows, change View to ScrollView.
+      <View style={MoreScreenStyles.WrapperContainer}>
+        <OptionComp
+          optionIcon={<FileOptionIcon />}
+          optionText="History"
+          onPressAction={() => console.log('History Icon')}
+        />
+        <OptionComp
+          optionIcon={<HelpIcon />}
+          optionText="Get Help"
+          onPressAction={() => console.log('Help Icon')}
+        />
+        <OptionComp
+          optionIcon={<LogOutIcon />}
+          optionText="Log Out"
+          onPressAction={() => this.signOutAsync()}
+        />
+      </View>
     );
   }
 }
