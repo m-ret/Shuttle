@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 
+import { isEqual, upperCase } from 'lodash';
+
 import OptionsModal from './OptionsAlertPassenger';
 
 import { confirmationPopupAction } from './actions/popupsModals';
@@ -53,6 +55,25 @@ const ConfirmationPopupParent = ({
     confirmationPopupActionHandler();
   };
 
+  const handleTexts = () => {
+    if (isEqual(screenName, 'MoreScreen')) {
+      return 'log out';
+    }
+
+    if (isEqual(screenName, 'MyPassengersScreen')) {
+      return 'remove';
+    }
+
+    if (
+      isEqual(screenName, 'PassengerCardBasedOnRoute') ||
+      isEqual(screenName, 'PassengerByCardinalPoint')
+    ) {
+      return 'delete';
+    }
+
+    return '';
+  };
+
   return (
     <View>
       <>
@@ -62,6 +83,8 @@ const ConfirmationPopupParent = ({
         >
           {
             <ConfirmationPopup
+              textTitle={handleTexts()}
+              buttonText={upperCase(handleTexts())}
               id={passengerInfo.id}
               handleDeleteOptionsModal={() =>
                 handleDeletePassenger(passengerInfo.id)

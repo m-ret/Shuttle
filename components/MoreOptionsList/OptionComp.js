@@ -12,9 +12,9 @@ const OptionComp = ({ onPressAction, optionText, optionIcon }) => (
         <View style={MoreScreenStyles.optionTextContainer}>
           <Text style={MoreScreenStyles.optionText}>{optionText}</Text>
           <MaterialCommunityIcons
-            name="chevron-right"
             size={24}
             color="#474350"
+            name="chevron-right"
           />
         </View>
       </View>

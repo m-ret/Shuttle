@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
+import { Text, View } from 'react-native';
 
 import PropTypes from 'prop-types';
 
@@ -13,24 +13,24 @@ import { confirmationPopupAction } from './actions/popupsModals';
 import ConfirmationPopupBtn from './ConfirmationPopupBtn';
 
 const ConfirmationPopup = ({
+  textTitle,
+  buttonText,
   handleDeleteOptionsModal,
   confirmationPopupActionHandler,
 }) => (
   <View style={styles.ConfirmationWrapperContainer}>
     <View style={styles.ConfirmationContainer}>
       <Text style={styles.ConfirmationText}>
-        Are you sure you want to delete this passenger?
+        Are you sure you want to {textTitle} this passenger?
       </Text>
       <View style={styles.ButtonsWrapper}>
         <ConfirmationPopupBtn
-          text="Cancel"
+          text="CANCEL"
           onPress={confirmationPopupActionHandler}
-          background={TouchableOpacity.Ripple('#ccc', false)}
         />
         <ConfirmationPopupBtn
-          text="Delete"
+          text={buttonText}
           onPress={handleDeleteOptionsModal}
-          background={TouchableOpacity.Ripple('#ccc', false)}
         />
       </View>
     </View>
@@ -40,6 +40,8 @@ const ConfirmationPopup = ({
 ConfirmationPopup.propTypes = {
   handleDeleteOptionsModal: PropTypes.func.isRequired,
   confirmationPopupActionHandler: PropTypes.func.isRequired,
+  textTitle: PropTypes.oneOfType([PropTypes.string]).isRequired,
+  buttonText: PropTypes.oneOfType([PropTypes.string]).isRequired,
 };
 
 export default compose(
