@@ -20,9 +20,7 @@ const ConfirmationPopup = ({
 }) => (
   <View style={styles.ConfirmationWrapperContainer}>
     <View style={styles.ConfirmationContainer}>
-      <Text style={styles.ConfirmationText}>
-        Are you sure you want to {textTitle} this passenger?
-      </Text>
+      <Text style={styles.ConfirmationText}>{textTitle}</Text>
       <View style={styles.ButtonsWrapper}>
         <ConfirmationPopupBtn
           text="CANCEL"

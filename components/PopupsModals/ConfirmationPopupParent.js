@@ -1,17 +1,20 @@
-import { View } from 'react-native';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { View, AsyncStorage } from 'react-native';
 
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 
-import { isEqual, upperCase } from 'lodash';
+import { isEqual } from 'lodash';
 
 import OptionsModal from './OptionsAlertPassenger';
 
-import { confirmationPopupAction } from './actions/popupsModals';
 import ConfirmationPopup from './ConfirmationPopup';
+
+import { confirmationPopupAction } from './actions/popupsModals';
+
 import FetchDeletePassenger from '../../APICalls/FetchDeletePassenger';
+
 import {
   passengerCardIdAction,
   pickupPassengerCardIdAction,
@@ -19,15 +22,19 @@ import {
   unassignedPickUpPassengersAction,
   unassignedDropOffPassengersAction,
 } from '../../screens/HomeScreen/actions/homeScreen';
-import { passengersByCardinalPointDataAction } from '../../screens/PassengersByCardinalPoint/actions/passengersByCardinalPoint';
+
+import { removeUserTokenAction } from '../../screens/SigningScreen/actions/signinScreen';
+
 import { assignedPassengersDataAction } from '../../screens/MyPassengersScreen/actions/myPassengersScreen';
+import { passengersByCardinalPointDataAction } from '../../screens/PassengersByCardinalPoint/actions/passengersByCardinalPoint';
 
 const ConfirmationPopupParent = ({
   screenName,
   passengerInfo,
   navigationStore,
-  confirmationPopup,
   passengersGoingTo,
+  confirmationPopup,
+  removeUserTokenActionHandler,
   passengerCardIdActionHandler,
   confirmationPopupActionHandler,
   pickupPassengerCardIdActionHandler,
@@ -55,23 +62,32 @@ const ConfirmationPopupParent = ({
     confirmationPopupActionHandler();
   };
 
+  const handleLogOut = async () => {
+    await AsyncStorage.clear();
+    await removeUserTokenActionHandler();
+    confirmationPopupActionHandler();
+  };
+
   const handleTexts = () => {
     if (isEqual(screenName, 'MoreScreen')) {
-      return 'log out';
+      return ['Are you sure you want to log out?', 'LOG OUT'];
     }
 
     if (isEqual(screenName, 'MyPassengersScreen')) {
-      return 'remove';
+      return [
+        'Are you sure you want to remove this passenger from your list? ',
+        'REMOVE',
+      ];
     }
 
     if (
       isEqual(screenName, 'PassengerCardBasedOnRoute') ||
       isEqual(screenName, 'PassengerByCardinalPoint')
     ) {
-      return 'delete';
+      return ['Are you sure you want to delete this passenger? ', 'DELETE'];
     }
 
-    return '';
+    return ['', ''];
   };
 
   return (
@@ -83,11 +99,13 @@ const ConfirmationPopupParent = ({
         >
           {
             <ConfirmationPopup
-              textTitle={handleTexts()}
-              buttonText={upperCase(handleTexts())}
+              textTitle={handleTexts()[0]}
+              buttonText={handleTexts()[1]}
               id={passengerInfo.id}
               handleDeleteOptionsModal={() =>
-                handleDeletePassenger(passengerInfo.id)
+                isEqual(screenName, 'MoreScreen')
+                  ? handleLogOut()
+                  : handleDeletePassenger(passengerInfo.id)
               }
             />
           }
@@ -110,6 +128,7 @@ ConfirmationPopupParent.propTypes = {
   ]).isRequired,
   navigationStore: PropTypes.shape({}).isRequired,
   screenName: PropTypes.oneOfType([PropTypes.string]),
+  removeUserTokenActionHandler: PropTypes.func.isRequired,
   passengerCardIdActionHandler: PropTypes.func.isRequired,
   confirmationPopupActionHandler: PropTypes.func.isRequired,
   passengersGoingTo: PropTypes.oneOfType([PropTypes.string]),
@@ -125,6 +144,7 @@ ConfirmationPopupParent.propTypes = {
 export default compose(
   connect(
     store => ({
+      userToken: store.signinScreen.userToken,
       screenName: store.homeScreen.screenName,
       navigationStore: store.homeScreen.navigation,
       passengerInfo: store.homeScreen.passengerInfo,
@@ -138,6 +158,9 @@ export default compose(
       unassignedDropOffPassengers: store.homeScreen.unassignedDropOffPassengers,
     }),
     dispatch => ({
+      removeUserTokenActionHandler: () => {
+        dispatch(removeUserTokenAction());
+      },
       passengerCardIdActionHandler: id => {
         dispatch(passengerCardIdAction(id));
       },
