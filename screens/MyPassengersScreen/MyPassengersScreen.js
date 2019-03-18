@@ -111,6 +111,9 @@ class MyPassengersScreen extends Component {
 
   getOpacity = infoId => {
     const { myPassengerCardId, dropOffPickUpConfirmationSuccess } = this.props;
+    console.log({ dropOffPickUpConfirmationSuccess });
+    console.log({ myPassengerCardId });
+    console.log({ isEqual: isEqual(myPassengerCardId, infoId) });
     if (
       !dropOffPickUpConfirmationSuccess &&
       myPassengerCardId &&
@@ -162,11 +165,13 @@ class MyPassengersScreen extends Component {
       holdPassengerInfoActionHandler,
       myPassengerCardIdPickUpActionHandler,
       isAddToMyPassengersSuccessActionHandler,
+      dropOffPickUpConfirmationSuccessActionHandler,
     } = this.props;
 
     const url = `https://www.google.com/maps/dir/?api=1&navigate&destination=${latitude},${longitude}`;
 
     isAddToMyPassengersSuccessActionHandler(false);
+    dropOffPickUpConfirmationSuccessActionHandler(false);
     myPassengerCardIdPickUpActionHandler(passengerInfoId);
     myPassengerCardIdActionHandler(passengerInfoId);
 

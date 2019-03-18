@@ -26,12 +26,13 @@ const FetchDropOffPickUpConfirmation = async (
         method: 'POST',
         body: JSON.stringify({ id: passengerId }),
         headers: {
-          Authorization: `Bearer ${userToken}`,
           Accept: 'application/json',
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${userToken}`,
         },
       },
     );
+
     responseJson = await response.json();
 
     if (has(responseJson, 'error')) {

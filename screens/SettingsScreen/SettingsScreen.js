@@ -14,8 +14,8 @@ import FileOptionIcon from '../../components/SVGs/MoreScreen/FileOptionIcon';
 
 import MoreScreenStyles from '../../styles/MoreScreen';
 
-import { confirmationPopupAction } from '../../components/PopupsModals/actions/popupsModals';
 import { screenNameAction } from '../HomeScreen/actions/homeScreen';
+import { confirmationPopupAction } from '../../components/PopupsModals/actions/popupsModals';
 
 class SettingsScreen extends Component {
   static navigationOptions = {
