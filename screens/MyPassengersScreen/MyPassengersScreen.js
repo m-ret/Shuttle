@@ -111,9 +111,6 @@ class MyPassengersScreen extends Component {
 
   getOpacity = infoId => {
     const { myPassengerCardId, dropOffPickUpConfirmationSuccess } = this.props;
-    console.log({ dropOffPickUpConfirmationSuccess });
-    console.log({ myPassengerCardId });
-    console.log({ isEqual: isEqual(myPassengerCardId, infoId) });
     if (
       !dropOffPickUpConfirmationSuccess &&
       myPassengerCardId &&

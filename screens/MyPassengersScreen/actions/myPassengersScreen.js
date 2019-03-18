@@ -11,7 +11,7 @@ export const assignedPassengersDataAction = assignedPassengersData => ({
 });
 
 export const myPassengerCardIdPickUpAction = myPassengerCardIdPickUp => ({
-  type: ActionTypes.MY_PASSENGERS_CARD_ID,
+  type: ActionTypes.MY_PASSENGERS_CARD_ID_PICKUP,
   payload: { myPassengerCardIdPickUp },
 });
 
