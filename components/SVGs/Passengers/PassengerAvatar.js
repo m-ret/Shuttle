@@ -7,13 +7,13 @@ const PassengerAvatar = ({
   y,
   d1,
   d2,
+  fill,
   opacity,
-  numberOfPassengers,
-  cardinalPoint,
   transform1,
   transform2,
   callFunction,
-  fill,
+  cardinalPoint,
+  numberOfPassengers,
 }) => (
   <Svg.G opacity={opacity} onPress={callFunction}>
     <Svg.Path d={d1} fill="#474350" opacity="0.5" />

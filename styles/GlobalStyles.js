@@ -35,28 +35,36 @@ const globalStyles = StyleSheet.create({
   container: {
     padding: 30,
   },
+
   mainColorBackground: {
     backgroundColor: mainColor,
   },
+
   mainColorFont: {
     color: mainColor,
   },
+
   whiteColor: {
     color: white,
     backgroundColor: white,
   },
+
   fontWhite: {
     color: white,
   },
+
   regularFontFamily: {
     fontFamily: 'montserratRegular',
   },
+
   semiBoldFontFamily: {
     fontFamily: 'montserratSemibold',
   },
+
   boldFontFamily: {
     fontFamily: 'montserratBold',
   },
+
   touchableBtnDropOffItem: {
     height: 36,
     display: 'flex',
@@ -67,6 +75,7 @@ const globalStyles = StyleSheet.create({
     justifyContent: 'center',
     alignContent: 'space-around',
   },
+
   stretchContent: {
     flex: 1,
     color: white,
@@ -74,11 +83,26 @@ const globalStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
+
   Loader: {
     flex: 1,
     alignItems: 'center',
     alignContent: 'center',
     justifyContent: 'center',
+  },
+
+  ButtonWithBorderOnly: {
+    borderWidth: 1,
+    color: '#474350',
+    borderColor: '#474350',
+    backgroundColor: '#FFFFFF',
+  },
+
+  ButtonDarkBg: {
+    borderWidth: 1,
+    color: '#FFFFFF',
+    borderColor: '#474350',
+    backgroundColor: '#474350',
   },
 });
 

@@ -49,18 +49,19 @@ class SettingsScreen extends Component {
   };
 
   render() {
+    const { navigation } = this.props;
     return (
       // if this list grows, change View to ScrollView.
       <View style={MoreScreenStyles.WrapperContainer}>
         <OptionComp
           optionIcon={<FileOptionIcon />}
           optionText="History"
-          onPressAction={() => console.log('History Icon')}
+          onPressAction={() => navigation.navigate('History')}
         />
         <OptionComp
           optionIcon={<HelpIcon />}
           optionText="Get Help"
-          onPressAction={() => console.log('Help Icon')}
+          onPressAction={() => navigation.navigate('History')}
         />
         <OptionComp
           optionIcon={<LogOutIcon />}

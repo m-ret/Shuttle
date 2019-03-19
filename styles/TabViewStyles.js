@@ -1,5 +1,4 @@
 import { StyleSheet } from 'react-native';
-import { Constants } from 'expo';
 import globalStyles from './GlobalStyles';
 import Colors from '../constants/Colors';
 
@@ -9,7 +8,7 @@ const tabViewStyles = StyleSheet.create({
   },
   tabBar: {
     flexDirection: 'row',
-    paddingTop: Constants.statusBarHeight,
+    backgroundColor: 'rgba(250, 250, 250, 0.5)',
   },
   onWhite: {
     color: globalStyles.whiteColor.color,
@@ -20,14 +19,14 @@ const tabViewStyles = StyleSheet.create({
   },
   tabItem: {
     flex: 1,
+    height: 58,
     alignItems: 'center',
     justifyContent: 'center',
-    height: 58,
   },
   tabStyle: {
-    marginHorizontal: 10,
     marginTop: 20,
     borderRadius: 2,
+    marginHorizontal: 10,
   },
   tabStyle_0_disabled: {
     backgroundColor: Colors.tabIconDefault,
@@ -42,15 +41,15 @@ const tabViewStyles = StyleSheet.create({
     backgroundColor: Colors.pickupTabColor,
   },
   tabArrowWrapper: {
-    justifyContent: 'center',
-    alignItems: 'center',
     height: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   tabArrowContent: {
-    transform: [{ rotateZ: '45deg' }],
     width: 15,
     height: 15,
     marginTop: 35,
+    transform: [{ rotateZ: '45deg' }],
   },
   tabTitle: {
     color: Colors.whiteColor,

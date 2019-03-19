@@ -14,6 +14,7 @@ import HomeScreen from '../screens/HomeScreen/HomeScreen';
 import MyPassengersScreen from '../screens/MyPassengersScreen/MyPassengersScreen';
 import SettingsScreen from '../screens/SettingsScreen/SettingsScreen';
 import PassengersByCardinalPoint from '../screens/PassengersByCardinalPoint/PassengersByCardinalPoint';
+import HistoryScreen from '../screens/HistoryScreen/HistoryScreen';
 
 import Colors from '../constants/Colors';
 
@@ -24,7 +25,7 @@ const tabBarOptions = {
   activeBackgroundColor: '#f7f7f7',
 };
 
-const cardinalPointScreenNavigationOptions = ({ navigation }) => ({
+const goBackButtonNavOptions = ({ navigation }) => ({
   headerLeft: (
     <TouchableOpacity
       onPress={() => navigation.goBack(null)}
@@ -43,7 +44,7 @@ const HomeStack = createStackNavigator({
   DropOffAllPassengers: HomeScreen,
   CardinalPoint: {
     screen: PassengersByCardinalPoint,
-    navigationOptions: cardinalPointScreenNavigationOptions,
+    navigationOptions: goBackButtonNavOptions,
   },
 });
 
@@ -79,6 +80,10 @@ LinksStack.navigationOptions = {
 
 const SettingsStack = createStackNavigator({
   DropOffMore: SettingsScreen,
+  History: {
+    screen: HistoryScreen,
+    navigationOptions: goBackButtonNavOptions,
+  },
 });
 
 SettingsStack.navigationOptions = {

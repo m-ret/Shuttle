@@ -17,12 +17,14 @@ import Colors from '../constants/Colors';
 import GoBackButton from '../components/SVGs/GoBackButton/GoBackButtonSVG';
 import PassengersByCardinalPointPickup from '../screens/PassengersByCardinalPoint/ByPickup';
 
+import HistoryScreen from '../screens/HistoryScreen/HistoryScreen';
+
 const tabBarOptions = {
   activeTintColor: 'black',
   activeBackgroundColor: '#f7f7f7',
 };
 
-const cardinalPointScreenNavigationOptions = ({ navigation }) => ({
+const goBackButtonNavOptions = ({ navigation }) => ({
   headerLeft: (
     <TouchableOpacity
       onPress={() => navigation.goBack(null)}
@@ -38,7 +40,7 @@ const HomeStack = createStackNavigator({
   PickupHome: HomeScreen,
   CardinalPointPickup: {
     screen: PassengersByCardinalPointPickup,
-    navigationOptions: cardinalPointScreenNavigationOptions,
+    navigationOptions: goBackButtonNavOptions,
   },
 });
 
@@ -72,6 +74,10 @@ LinksStack.navigationOptions = {
 
 const SettingsStack = createStackNavigator({
   PickupSettings: SettingsScreen,
+  History: {
+    screen: HistoryScreen,
+    navigationOptions: goBackButtonNavOptions,
+  },
 });
 
 SettingsStack.navigationOptions = {
