@@ -27,8 +27,6 @@ const FetchGetHistory = async (
       },
     );
 
-    console.log({ fromdate, todate });
-
     responseJson = await response.json();
 
     if (has(responseJson, 'error')) {
