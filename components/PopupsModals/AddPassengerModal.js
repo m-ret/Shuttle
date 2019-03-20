@@ -75,6 +75,20 @@ class AddPassengerModal extends Component {
     }
   }
 
+  componentWillUnmount() {
+    const { newAddressFromGoogleActionHandler } = this.props;
+
+    newAddressFromGoogleActionHandler({});
+
+    this.setState({
+      name: '',
+      phone: '',
+      address: '',
+      latitude: '',
+      longitude: '',
+    });
+  }
+
   focus = () => {
     this.ref.focus();
   };

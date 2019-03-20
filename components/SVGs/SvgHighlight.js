@@ -88,13 +88,14 @@ export default class TouchableOpacityG extends Component {
   static defaultProps = {
     activeOpacity: 0.2,
   };
+
   /**
    * Animate the touchable to a new opacity.
    */
   setOpacityTo = (value, duration) => {
     Animated.timing(this.state.anim, {
       toValue: value,
-      duration: duration,
+      duration,
       easing: Easing.inOut(Easing.quad),
       useNativeDriver: true,
     }).start();
