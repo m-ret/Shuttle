@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 const MoreScreenStyles = StyleSheet.create({
   WrapperContainer: {
     flex: 1,
-    paddingTop: 15,
+    paddingTop: 45,
   },
   optionIconContainer: {
     marginRight: 30,
@@ -24,7 +24,6 @@ const MoreScreenStyles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 15,
     justifyContent: 'center',
-    backgroundColor: '#fdfdfd',
     borderBottomColor: '#EDEDED',
     borderBottomWidth: StyleSheet.hairlineWidth,
   },

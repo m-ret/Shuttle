@@ -73,13 +73,14 @@ class EditAddressInput extends Component {
               returnKeyType="search" // Can be left out for default return key https://facebook.github.io/react-native/docs/textinput.html#returnkeytype
               listViewDisplayed="auto" // true/false/undefined
               renderDescription={row => row.description} // custom description render
-              onPress={(data, details = null) => {
+              onPress={async (data, details = null) => {
                 // 'details' is provided when fetchDetails = true
-                newAddressFromGoogleActionHandler({
+                await newAddressFromGoogleActionHandler({
                   description: data.description,
                   latitude: details.geometry.location.lat,
                   longitude: details.geometry.location.lng,
                 });
+                toggleGooglePlacesInputActionHandler();
               }}
               getDefaultValue={() => ''}
               query={{
