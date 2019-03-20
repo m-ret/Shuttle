@@ -14,10 +14,10 @@ const ConfirmationPopupBtn = ({
   cancelButtonTextStyle,
 }) => (
   <TouchableOpacity
-    disabled={isDisabled}
-    style={[styles.ConfirmationOption, saveButtonStyle, cancelButtonStyle]}
-    background={background}
     onPress={onPress}
+    disabled={isDisabled}
+    background={background}
+    style={[styles.ConfirmationOption, saveButtonStyle, cancelButtonStyle]}
   >
     <View>
       <View>

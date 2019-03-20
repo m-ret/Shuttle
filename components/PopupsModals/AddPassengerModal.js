@@ -148,13 +148,6 @@ class AddPassengerModal extends Component {
       newAddressFromGoogle,
       toggleAddPassengerModalActionHandler,
     } = this.props;
-    console.log(!(name.length && address.length && phone.length));
-    console.log(
-      name.length,
-      newAddressFromGoogle,
-      newAddressFromGoogle.description,
-      phone.length,
-    );
     return (
       <>
         <View style={styles.container}>
@@ -199,6 +192,7 @@ class AddPassengerModal extends Component {
               </AddEditFormInputs>
               <AddEditFormInputs
                 shouldFocus={false}
+                keyboardType="numeric"
                 textStateValue={phone}
                 placeholder="Enter Phone"
                 onChangeText={phone => this.setState({ phone })}

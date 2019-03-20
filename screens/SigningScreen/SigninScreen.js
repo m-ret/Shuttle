@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { View, ScrollView } from 'react-native';
 import { compose } from 'redux';
@@ -11,7 +11,7 @@ import signingStyles from '../../styles/SigningScreenStyles';
 import FetchLoginData from '../../APICalls/FetchLoginData';
 import { setUserTokenAction } from './actions/signinScreen';
 
-class SigninScreen extends React.Component {
+class SigninScreen extends Component {
   static navigationOptions = {
     header: null,
   };

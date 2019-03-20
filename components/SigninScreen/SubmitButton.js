@@ -17,9 +17,9 @@ const SigninSubmitButton = ({ signInAsync, disabledProp, style }) => (
 
 SigninSubmitButton.propTypes = {
   signInAsync: PropTypes.func.isRequired,
+  style: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
   disabledProp: PropTypes.oneOfType([PropTypes.bool, PropTypes.number])
     .isRequired,
-  style: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
 };
 
 export default SigninSubmitButton;

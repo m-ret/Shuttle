@@ -11,18 +11,20 @@ const AddEditFormInputs = ({
   shouldFocus,
   placeholder,
   onChangeText,
+  keyboardType,
   textStateValue,
 }) => (
   <View style={styles.InputContainer}>
     {children}
     <TextInput
-      placeholder={placeholder}
+      keyboardType={keyboardType}
+      ref={isRef}
       onFocus={onFocus}
       value={textStateValue}
+      autoFocus={shouldFocus}
+      placeholder={placeholder}
       onChangeText={onChangeText}
       style={styles.AddEditInputs}
-      autoFocus={shouldFocus}
-      ref={isRef}
     />
   </View>
 );
@@ -32,6 +34,7 @@ AddEditFormInputs.defaultProps = {
   isRef: undefined,
   onFocus: undefined,
   textStateValue: '',
+  keyboardType: 'default',
 };
 
 AddEditFormInputs.propTypes = {
@@ -39,6 +42,7 @@ AddEditFormInputs.propTypes = {
   onFocus: PropTypes.func,
   onChangeText: PropTypes.func.isRequired,
   placeholder: PropTypes.oneOfType([PropTypes.string]),
+  keyboardType: PropTypes.oneOfType([PropTypes.string]),
   textStateValue: PropTypes.oneOfType([PropTypes.string]),
   children: PropTypes.oneOfType([PropTypes.object]).isRequired,
   shouldFocus: PropTypes.oneOfType([PropTypes.bool]).isRequired,

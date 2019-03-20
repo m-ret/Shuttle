@@ -267,6 +267,7 @@ class PassengerFormModal extends Component {
             </AddEditFormInputs>
             <AddEditFormInputs
               shouldFocus={false}
+              keyboardType="numeric"
               onChangeText={phone => this.setState({ phone })}
               textStateValue={phone}
             >
