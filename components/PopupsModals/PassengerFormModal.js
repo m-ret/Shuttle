@@ -121,6 +121,21 @@ class PassengerFormModal extends Component {
     }
   }
 
+  componentWillUnmount() {
+    const { newAddressFromGoogleActionHandler } = this.props;
+
+    newAddressFromGoogleActionHandler({});
+
+    this.setState({
+      id: '',
+      name: '',
+      phone: '',
+      address: '',
+      latitude: '',
+      longitude: '',
+    });
+  }
+
   focus = () => {
     this.ref.focus();
   };
