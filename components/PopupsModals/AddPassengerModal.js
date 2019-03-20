@@ -44,6 +44,7 @@ class AddPassengerModal extends Component {
     const { name, phone, address, latitude, longitude } = this.state;
 
     const {
+      isDisabled,
       passengerInfo,
       navigationStore,
       addPassengerData,
@@ -58,6 +59,7 @@ class AddPassengerModal extends Component {
       nextState.address !== address ||
       nextState.latitude !== latitude ||
       nextState.longitude !== longitude ||
+      nextProps.isDisabled !== isDisabled ||
       nextProps.passengerInfo !== passengerInfo ||
       nextProps.navigationStore !== navigationStore ||
       nextProps.addPassengerData !== addPassengerData ||
@@ -146,11 +148,26 @@ class AddPassengerModal extends Component {
       newAddressFromGoogle,
       toggleAddPassengerModalActionHandler,
     } = this.props;
+    console.log(!(name.length && address.length && phone.length));
+    console.log(
+      name.length,
+      newAddressFromGoogle,
+      newAddressFromGoogle.description,
+      phone.length,
+    );
     return (
       <>
         <View style={styles.container}>
           <EditAddressInput />
           <PassengerFormWrapper
+            isDisabled={
+              !(
+                name.length &&
+                newAddressFromGoogle &&
+                newAddressFromGoogle.description &&
+                phone.length
+              )
+            }
             modalTitle="Add"
             onPressSave={this.handleAddPassenger}
             onPressCancel={this.onCloseEditAddressModal}
@@ -197,6 +214,7 @@ class AddPassengerModal extends Component {
 }
 
 AddPassengerModal.defaultProps = {
+  isDisabled: true,
   newAddressFromGoogle: {},
 };
 
@@ -207,6 +225,7 @@ AddPassengerModal.propTypes = {
     PropTypes.object,
   ]).isRequired,
   navigationStore: PropTypes.shape({}).isRequired,
+  isDisabled: PropTypes.oneOfType([PropTypes.bool]),
   newAddressFromGoogleActionHandler: PropTypes.func.isRequired,
   newAddressFromGoogle: PropTypes.oneOfType([PropTypes.object]),
   toggleGooglePlacesInputActionHandler: PropTypes.func.isRequired,

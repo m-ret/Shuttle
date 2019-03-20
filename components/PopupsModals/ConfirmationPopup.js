@@ -23,10 +23,12 @@ const ConfirmationPopup = ({
       <Text style={styles.ConfirmationText}>{textTitle}</Text>
       <View style={styles.ButtonsWrapper}>
         <ConfirmationPopupBtn
+          isDisabled={false}
           text="CANCEL"
           onPress={confirmationPopupActionHandler}
         />
         <ConfirmationPopupBtn
+          isDisabled={false}
           text={buttonText}
           onPress={handleDeleteOptionsModal}
         />

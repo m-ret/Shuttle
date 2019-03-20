@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import { Text, View } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import React from 'react';
@@ -15,6 +16,7 @@ const pickupTabColor = '#3DA7DC';
 
 const PassengerFormWrapper = ({
   children,
+  isDisabled,
   modalTitle,
   onPressSave,
   onPressCancel,
@@ -41,6 +43,7 @@ const PassengerFormWrapper = ({
 
       <View style={[styles.ButtonsWrapper, styles.AddEditButtonsWrapper]}>
         <ConfirmationPopupBtn
+          isDisabled={false}
           text="Cancel"
           onPress={onPressCancel}
           cancelButtonStyle={styles.CancelButtonStyle}
@@ -49,10 +52,13 @@ const PassengerFormWrapper = ({
         <ConfirmationPopupBtn
           text="Save"
           onPress={onPressSave}
+          isDisabled={isDisabled}
           saveButtonStyle={[
             styles.SaveButtonStyle,
             {
-              backgroundColor: navigationStore.index
+              backgroundColor: isDisabled
+                ? 'grey'
+                : navigationStore.index
                 ? pickupTabColor
                 : dropOffTabColor,
             },
@@ -64,8 +70,13 @@ const PassengerFormWrapper = ({
   </>
 );
 
+PassengerFormWrapper.defaultProps = {
+  isDisabled: true,
+};
+
 PassengerFormWrapper.propTypes = {
   navigationStore: PropTypes.shape({}).isRequired,
+  isDisabled: PropTypes.oneOfType([PropTypes.bool]),
   children: PropTypes.oneOfType([PropTypes.object]).isRequired,
   onPressSave: PropTypes.oneOfType([PropTypes.func]).isRequired,
   modalTitle: PropTypes.oneOfType([PropTypes.string]).isRequired,

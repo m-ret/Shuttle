@@ -4,8 +4,9 @@ import PropTypes from 'prop-types';
 import styles from '../../styles/PopupsModals';
 
 const ConfirmationPopupBtn = ({
-  onPress,
   text,
+  onPress,
+  isDisabled,
   background,
   buttonTextStyle,
   saveButtonStyle,
@@ -13,6 +14,7 @@ const ConfirmationPopupBtn = ({
   cancelButtonTextStyle,
 }) => (
   <TouchableOpacity
+    disabled={isDisabled}
     style={[styles.ConfirmationOption, saveButtonStyle, cancelButtonStyle]}
     background={background}
     onPress={onPress}
@@ -34,6 +36,7 @@ const ConfirmationPopupBtn = ({
 );
 
 ConfirmationPopupBtn.defaultProps = {
+  isDisabled: true,
   background: undefined,
   saveButtonStyle: undefined,
   buttonTextStyle: undefined,
@@ -43,6 +46,7 @@ ConfirmationPopupBtn.defaultProps = {
 
 ConfirmationPopupBtn.propTypes = {
   onPress: PropTypes.func.isRequired,
+  isDisabled: PropTypes.oneOfType([PropTypes.bool]),
   background: PropTypes.oneOfType([PropTypes.object]),
   text: PropTypes.oneOfType([PropTypes.string]).isRequired,
   cancelButtonStyle: PropTypes.oneOfType([PropTypes.object]),

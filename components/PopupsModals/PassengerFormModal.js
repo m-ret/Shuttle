@@ -229,6 +229,15 @@ class PassengerFormModal extends Component {
       <>
         <EditAddressInput />
         <PassengerFormWrapper
+          isDisabled={
+            !(
+              (name.length &&
+                phone.length &&
+                newAddressFromGoogle &&
+                newAddressFromGoogle.description) ||
+              (name.length && phone.length && address.length)
+            )
+          }
           modalTitle="Edit"
           onPressSave={this.handleEditPassenger}
           onPressCancel={this.onCloseEditAddressModal}
