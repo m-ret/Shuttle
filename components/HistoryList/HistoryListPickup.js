@@ -1,23 +1,34 @@
 /* eslint-disable no-nested-ternary */
-import { isEqual } from 'lodash';
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+
 import {
+  View,
+  ScrollView,
   RefreshControl,
   ActivityIndicator,
-  ScrollView,
-  View,
-  Text,
 } from 'react-native';
+
+import PropTypes from 'prop-types';
+
+import { isEqual } from 'lodash';
+
 import { withNavigation } from 'react-navigation';
-import { connect } from 'react-redux';
+
 import { compose } from 'redux';
-import FetchGetHistory from '../../APICalls/FetchGetHistory';
-import { screenNameAction } from '../../screens/HomeScreen/actions/homeScreen';
-import { historyDataAction } from '../../screens/HistoryScreen/actions/historyScreen';
+import { connect } from 'react-redux';
+
 import globalStyles from '../../styles/GlobalStyles';
 
-class HistoryListPickUp extends Component {
+import FetchGetHistory from '../../APICalls/FetchGetHistory';
+
+import { screenNameAction } from '../../screens/HomeScreen/actions/homeScreen';
+import { historyDataAction } from '../../screens/HistoryScreen/actions/historyScreen';
+
+import HistoryFiltersButtons from '../HistoryFiltersButtons/HistoryFiltersButtons';
+import HistoryScreenStyles from '../../styles/HistoryScreenStyles';
+import HistoryPassengerCard from '../HistoryPassengerCard/HistoryPassengerCard';
+
+class HistoryList extends Component {
   static navigationOptions = {
     title: null,
     headerStyle: { shadowColor: 'transparent', borderBottomWidth: 0 },
@@ -30,15 +41,17 @@ class HistoryListPickUp extends Component {
 
   componentDidMount() {
     const { screenNameActionHandler } = this.props;
-    screenNameActionHandler('HistoryListPickUp');
+    screenNameActionHandler('HistoryList');
 
     return this.handleFetchGetHistory();
   }
 
   shouldComponentUpdate(props, state) {
     const { refreshing, loadingState } = this.state;
-    const { historyData, historyNavigation } = this.props;
+    const { historyData, historyNavigation, minDate, maxDate } = this.props;
     return (
+      !isEqual(props.minDate, minDate) ||
+      !isEqual(props.maxDate, maxDate) ||
       !isEqual(state.refreshing, refreshing) ||
       !isEqual(props.historyData, historyData) ||
       !isEqual(state.loadingState, loadingState) ||
@@ -47,11 +60,12 @@ class HistoryListPickUp extends Component {
   }
 
   componentDidUpdate(props, state) {
-    const { historyData, historyNavigation } = this.props;
+    const { historyNavigation, minDate, maxDate } = this.props;
 
     if (
-      !isEqual(props.historyData, historyData) ||
-      !isEqual(props.historyNavigation, historyNavigation)
+      !isEqual(props.historyNavigation, historyNavigation) ||
+      !isEqual(props.minDate, minDate) ||
+      !isEqual(props.maxDate, maxDate)
     ) {
       this.handleFetchGetHistory();
     }
@@ -64,11 +78,21 @@ class HistoryListPickUp extends Component {
   }
 
   handleFetchGetHistory = async () => {
-    const { historyNavigation, historyDataActionHandler } = this.props;
+    const {
+      minDate,
+      maxDate,
+      historyNavigation,
+      historyDataActionHandler,
+    } = this.props;
 
     this.setState({ loadingState: true });
 
-    await FetchGetHistory(historyNavigation, historyDataActionHandler);
+    await FetchGetHistory(
+      minDate,
+      maxDate,
+      historyNavigation,
+      historyDataActionHandler,
+    );
 
     this.setState({ loadingState: false });
   };
@@ -87,12 +111,31 @@ class HistoryListPickUp extends Component {
         }
       >
         <View style={globalStyles.ContainerWithHorizontalPadding}>
+          <HistoryFiltersButtons />
+
           {loadingState ? (
-            <View style={globalStyles.Loader}>
+            <View
+              style={[
+                globalStyles.Loader,
+                { flex: 1, justifyContent: 'center', marginTop: 50 },
+              ]}
+            >
               <ActivityIndicator size="large" />
             </View>
           ) : (
-            <Text>{JSON.stringify(historyData)}</Text>
+            <View style={HistoryScreenStyles.Wrapper}>
+              {historyData && historyData.length
+                ? historyData.map((info, index) => (
+                    <HistoryPassengerCard
+                      info={info}
+                      key={info.id}
+                      index={index}
+                      pickUpOrDropOffText="Picked"
+                      pickUpOrDropOffTime={info.dropofftimestamp}
+                    />
+                  ))
+                : null}
+            </View>
           )}
         </View>
       </ScrollView>
@@ -100,12 +143,16 @@ class HistoryListPickUp extends Component {
   }
 }
 
-HistoryListPickUp.defaultProps = {
+HistoryList.defaultProps = {
+  minDate: '',
+  maxDate: '',
   historyData: [],
 };
 
-HistoryListPickUp.propTypes = {
+HistoryList.propTypes = {
   navigation: PropTypes.shape({}).isRequired,
+  minDate: PropTypes.oneOfType([PropTypes.string]),
+  maxDate: PropTypes.oneOfType([PropTypes.string]),
   historyNavigation: PropTypes.shape({}).isRequired,
   screenNameActionHandler: PropTypes.func.isRequired,
   historyDataActionHandler: PropTypes.func.isRequired,
@@ -115,6 +162,8 @@ HistoryListPickUp.propTypes = {
 export default compose(
   connect(
     store => ({
+      minDate: store.historyScreen.minDate,
+      maxDate: store.historyScreen.maxDate,
       historyData: store.historyScreen.historyData,
       historyNavigation: store.historyScreen.historyNavigation,
     }),
@@ -127,4 +176,4 @@ export default compose(
       },
     }),
   ),
-)(withNavigation(HistoryListPickUp));
+)(withNavigation(HistoryList));

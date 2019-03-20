@@ -2,6 +2,8 @@ import createReducer from '../../../redux/createReducer';
 import ActionTypes from '../constants/ActionTypes';
 
 const initialState = {
+  minDate: '',
+  maxDate: '',
   historyData: [],
   historyNavigation: {
     index: 0,
@@ -27,6 +29,20 @@ const handlers = {
         ...state.historyNavigation,
         index: action.payload.index,
       },
+    };
+  },
+
+  [ActionTypes.MIN_DATE](state, action) {
+    return {
+      ...state,
+      minDate: action.payload.minDate,
+    };
+  },
+
+  [ActionTypes.MAX_DATE](state, action) {
+    return {
+      ...state,
+      maxDate: action.payload.maxDate,
     };
   },
 };

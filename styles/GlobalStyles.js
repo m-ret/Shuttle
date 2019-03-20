@@ -104,6 +104,12 @@ const globalStyles = StyleSheet.create({
     borderColor: '#474350',
     backgroundColor: '#474350',
   },
+
+  HistoryScreenTitle: {
+    fontSize: 15,
+    paddingTop: 35,
+    fontWeight: '900',
+  },
 });
 
 export default globalStyles;

@@ -89,18 +89,19 @@ class AddPassengerModal extends Component {
     await toggleGooglePlacesInputActionHandler();
   };
 
-  handleAddPassenger = () => {
+  handleAddPassenger = async () => {
     const {
       navigationStore,
       newAddressFromGoogle,
       newAddressFromGoogleActionHandler,
+      toggleAddPassengerModalActionHandler,
       unassignedPickUpPassengersActionHandler,
       unassignedDropOffPassengersActionHandler,
     } = this.props;
 
     const { name, phone, address, latitude, longitude } = this.state;
 
-    FetchAddPassenger(
+    await FetchAddPassenger(
       name,
       phone,
       this.onParamChange(newAddressFromGoogle.description, address),
@@ -112,10 +113,10 @@ class AddPassengerModal extends Component {
     );
 
     newAddressFromGoogleActionHandler({});
-    this.callModal();
+    toggleAddPassengerModalActionHandler();
   };
 
-  onCloseEditAddressModal = async () => {
+  onCloseEditAddressModal = () => {
     const {
       toggleAddPassengerModalActionHandler,
       newAddressFromGoogleActionHandler,

@@ -6,6 +6,8 @@ import { API_URL } from '../constants/API';
 
 const FetchGetHistory = async (
   // These are params. So be careful before you change its order
+  fromdate,
+  todate,
   historyNavigation,
   historyDataActionHandler,
 ) => {
@@ -21,16 +23,20 @@ const FetchGetHistory = async (
           'Content-Type': 'application/json',
           Authorization: `Bearer ${userToken}`,
         },
-        // body: JSON.stringify({ fromdate: '', todate: '' }),
+        body: JSON.stringify({ fromdate, todate }),
       },
     );
+
+    console.log({ fromdate, todate });
 
     responseJson = await response.json();
 
     if (has(responseJson, 'error')) {
       Alert.alert(
         'Error',
-        'Unable to process your FetchGetHistory request at this time.',
+        `Unable to process your get${
+          historyNavigation.index ? 'PickUp' : 'DropOff'
+        }History request at this time.`,
       );
     } else {
       historyDataActionHandler(responseJson.success.data);
@@ -39,7 +45,9 @@ const FetchGetHistory = async (
   } catch (error) {
     Alert.alert(
       'Error',
-      'There was an error with your FetchGetHistory request, please try again later.',
+      `There was an error with your get${
+        historyNavigation.index ? 'PickUp' : 'DropOff'
+      }History, request, please try again later.`,
     );
   }
 

@@ -158,6 +158,7 @@ class MyPassengersScreen extends Component {
     passengerInfoId,
   ) => {
     const {
+      navigationStore,
       myPassengerCardIdActionHandler,
       holdPassengerInfoActionHandler,
       myPassengerCardIdPickUpActionHandler,
@@ -169,8 +170,12 @@ class MyPassengersScreen extends Component {
 
     isAddToMyPassengersSuccessActionHandler(false);
     dropOffPickUpConfirmationSuccessActionHandler(false);
-    myPassengerCardIdPickUpActionHandler(passengerInfoId);
-    myPassengerCardIdActionHandler(passengerInfoId);
+
+    if (navigationStore.index) {
+      myPassengerCardIdPickUpActionHandler(passengerInfoId);
+    } else {
+      myPassengerCardIdActionHandler(passengerInfoId);
+    }
 
     await holdPassengerInfoActionHandler(passengerInfo);
 
