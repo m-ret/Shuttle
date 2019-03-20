@@ -24,12 +24,15 @@ class HistoryFiltersButtons extends Component {
   }
 
   handleOnSucess = (minDate, maxDate) => {
+    const { toggleCalendar } = this.state;
     const { minDateActionHandler, maxDateActionHandler } = this.props;
     minDateActionHandler(minDate);
     maxDateActionHandler(maxDate);
+
+    return this.setState({ toggleCalendar: !toggleCalendar });
   };
 
-  handleSeeLatest = (minDate, maxDate) => {
+  handleSeeLatest = () => {
     const { toggleCalendar } = this.state;
     const { minDateActionHandler, maxDateActionHandler } = this.props;
     minDateActionHandler('');

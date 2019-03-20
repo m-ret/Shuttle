@@ -24,9 +24,9 @@ import FetchGetHistory from '../../APICalls/FetchGetHistory';
 import { screenNameAction } from '../../screens/HomeScreen/actions/homeScreen';
 import { historyDataAction } from '../../screens/HistoryScreen/actions/historyScreen';
 
-import HistoryFiltersButtons from '../HistoryFiltersButtons/HistoryFiltersButtons';
 import HistoryScreenStyles from '../../styles/HistoryScreenStyles';
 import HistoryPassengerCard from '../HistoryPassengerCard/HistoryPassengerCard';
+import HistoryFiltersButtons from '../HistoryFiltersButtons/HistoryFiltersButtons';
 
 class HistoryList extends Component {
   static navigationOptions = {
