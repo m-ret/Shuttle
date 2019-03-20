@@ -24,9 +24,9 @@ import FetchGetHistory from '../../APICalls/FetchGetHistory';
 import { screenNameAction } from '../../screens/HomeScreen/actions/homeScreen';
 import { historyDataAction } from '../../screens/HistoryScreen/actions/historyScreen';
 
-import HistoryFiltersButtons from '../HistoryFiltersButtons/HistoryFiltersButtons';
 import HistoryScreenStyles from '../../styles/HistoryScreenStyles';
 import HistoryPassengerCard from '../HistoryPassengerCard/HistoryPassengerCard';
+import HistoryFiltersButtons from '../HistoryFiltersButtons/HistoryFiltersButtons';
 
 class HistoryList extends Component {
   static navigationOptions = {
@@ -63,9 +63,9 @@ class HistoryList extends Component {
     const { historyNavigation, minDate, maxDate } = this.props;
 
     if (
-      !isEqual(props.historyNavigation, historyNavigation) ||
       !isEqual(props.minDate, minDate) ||
-      !isEqual(props.maxDate, maxDate)
+      !isEqual(props.maxDate, maxDate) ||
+      !isEqual(props.historyNavigation, historyNavigation)
     ) {
       this.handleFetchGetHistory();
     }
@@ -131,7 +131,7 @@ class HistoryList extends Component {
                       key={info.id}
                       index={index}
                       pickUpOrDropOffText="Picked"
-                      pickUpOrDropOffTime={info.dropofftimestamp}
+                      pickUpOrDropOffTime={info.pickuptimestamp}
                     />
                   ))
                 : null}

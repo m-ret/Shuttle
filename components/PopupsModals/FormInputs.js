@@ -17,12 +17,12 @@ const AddEditFormInputs = ({
   <View style={styles.InputContainer}>
     {children}
     <TextInput
-      keyboardType={keyboardType}
       ref={isRef}
       onFocus={onFocus}
       value={textStateValue}
       autoFocus={shouldFocus}
       placeholder={placeholder}
+      keyboardType={keyboardType}
       onChangeText={onChangeText}
       style={styles.AddEditInputs}
     />
