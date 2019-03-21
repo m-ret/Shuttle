@@ -40,6 +40,7 @@ class PassengerCardBasedOnRoute extends Component {
 
   componentDidMount() {
     const { screenNameActionHandler } = this.props;
+    this.isUnmounted = false;
     screenNameActionHandler('PassengerCardBasedOnRoute');
   }
 
@@ -74,17 +75,28 @@ class PassengerCardBasedOnRoute extends Component {
       unassignedDropOffPassengers,
     } = this.props;
     if (props.pushNotificationData !== pushNotificationData) {
-      this.applyOpacityForSomeSeconds(0.5);
+      this.applyOpacityForSomeSeconds(0.5, 0);
     }
     if (
       props.unassignedPickUpPassengers !== unassignedPickUpPassengers ||
       props.unassignedDropOffPassengers !== unassignedDropOffPassengers
     ) {
-      setTimeout(() => {
-        this.applyOpacityForSomeSeconds(1);
-      }, 1000);
+      this.applyOpacityForSomeSeconds(1, 1000);
     }
   }
+
+  componentWillUnmount() {
+    console.log('=== componentWillUnmount ===');
+
+    this.isUnmounted = true;
+  }
+
+  applyOpacityForSomeSeconds = (setOpacity, timeout) =>
+    setTimeout(() => {
+      if (!this.isUnmounted) {
+        this.setState({ lastIndexOpacity: setOpacity });
+      }
+    }, timeout);
 
   filteredData = filterByParam => {
     const { searchParam } = this.props;
@@ -147,9 +159,6 @@ class PassengerCardBasedOnRoute extends Component {
     );
   };
 
-  applyOpacityForSomeSeconds = setOpacity =>
-    this.setState({ lastIndexOpacity: setOpacity });
-
   componentToRenderBasedOnParams = (info, lastIndex, index) => {
     const { opacity, lastIndexOpacity } = this.state;
     const { searchParam, navigationStore } = this.props;
@@ -184,7 +193,6 @@ class PassengerCardBasedOnRoute extends Component {
 
   showFeedbackIfNoLength = data => {
     const lastIndex = findLastIndex(data);
-    console.log({ lastIndex });
     if (size(this.filteredData(data))) {
       this.filteredData(data).map(info =>
         this.componentToRenderBasedOnParams(info),
@@ -194,7 +202,6 @@ class PassengerCardBasedOnRoute extends Component {
     }
 
     return this.filteredData(data).map((info, index) => {
-      console.log({ lastIndex, index });
       return this.componentToRenderBasedOnParams(info, lastIndex, index);
     });
   };

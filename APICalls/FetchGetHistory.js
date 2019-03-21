@@ -38,7 +38,6 @@ const FetchGetHistory = async (
       );
     } else {
       historyDataActionHandler(responseJson.success.data);
-      console.log({ responseJson: responseJson.success });
     }
   } catch (error) {
     Alert.alert(

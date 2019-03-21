@@ -19,10 +19,6 @@ import {
 class HistoryFiltersButtons extends Component {
   state = { toggleCalendar: false };
 
-  componentDidMount() {
-    console.log('componentDidMount: HistoryFiltersButtons');
-  }
-
   handleOnSucess = (minDate, maxDate) => {
     const { toggleCalendar } = this.state;
     const { minDateActionHandler, maxDateActionHandler } = this.props;
