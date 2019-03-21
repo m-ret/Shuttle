@@ -43,7 +43,7 @@ const registerForPushNotificationsAsync = async () => {
       },
       body: JSON.stringify({ token }),
     });
-    console.log({ token });
+
     const responseJson = await response.json();
     if (has(responseJson, 'error')) {
       Alert.alert(

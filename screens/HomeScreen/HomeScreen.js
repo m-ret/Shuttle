@@ -44,8 +44,8 @@ class HomeScreen extends Component {
       pushNotificationData,
       pushNotificationDataActionHandler,
     } = this.props;
-    pushNotificationDataActionHandler({ pushNotificationData: notification });
-    console.log({ pushNotificationData });
+    pushNotificationDataActionHandler(notification);
+    console.log(pushNotificationData);
   };
 
   handleIndexChange = async indexParam => {

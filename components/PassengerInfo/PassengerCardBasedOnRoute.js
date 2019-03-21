@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 
-import { size } from 'lodash';
+import { size, findLastIndex } from 'lodash';
 
 import PassengersInfo from './PassengerInfo';
 
@@ -36,27 +36,54 @@ import globalStyles from '../../styles/GlobalStyles';
 import Colors from '../../constants/Colors';
 
 class PassengerCardBasedOnRoute extends Component {
+  state = { opacity: 1, lastIndexOpacity: 1 };
+
   componentDidMount() {
     const { screenNameActionHandler } = this.props;
     screenNameActionHandler('PassengerCardBasedOnRoute');
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(nextProps, state) {
     const {
       searchParam,
       passengerInfo,
       navigationStore,
+      pushNotificationData,
       unassignedPickUpPassengers,
       unassignedDropOffPassengers,
     } = this.props;
 
+    const { opacity, lastIndexOpacity } = this.state;
+
     return (
+      state.opacity !== opacity ||
       nextProps.searchParam !== searchParam ||
       nextProps.passengerInfo !== passengerInfo ||
+      state.lastIndexOpacity !== lastIndexOpacity ||
       nextProps.navigationStore !== navigationStore ||
+      nextProps.pushNotificationData !== pushNotificationData ||
       nextProps.unassignedPickUpPassengers !== unassignedPickUpPassengers ||
       nextProps.unassignedDropOffPassengers !== unassignedDropOffPassengers
     );
+  }
+
+  componentDidUpdate(props, state) {
+    const {
+      pushNotificationData,
+      unassignedPickUpPassengers,
+      unassignedDropOffPassengers,
+    } = this.props;
+    if (props.pushNotificationData !== pushNotificationData) {
+      this.applyOpacityForSomeSeconds(0.5);
+    }
+    if (
+      props.unassignedPickUpPassengers !== unassignedPickUpPassengers ||
+      props.unassignedDropOffPassengers !== unassignedDropOffPassengers
+    ) {
+      setTimeout(() => {
+        this.applyOpacityForSomeSeconds(1);
+      }, 1500);
+    }
   }
 
   filteredData = filterByParam => {
@@ -120,11 +147,18 @@ class PassengerCardBasedOnRoute extends Component {
     );
   };
 
-  componentToRenderBasedOnParams = info => {
+  applyOpacityForSomeSeconds = setOpacity =>
+    this.setState({ lastIndexOpacity: setOpacity });
+
+  componentToRenderBasedOnParams = (info, lastIndex, index) => {
+    const { opacity, lastIndexOpacity } = this.state;
     const { searchParam, navigationStore } = this.props;
 
     return (
-      <View key={info.id}>
+      <View
+        key={info.id}
+        opacity={lastIndex === index ? lastIndexOpacity : opacity}
+      >
         <PassengersInfo
           id={info.id}
           name={info.name}
@@ -149,6 +183,8 @@ class PassengerCardBasedOnRoute extends Component {
   };
 
   showFeedbackIfNoLength = data => {
+    const lastIndex = findLastIndex(data);
+    console.log({ lastIndex });
     if (size(this.filteredData(data))) {
       this.filteredData(data).map(info =>
         this.componentToRenderBasedOnParams(info),
@@ -157,9 +193,10 @@ class PassengerCardBasedOnRoute extends Component {
       return <EmptyState>No records found</EmptyState>;
     }
 
-    return this.filteredData(data).map(info =>
-      this.componentToRenderBasedOnParams(info),
-    );
+    return this.filteredData(data).map((info, index) => {
+      console.log({ lastIndex, index });
+      return this.componentToRenderBasedOnParams(info, lastIndex, index);
+    });
   };
 
   render() {
@@ -188,6 +225,7 @@ class PassengerCardBasedOnRoute extends Component {
 PassengerCardBasedOnRoute.defaultProps = {
   passengersGoingTo: '',
   searchParam: undefined,
+  pushNotificationData: {},
 };
 
 PassengerCardBasedOnRoute.propTypes = {
@@ -196,6 +234,7 @@ PassengerCardBasedOnRoute.propTypes = {
     PropTypes.number,
     PropTypes.object,
   ]).isRequired,
+  pushNotificationData: PropTypes.shape({}),
   navigationStore: PropTypes.shape({}).isRequired,
   screenNameActionHandler: PropTypes.func.isRequired,
   popupsModalsActionHandler: PropTypes.func.isRequired,
@@ -226,6 +265,7 @@ export default compose(
       passengerCardId: store.homeScreen.passengerCardId,
       passengersGoingTo: store.homeScreen.passengersGoingTo,
       confirmationPopup: store.popupsModals.confirmationPopup,
+      pushNotificationData: store.globalStore.pushNotificationData,
       pickupPassengerCardId: store.homeScreen.pickupPassengerCardId,
       isAddToMyPassengersSuccess: store.homeScreen.isAddToMyPassengersSuccess,
       unassignedPickUpPassengers: store.homeScreen.unassignedPickUpPassengers,

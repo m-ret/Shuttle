@@ -10,29 +10,38 @@ import AllPassengersContainer from './AllPassengersContainer';
 
 import { unassignedDropOffPassengersAction } from '../../screens/HomeScreen/actions/homeScreen';
 
+import { pushNotificationDataAction } from '../../screens/GlobalStoreRedux/actions/GlobalStore';
+
 class AllPassengersDropOff extends Component {
-  state = {
-    refreshing: false,
-  };
+  state = { refreshing: false };
 
   componentDidMount() {
     const { unassignedDropOffPassengersActionHandler, userToken } = this.props;
     FetchDropOffPassengers(unassignedDropOffPassengersActionHandler, userToken);
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  shouldComponentUpdate(props, state) {
+    const { refreshing } = this.state;
+    const { pushNotificationData, userToken } = this.props;
+
+    return (
+      props.userToken !== userToken ||
+      state.refreshing !== refreshing ||
+      props.pushNotificationData !== pushNotificationData
+    );
+  }
+
+  async componentDidUpdate(prevProps, prevState) {
     const {
       userToken,
       pushNotificationData,
       unassignedDropOffPassengersActionHandler,
     } = this.props;
-    console.log('WHEREEEEE');
     if (
       prevProps.userToken !== userToken ||
       prevProps.pushNotificationData !== pushNotificationData
     ) {
-      console.log('SASSSSSS');
-      FetchDropOffPassengers(
+      await FetchDropOffPassengers(
         unassignedDropOffPassengersActionHandler,
         userToken,
       );
@@ -50,10 +59,21 @@ class AllPassengersDropOff extends Component {
   };
 
   render() {
-    const { dropOffTabColor } = this.props;
+    const {
+      dropOffTabColor,
+      pushNotificationData,
+      pushNotificationDataActionHandler,
+    } = this.props;
     const { refreshing } = this.state;
     return (
       <ScrollView
+        ref={ref => (this.scrollView = ref)}
+        onContentSizeChange={(contentWidth, contentHeight) => {
+          return pushNotificationData.origin === 'selected'
+            ? (this.scrollView.scrollToEnd({ animated: true }),
+              pushNotificationDataActionHandler({}))
+            : null;
+        }}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={this.onRefresh} />
         }
@@ -73,6 +93,7 @@ AllPassengersDropOff.propTypes = {
   pushNotificationData: PropTypes.shape({}),
   navigationStore: PropTypes.shape({}).isRequired,
   userToken: PropTypes.oneOfType([PropTypes.string]),
+  pushNotificationDataActionHandler: PropTypes.func.isRequired,
   unassignedDropOffPassengersActionHandler: PropTypes.func.isRequired,
   dropOffTabColor: PropTypes.oneOfType([PropTypes.string]).isRequired,
 };
@@ -89,6 +110,9 @@ export default compose(
     dispatch => ({
       unassignedDropOffPassengersActionHandler: data => {
         dispatch(unassignedDropOffPassengersAction(data));
+      },
+      pushNotificationDataActionHandler: data => {
+        dispatch(pushNotificationDataAction(data));
       },
     }),
   ),
