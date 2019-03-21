@@ -300,20 +300,29 @@ class MyPassengersScreen extends Component {
                       isBtnDisabled={this.getOpacity(info.id) !== 1}
                       callModal={() => this.callModalAndSetPassengerInfo(info)}
                       buttonText={
-                        isEqual(myPassengerCardId, info.id)
+                        (myPassengerCardId &&
+                          isEqual(myPassengerCardId, info.id)) ||
+                        (myPassengerCardIdPickUp &&
+                          isEqual(myPassengerCardIdPickUp, info.id))
                           ? 'CONFIRM DROPOFF'
                           : 'START NAVIGATING'
                       }
                       btnStyle={[
                         globalStyles.touchableBtnDropOffItem,
-                        isEqual(myPassengerCardId, info.id)
+                        (myPassengerCardId &&
+                          isEqual(myPassengerCardId, info.id)) ||
+                        (myPassengerCardIdPickUp &&
+                          isEqual(myPassengerCardIdPickUp, info.id))
                           ? globalStyles.ConfirmActionBg
                           : navigationStore.index
                           ? { backgroundColor: Colors.pickupTabColor }
                           : { backgroundColor: Colors.dropOffTabColor },
                       ]}
                       onPress={() =>
-                        isEqual(myPassengerCardId, info.id)
+                        (myPassengerCardId &&
+                          isEqual(myPassengerCardId, info.id)) ||
+                        (myPassengerCardIdPickUp &&
+                          isEqual(myPassengerCardIdPickUp, info.id))
                           ? this.handleFetchDropOffPickupConfirmation(info.id)
                           : this.handleStartNavigating(
                               info.latitude,
@@ -327,8 +336,8 @@ class MyPassengersScreen extends Component {
                 ))
               ) : (
                 <GoToAllPassengers
-                  navigationStore={navigationStore}
                   navigation={navigation}
+                  navigationStore={navigationStore}
                 />
               )}
             </View>

@@ -19,10 +19,16 @@ import AllPassengersDropOff from '../../components/DropOffPickUpTabs/AllPassenge
 
 import { indexRouteAction } from './actions/homeScreen';
 
+import registerForPushNotificationsAsync from '../../APICalls/FetchPushNotifications';
+
 class HomeScreen extends Component {
   static navigationOptions = {
     header: null,
   };
+
+  async componentDidMount() {
+    registerForPushNotificationsAsync();
+  }
 
   shouldComponentUpdate(nextProps, nextState) {
     return nextProps !== this.props;

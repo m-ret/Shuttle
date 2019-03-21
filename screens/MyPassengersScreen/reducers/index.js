@@ -3,6 +3,8 @@ import ActionTypes from '../constants/ActionTypes';
 
 const initialState = {
   assignedPassengersData: [],
+  myPassengerCardId: undefined,
+  myPassengerCardIdPickUp: undefined,
   dropOffPickUpConfirmationSuccess: false,
 };
 

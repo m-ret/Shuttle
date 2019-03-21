@@ -52,7 +52,10 @@ const PassengerGoingAvatar = ({
           fill="#FFF"
           transform="translate(0 26)"
         >
-          <Svg.TSpan x="8.87" y="16">
+          <Svg.TSpan
+            y="15.5"
+            x={passengersByCardinalPointData.length > 9 ? '5' : '7.87'}
+          >
             {passengersByCardinalPointData.length}
           </Svg.TSpan>
         </Svg.Text>

@@ -61,7 +61,9 @@ class SettingsScreen extends Component {
         <OptionComp
           optionIcon={<HelpIcon />}
           optionText="Get Help"
-          onPressAction={() => navigation.navigate('History')}
+          onPressAction={() =>
+            console.log('Should take you to Get Help screen')
+          }
         />
         <OptionComp
           optionIcon={<LogOutIcon />}
