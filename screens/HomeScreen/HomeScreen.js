@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 
 import { withNavigation } from 'react-navigation';
 
-import { Constants } from 'expo';
+import { Constants, Notifications } from 'expo';
 import TabView from '../../components/DropOffPickUpTabs/TabView';
 
 import styles from '../../styles/HomeScreenStyles';
@@ -20,6 +20,7 @@ import AllPassengersDropOff from '../../components/DropOffPickUpTabs/AllPassenge
 import { indexRouteAction } from './actions/homeScreen';
 
 import registerForPushNotificationsAsync from '../../APICalls/FetchPushNotifications';
+import { pushNotificationDataAction } from '../GlobalStoreRedux/actions/GlobalStore';
 
 class HomeScreen extends Component {
   static navigationOptions = {
@@ -28,11 +29,24 @@ class HomeScreen extends Component {
 
   async componentDidMount() {
     registerForPushNotificationsAsync();
+
+    this.notificationSubscription = Notifications.addListener(
+      this.handleNotification,
+    );
   }
 
   shouldComponentUpdate(nextProps, nextState) {
     return nextProps !== this.props;
   }
+
+  handleNotification = notification => {
+    const {
+      pushNotificationData,
+      pushNotificationDataActionHandler,
+    } = this.props;
+    pushNotificationDataActionHandler({ pushNotificationData: notification });
+    console.log({ pushNotificationData });
+  };
 
   handleIndexChange = async indexParam => {
     const { navigation, indexRouteActionHandler } = this.props;
@@ -61,20 +75,30 @@ class HomeScreen extends Component {
   }
 }
 
+HomeScreen.defaultProps = {
+  pushNotificationData: {},
+};
+
 HomeScreen.propTypes = {
+  pushNotificationData: PropTypes.shape({}),
   navigation: PropTypes.shape({}).isRequired,
   navigationStore: PropTypes.shape({}).isRequired,
   indexRouteActionHandler: PropTypes.func.isRequired,
+  pushNotificationDataActionHandler: PropTypes.func.isRequired,
 };
 
 export default compose(
   connect(
     store => ({
       navigationStore: store.homeScreen.navigation,
+      pushNotificationData: store.globalStore.pushNotificationData,
     }),
     dispatch => ({
       indexRouteActionHandler: data => {
         dispatch(indexRouteAction(data));
+      },
+      pushNotificationDataActionHandler: data => {
+        dispatch(pushNotificationDataAction(data));
       },
     }),
   ),

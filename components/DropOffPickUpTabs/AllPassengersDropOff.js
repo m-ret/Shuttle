@@ -21,8 +21,17 @@ class AllPassengersDropOff extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { unassignedDropOffPassengersActionHandler, userToken } = this.props;
-    if (prevProps.userToken !== userToken) {
+    const {
+      userToken,
+      pushNotificationData,
+      unassignedDropOffPassengersActionHandler,
+    } = this.props;
+    console.log('WHEREEEEE');
+    if (
+      prevProps.userToken !== userToken ||
+      prevProps.pushNotificationData !== pushNotificationData
+    ) {
+      console.log('SASSSSSS');
       FetchDropOffPassengers(
         unassignedDropOffPassengersActionHandler,
         userToken,
@@ -57,11 +66,13 @@ class AllPassengersDropOff extends Component {
 
 AllPassengersDropOff.defaultProps = {
   userToken: '',
+  pushNotificationData: {},
 };
 
 AllPassengersDropOff.propTypes = {
-  userToken: PropTypes.oneOfType([PropTypes.string]),
+  pushNotificationData: PropTypes.shape({}),
   navigationStore: PropTypes.shape({}).isRequired,
+  userToken: PropTypes.oneOfType([PropTypes.string]),
   unassignedDropOffPassengersActionHandler: PropTypes.func.isRequired,
   dropOffTabColor: PropTypes.oneOfType([PropTypes.string]).isRequired,
 };
@@ -72,6 +83,7 @@ export default compose(
       userToken: store.signinScreen.userToken,
       navigationStore: store.homeScreen.navigation,
       dropOffTabColor: store.homeScreen.dropOffTabColor,
+      pushNotificationData: store.globalStore.pushNotificationData,
       unassignedDropOffPassengers: store.homeScreen.unassignedDropOffPassengers,
     }),
     dispatch => ({

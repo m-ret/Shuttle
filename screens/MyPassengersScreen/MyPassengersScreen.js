@@ -110,11 +110,25 @@ class MyPassengersScreen extends Component {
   }
 
   getOpacity = infoId => {
-    const { myPassengerCardId, dropOffPickUpConfirmationSuccess } = this.props;
+    const {
+      myPassengerCardId,
+      myPassengerCardIdPickUp,
+      dropOffPickUpConfirmationSuccess,
+    } = this.props;
+
     if (
       !dropOffPickUpConfirmationSuccess &&
       myPassengerCardId &&
-      !isEqual(myPassengerCardId, infoId)
+      (!isEqual(myPassengerCardId, infoId) &&
+        !isEqual(myPassengerCardIdPickUp, infoId))
+    ) {
+      return 0.5;
+    }
+    if (
+      !dropOffPickUpConfirmationSuccess &&
+      myPassengerCardIdPickUp &&
+      (!isEqual(myPassengerCardId, infoId) &&
+        !isEqual(myPassengerCardIdPickUp, infoId))
     ) {
       return 0.5;
     }
@@ -304,7 +318,9 @@ class MyPassengersScreen extends Component {
                           isEqual(myPassengerCardId, info.id)) ||
                         (myPassengerCardIdPickUp &&
                           isEqual(myPassengerCardIdPickUp, info.id))
-                          ? 'CONFIRM DROPOFF'
+                          ? navigationStore.index
+                            ? 'CONFIRM PICKUP'
+                            : 'CONFIRM DROPOFF'
                           : 'START NAVIGATING'
                       }
                       btnStyle={[

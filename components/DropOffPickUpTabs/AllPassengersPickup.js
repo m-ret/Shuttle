@@ -22,8 +22,9 @@ class AllPassengersPickup extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    console.log('SASSSSSS !!!');
     const { unassignedPickUpPassengersActionHandler, userToken } = this.props;
-    if (prevProps.userToken !== this.props.userToken) {
+    if (prevProps.userToken !== userToken) {
       FetchPickupPassengers(unassignedPickUpPassengersActionHandler, userToken);
     }
   }
@@ -39,8 +40,8 @@ class AllPassengersPickup extends Component {
   };
 
   render() {
-    const { pickupTabColor } = this.props;
     const { refreshing } = this.state;
+    const { pickupTabColor } = this.props;
     return (
       <ScrollView
         refreshControl={

@@ -1,0 +1,3 @@
+export default {
+  PUSH_NOTIFICATION_DATA: 'PUSH_NOTIFICATION_DATA',
+};
