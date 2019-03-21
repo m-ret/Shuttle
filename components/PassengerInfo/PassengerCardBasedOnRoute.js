@@ -82,7 +82,7 @@ class PassengerCardBasedOnRoute extends Component {
     ) {
       setTimeout(() => {
         this.applyOpacityForSomeSeconds(1);
-      }, 1500);
+      }, 1000);
     }
   }
 

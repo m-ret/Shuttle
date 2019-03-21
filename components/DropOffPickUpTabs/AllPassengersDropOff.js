@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 
+import { size } from 'lodash';
+
 import FetchDropOffPassengers from '../../APICalls/FetchDropOffPassengers';
 
 import AllPassengersContainer from './AllPassengersContainer';
@@ -37,14 +39,19 @@ class AllPassengersDropOff extends Component {
       pushNotificationData,
       unassignedDropOffPassengersActionHandler,
     } = this.props;
-    if (
-      prevProps.userToken !== userToken ||
-      prevProps.pushNotificationData !== pushNotificationData
-    ) {
-      await FetchDropOffPassengers(
+    if (prevProps.userToken !== userToken) {
+      FetchDropOffPassengers(
         unassignedDropOffPassengersActionHandler,
         userToken,
       );
+    }
+    if (prevProps.pushNotificationData !== pushNotificationData) {
+      if (size(pushNotificationData)) {
+        FetchDropOffPassengers(
+          unassignedDropOffPassengersActionHandler,
+          userToken,
+        );
+      }
     }
   }
 
