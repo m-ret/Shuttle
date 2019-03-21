@@ -19,6 +19,11 @@ export const searchParamAction = searchParam => ({
   payload: { searchParam },
 });
 
+export const passengerNameAction = passengerName => ({
+  type: ActionTypes.PASSENGER_NAME,
+  payload: { passengerName },
+});
+
 export const passengerSuccessfullyEditedAction = () => ({
   type: ActionTypes.PASSENGER_SUCCESSFULLY_EDITED,
 });
@@ -36,6 +41,11 @@ export const passengerCardIdAction = passengerCardId => ({
 export const passengersGoingToAction = passengersGoingTo => ({
   type: ActionTypes.PASSENGER_GOING_TO,
   payload: { passengersGoingTo },
+});
+
+export const pickupPassengerNameAction = pickupPassengerName => ({
+  type: ActionTypes.PICKUP_PASSENGER_NAME,
+  payload: { pickupPassengerName },
 });
 
 export const pickupPassengerCardIdAction = pickupPassengerCardId => ({

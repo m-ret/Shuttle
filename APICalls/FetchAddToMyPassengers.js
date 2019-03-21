@@ -11,9 +11,12 @@ import FetchPassengersByCardinalPoint from './FetchPassengersByCardinalPoint';
 const FetchAddToMyPassengers = async (
   // These are params. So be careful before you change its order
   id,
+  name,
   navigationStore,
   passengersGoingTo,
+  passengerNameActionHandler,
   passengerCardIdActionHandler,
+  pickupPassengerNameActionHandler,
   pickupPassengerCardIdActionHandler,
   unassignedPickUpPassengersActionHandler,
   unassignedDropOffPassengersActionHandler,
@@ -22,6 +25,8 @@ const FetchAddToMyPassengers = async (
 ) => {
   const route = navigationStore.index ? 'PickUp' : 'DropOff';
   const userToken = await AsyncStorage.getItem('userToken');
+  passengerNameActionHandler('');
+  pickupPassengerNameActionHandler('');
   try {
     const response = await fetch(
       `${API_URL}addToMy${route === 'PickUp' ? 'PickUp' : 'DropOff'}Passengers`,
@@ -43,12 +48,14 @@ const FetchAddToMyPassengers = async (
       passengerCardIdActionHandler(id);
       if (route === 'DropOff') {
         passengerCardIdActionHandler(id);
+        passengerNameActionHandler(name);
         FetchDropOffPassengers(
           unassignedDropOffPassengersActionHandler,
           userToken,
         );
       } else {
         pickupPassengerCardIdActionHandler(id);
+        pickupPassengerNameActionHandler(name);
         FetchPickupPassengers(
           unassignedPickUpPassengersActionHandler,
           userToken,

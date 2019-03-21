@@ -18,8 +18,10 @@ import {
 
 import {
   screenNameAction,
+  passengerNameAction,
   passengerCardIdAction,
   holdPassengerInfoAction,
+  pickupPassengerNameAction,
   pickupPassengerCardIdAction,
   isAddToMyPassengersSuccessAction,
   unassignedPickUpPassengersAction,
@@ -85,12 +87,14 @@ class PassengerCardBasedOnRoute extends Component {
     holdPassengerInfoActionHandler(passengerInfo);
   };
 
-  handleAddToMyPassengers = async id => {
+  handleAddToMyPassengers = async (id, name) => {
     const {
       navigationStore,
       passengersGoingTo,
       screenNameActionHandler,
+      passengerNameActionHandler,
       passengerCardIdActionHandler,
+      pickupPassengerNameActionHandler,
       pickupPassengerCardIdActionHandler,
       isAddToMyPassengersSuccessActionHandler,
       unassignedPickUpPassengersActionHandler,
@@ -102,9 +106,12 @@ class PassengerCardBasedOnRoute extends Component {
 
     return FetchAddToMyPassengers(
       id,
+      name,
       navigationStore,
       passengersGoingTo,
+      passengerNameActionHandler,
       passengerCardIdActionHandler,
+      pickupPassengerNameActionHandler,
       pickupPassengerCardIdActionHandler,
       unassignedPickUpPassengersActionHandler,
       unassignedDropOffPassengersActionHandler,
@@ -126,7 +133,7 @@ class PassengerCardBasedOnRoute extends Component {
           searchParam={searchParam}
           buttonText="ADD TO MY PASSENGERS"
           cardinalpoint={info.cardinalpoint}
-          onPress={() => this.handleAddToMyPassengers(info.id)}
+          onPress={() => this.handleAddToMyPassengers(info.id, info.name)}
           callModal={() => this.callModalAndSetPassengerInfo(info)}
           btnStyle={[
             globalStyles.touchableBtnDropOffItem,
@@ -193,10 +200,12 @@ PassengerCardBasedOnRoute.propTypes = {
   screenNameActionHandler: PropTypes.func.isRequired,
   popupsModalsActionHandler: PropTypes.func.isRequired,
   searchParam: PropTypes.oneOfType([PropTypes.string]),
+  passengerNameActionHandler: PropTypes.func.isRequired,
   passengerCardIdActionHandler: PropTypes.func.isRequired,
   confirmationPopupActionHandler: PropTypes.func.isRequired,
   holdPassengerInfoActionHandler: PropTypes.func.isRequired,
   passengersGoingTo: PropTypes.oneOfType([PropTypes.string]),
+  pickupPassengerNameActionHandler: PropTypes.func.isRequired,
   pickupPassengerCardIdActionHandler: PropTypes.func.isRequired,
   isAddToMyPassengersSuccessActionHandler: PropTypes.func.isRequired,
   unassignedPickUpPassengersActionHandler: PropTypes.func.isRequired,
@@ -235,8 +244,14 @@ export default compose(
       confirmationPopupActionHandler: () => {
         dispatch(confirmationPopupAction());
       },
+      passengerNameActionHandler: name => {
+        dispatch(passengerNameAction(name));
+      },
       pickupPassengerCardIdActionHandler: id => {
         dispatch(pickupPassengerCardIdAction(id));
+      },
+      pickupPassengerNameActionHandler: name => {
+        dispatch(pickupPassengerNameAction(name));
       },
       holdPassengerInfoActionHandler: passengerInfo => {
         dispatch(holdPassengerInfoAction(passengerInfo));

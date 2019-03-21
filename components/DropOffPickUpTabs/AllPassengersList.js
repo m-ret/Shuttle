@@ -18,7 +18,9 @@ import {
   screenNameAction,
   searchParamAction,
   toggleSearchAction,
+  passengerNameAction,
   passengerCardIdAction,
+  pickupPassengerNameAction,
   pickupPassengerCardIdAction,
   unassignedPickUpPassengersAction,
   isAddToMyPassengersSuccessAction,
@@ -83,11 +85,16 @@ class AllPassengersList extends Component {
       navigationStore,
       passengersGoingTo,
       screenNameActionHandler,
+      passengerNameActionHandler,
+      pickupPassengerNameActionHandler,
       unassignedPickUpPassengersActionHandler,
       isAddToMyPassengersSuccessActionHandler,
       unassignedDropOffPassengersActionHandler,
       passengersByCardinalPointDataActionHandler,
     } = this.props;
+
+    passengerNameActionHandler('');
+    pickupPassengerNameActionHandler('');
 
     await screenNameActionHandler('PassengerCardBasedOnRoute');
 
@@ -115,9 +122,10 @@ class AllPassengersList extends Component {
     if (toggleSearch) searchParamActionHandler('');
   };
 
-  showSuccessMessageBasedOnRoute = (nav, isSuccess, cardId) => {
+  showSuccessMessageBasedOnRoute = (name, nav, isSuccess, cardId) => {
     const { screenName } = this.props;
     return screenName === 'PassengerCardBasedOnRoute' &&
+      name &&
       nav &&
       isSuccess &&
       cardId ? (
@@ -125,7 +133,7 @@ class AllPassengersList extends Component {
         x={15}
         id={cardId}
         key={cardId}
-        buttonText="Passenger Added"
+        buttonText={`${name.replace(/ .*/, '')} Added`}
         handleUndo={() => this.handleUndo(cardId)}
       />
     ) : null;
@@ -135,8 +143,10 @@ class AllPassengersList extends Component {
     const {
       searchParam,
       toggleSearch,
+      passengerName,
       navigationStore,
       passengerCardId,
+      pickupPassengerName,
       pickupPassengerCardId,
       searchParamActionHandler,
       unassignedPickUpPassengers,
@@ -210,12 +220,14 @@ class AllPassengersList extends Component {
         )}
 
         {this.showSuccessMessageBasedOnRoute(
+          passengerName,
           !navigationStore.index,
           isAddToMyPassengersSuccess,
           passengerCardId,
         )}
 
         {this.showSuccessMessageBasedOnRoute(
+          pickupPassengerName,
           navigationStore.index,
           isAddToMyPassengersSuccess,
           pickupPassengerCardId,
@@ -229,8 +241,10 @@ class AllPassengersList extends Component {
 
 AllPassengersList.defaultProps = {
   screenName: '',
+  passengerName: '',
   passengerCardId: '',
   passengersGoingTo: '',
+  pickupPassengerName: '',
   pickupPassengerCardId: '',
 };
 
@@ -238,9 +252,13 @@ AllPassengersList.propTypes = {
   navigationStore: PropTypes.shape({}).isRequired,
   screenNameActionHandler: PropTypes.func.isRequired,
   screenName: PropTypes.oneOfType([PropTypes.string]),
+  passengerNameActionHandler: PropTypes.func.isRequired,
+  passengerName: PropTypes.oneOfType([PropTypes.string]),
   passengerCardIdActionHandler: PropTypes.func.isRequired,
   passengerCardId: PropTypes.oneOfType([PropTypes.number]),
   passengersGoingTo: PropTypes.oneOfType([PropTypes.string]),
+  pickupPassengerNameActionHandler: PropTypes.func.isRequired,
+  pickupPassengerName: PropTypes.oneOfType([PropTypes.string]),
   pickupPassengerCardIdActionHandler: PropTypes.func.isRequired,
   pickupPassengerCardId: PropTypes.oneOfType([PropTypes.number]),
   toggleSearch: PropTypes.oneOfType([PropTypes.bool]).isRequired,
@@ -268,8 +286,10 @@ export default compose(
       searchParam: store.homeScreen.searchParam,
       toggleSearch: store.homeScreen.toggleSearch,
       navigationStore: store.homeScreen.navigation,
+      passengerName: store.homeScreen.passengerName,
       passengerCardId: store.homeScreen.passengerCardId,
       passengersGoingTo: store.homeScreen.passengersGoingTo,
+      pickupPassengerName: store.homeScreen.pickupPassengerName,
       pickupPassengerCardId: store.homeScreen.pickupPassengerCardId,
       toggleAddPassengerModal: store.popupsModals.toggleAddPassengerModal,
       unassignedPickUpPassengers: store.homeScreen.unassignedPickUpPassengers,
@@ -288,11 +308,17 @@ export default compose(
       searchParamActionHandler: value => {
         dispatch(searchParamAction(value));
       },
+      passengerCardIdActionHandler: id => {
+        dispatch(passengerCardIdAction(id));
+      },
+      passengerNameActionHandler: name => {
+        dispatch(passengerNameAction(name));
+      },
       toggleAddPassengerModalActionHandler: () => {
         dispatch(toggleAddPassengerModalAction());
       },
-      passengerCardIdActionHandler: id => {
-        dispatch(passengerCardIdAction(id));
+      pickupPassengerNameActionHandler: name => {
+        dispatch(pickupPassengerNameAction(name));
       },
       pickupPassengerCardIdActionHandler: id => {
         dispatch(pickupPassengerCardIdAction(id));

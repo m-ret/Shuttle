@@ -404,11 +404,11 @@ export default compose(
         store.myPassengersScreen.dropOffPickUpConfirmationSuccess,
     }),
     dispatch => ({
-      screenNameActionHandler: value => {
-        dispatch(screenNameAction(value));
-      },
       popupsModalsActionHandler: () => {
         dispatch(popupsModalsAction());
+      },
+      screenNameActionHandler: value => {
+        dispatch(screenNameAction(value));
       },
       confirmationPopupActionHandler: () => {
         dispatch(confirmationPopupAction());

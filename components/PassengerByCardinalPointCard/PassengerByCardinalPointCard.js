@@ -27,6 +27,8 @@ import {
   pickupPassengerCardIdAction,
   unassignedPickUpPassengersAction,
   unassignedDropOffPassengersAction,
+  pickupPassengerNameAction,
+  passengerNameAction,
 } from '../../screens/HomeScreen/actions/homeScreen';
 
 import PassengersAdded from '../PassengerInfo/PassengersAdded';
@@ -143,12 +145,14 @@ class PassengersByCardinalPointCard extends Component {
     );
   };
 
-  handleAddToMyPassengers = id => {
+  handleAddToMyPassengers = (id, name) => {
     const {
       navigationStore,
       passengersGoingTo,
       screenNameActionHandler,
+      passengerNameActionHandler,
       passengerCardIdActionHandler,
+      pickupPassengerNameActionHandler,
       pickupPassengerCardIdActionHandler,
       unassignedPickUpPassengersActionHandler,
       unassignedDropOffPassengersActionHandler,
@@ -160,9 +164,12 @@ class PassengersByCardinalPointCard extends Component {
 
     return FetchAddToMyPassengers(
       id,
+      name,
       navigationStore,
       passengersGoingTo,
+      passengerNameActionHandler,
       passengerCardIdActionHandler,
+      pickupPassengerNameActionHandler,
       pickupPassengerCardIdActionHandler,
       unassignedPickUpPassengersActionHandler,
       unassignedDropOffPassengersActionHandler,
@@ -174,8 +181,10 @@ class PassengersByCardinalPointCard extends Component {
   render() {
     const {
       screenName,
+      passengerName,
       passengerCardId,
       navigationStore,
+      pickupPassengerName,
       isAddToMyPassengersSuccess,
       passengersByCardinalPointData,
     } = this.props;
@@ -202,16 +211,21 @@ class PassengersByCardinalPointCard extends Component {
             </View>
 
             {screenName === 'PassengerByCardinalPoint' &&
-              passengerCardId &&
-              isAddToMyPassengersSuccess && (
-                <PassengersAdded
-                  x={18}
-                  id={passengerCardId}
-                  key={passengerCardId}
-                  buttonText="Passenger Added"
-                  handleUndo={() => this.handleUndo(passengerCardId)}
-                />
-              )}
+            (passengerName || pickupPassengerName) &&
+            passengerCardId &&
+            isAddToMyPassengersSuccess ? (
+              <PassengersAdded
+                x={18}
+                id={passengerCardId}
+                key={passengerCardId}
+                buttonText={`${
+                  navigationStore.index
+                    ? pickupPassengerName.replace(/ .*/, '')
+                    : passengerName.replace(/ .*/, '')
+                } Added`}
+                handleUndo={() => this.handleUndo(passengerCardId)}
+              />
+            ) : null}
 
             <View style={{ marginTop: 38 }}>
               {passengersByCardinalPointData &&
@@ -224,7 +238,9 @@ class PassengersByCardinalPointCard extends Component {
                       datetime={info.timestamp}
                       buttonText="ADD TO MY PASSENGERS"
                       cardinalpoint={info.cardinalpoint}
-                      onPress={() => this.handleAddToMyPassengers(info.id)}
+                      onPress={() =>
+                        this.handleAddToMyPassengers(info.id, info.name)
+                      }
                       callModal={() => this.callModalAndSetPassengerInfo(info)}
                       btnStyle={[
                         globalStyles.touchableBtnDropOffItem,
@@ -247,8 +263,10 @@ class PassengersByCardinalPointCard extends Component {
 
 PassengersByCardinalPointCard.defaultProps = {
   screenName: '',
+  passengerName: '',
   passengerCardId: '',
   passengersGoingTo: '',
+  pickupPassengerName: '',
 };
 
 PassengersByCardinalPointCard.propTypes = {
@@ -256,11 +274,15 @@ PassengersByCardinalPointCard.propTypes = {
   screenNameActionHandler: PropTypes.func.isRequired,
   screenName: PropTypes.oneOfType([PropTypes.string]),
   popupsModalsActionHandler: PropTypes.func.isRequired,
+  passengerNameActionHandler: PropTypes.func.isRequired,
+  passengerName: PropTypes.oneOfType([PropTypes.string]),
   passengerCardIdActionHandler: PropTypes.func.isRequired,
   passengerCardId: PropTypes.oneOfType([PropTypes.number]),
   confirmationPopupActionHandler: PropTypes.func.isRequired,
   holdPassengerInfoActionHandler: PropTypes.func.isRequired,
   passengersGoingTo: PropTypes.oneOfType([PropTypes.string]),
+  pickupPassengerNameActionHandler: PropTypes.func.isRequired,
+  pickupPassengerName: PropTypes.oneOfType([PropTypes.string]),
   pickupPassengerCardIdActionHandler: PropTypes.func.isRequired,
   unassignedPickUpPassengersActionHandler: PropTypes.func.isRequired,
   isAddToMyPassengersSuccessActionHandler: PropTypes.func.isRequired,
@@ -278,9 +300,11 @@ export default compose(
     store => ({
       screenName: store.homeScreen.screenName,
       navigationStore: store.homeScreen.navigation,
+      passengerName: store.homeScreen.passengerName,
       passengerCardId: store.homeScreen.passengerCardId,
       passengersGoingTo: store.homeScreen.passengersGoingTo,
       confirmationPopup: store.popupsModals.confirmationPopup,
+      pickupPassengerName: store.homeScreen.pickupPassengerName,
       editPassengerModal: store.popupsModals.editPassengerModal,
       pickupPassengerCardId: store.homeScreen.pickupPassengerCardId,
       toggleCardOptionsModal: store.popupsModals.toggleCardOptionsModal,
@@ -290,20 +314,26 @@ export default compose(
       passengerSuccessfullyEdited: store.homeScreen.passengerSuccessfullyEdited,
     }),
     dispatch => ({
-      screenNameActionHandler: value => {
-        dispatch(screenNameAction(value));
-      },
       popupsModalsActionHandler: () => {
         dispatch(popupsModalsAction());
       },
-      confirmationPopupActionHandler: () => {
-        dispatch(confirmationPopupAction());
+      screenNameActionHandler: value => {
+        dispatch(screenNameAction(value));
       },
       passengerCardIdActionHandler: id => {
         dispatch(passengerCardIdAction(id));
       },
+      passengerNameActionHandler: name => {
+        dispatch(passengerNameAction(name));
+      },
+      confirmationPopupActionHandler: () => {
+        dispatch(confirmationPopupAction());
+      },
       pickupPassengerCardIdActionHandler: id => {
         dispatch(pickupPassengerCardIdAction(id));
+      },
+      pickupPassengerNameActionHandler: name => {
+        dispatch(pickupPassengerNameAction(name));
       },
       unassignedPickUpPassengersActionHandler: data => {
         dispatch(unassignedPickUpPassengersAction(data));

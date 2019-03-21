@@ -4,11 +4,13 @@ import ActionTypes from '../constants/ActionTypes';
 const initialState = {
   screenName: '',
   searchParam: '',
+  passengerName: '',
   passengerInfo: {},
   toggleSearch: false,
   passengerCardId: null,
   passengersGoingTo: '',
   myPassengerCardId: null,
+  pickupPassengerName: '',
   pickupTabColor: '#3DA7DC',
   dropOffTabColor: '#ff5252',
   pickupPassengerCardId: null,
@@ -72,6 +74,13 @@ const handlers = {
     };
   },
 
+  [ActionTypes.PASSENGER_NAME](state, action) {
+    return {
+      ...state,
+      passengerName: action.payload.passengerName,
+    };
+  },
+
   [ActionTypes.PASSENGER_INFO](state, action) {
     return {
       ...state,
@@ -83,6 +92,13 @@ const handlers = {
     return {
       ...state,
       passengerCardId: action.payload.passengerCardId,
+    };
+  },
+
+  [ActionTypes.PICKUP_PASSENGER_NAME](state, action) {
+    return {
+      ...state,
+      pickupPassengerName: action.payload.pickupPassengerName,
     };
   },
 
