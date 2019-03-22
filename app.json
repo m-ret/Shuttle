@@ -20,7 +20,6 @@
     "ios": {
       "supportsTablet": true
     },
-    "description": "Shuttle ",
-    "bitbucketUrl": "git@bitbucket.org:sitg/hubdrop-reactnative.git"
+    "description": "Shuttle "
   }
 }
